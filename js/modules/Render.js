@@ -37,7 +37,16 @@ const RenderUtils = (() => {
 
   function createCardHTML(routine) {
     const { className, icon } = getPriorityConfig(routine.priority);
-    const label = I18n.get(className.replace("-", "_"))
+    const label = I18n.get(className.replace("-", "_"));
+
+    const commandHTML = routine.command
+    ? `
+    <div class="card-command">
+      ${Icons.getIcon("terminal")}
+      <span>${routine.command}</span>
+    </div>
+    `
+    : "";
 
     return `
       <div class="card-header">
@@ -51,6 +60,8 @@ const RenderUtils = (() => {
           ${Icons.getIcon("clock")}
           <span>${Utils.secondsToTime(routine.time)}</span>
         </div>
+        
+        ${commandHTML}
         
         <div class="card-days">
           ${Icons.getIcon("calendar")}

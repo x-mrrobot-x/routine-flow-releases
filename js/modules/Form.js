@@ -4,7 +4,8 @@ const FormUtils = (() => {
     "description-error",
     "priority-error",
     "time-error",
-    "days-error"
+    "days-error",
+    "command-error"
   ];
 
   const REQUIRED_FIELDS = {
@@ -19,7 +20,8 @@ const FormUtils = (() => {
     priority: document.getElementById("priority").value,
     timeString: document.getElementById("time").value,
     timeInSeconds: Utils.timeToSeconds(document.getElementById("time").value),
-    selectedDays: State.getState("selectedDays")
+    selectedDays: State.getState("selectedDays"),
+    command: document.getElementById("command").value.trim()
   });
 
   const validateField = (field, value, errors, showErrorFn) => {
@@ -36,6 +38,11 @@ const FormUtils = (() => {
     validateField("description", formData.description, errors, showErrorFn);
     validateField("time", formData.timeString, errors, showErrorFn);
 
+    if (formData.command && formData.command.includes(" ")) {
+      showErrorFn("command-error", I18n.get("form_error_command_spaces"));
+      errors.push("command");
+    }
+
     if (formData.selectedDays.length === 0) {
       showErrorFn("days-error", I18n.get("form_error_days_required"));
       errors.push("days");
@@ -47,6 +54,7 @@ const FormUtils = (() => {
   const createRoutineData = formData => ({
     title: formData.title,
     description: formData.description,
+    command: formData.command,
     priority: formData.priority,
     time: formData.timeInSeconds,
     frequency: [...formData.selectedDays]

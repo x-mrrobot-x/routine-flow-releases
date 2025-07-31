@@ -109,6 +109,10 @@
   user-select: none;
 }
 
+*::-webkit-scrollbar {
+  display: none;
+}
+
 body,
 html,
 .app-container {
@@ -195,10 +199,6 @@ svg {
 
 .app-container {
   overflow-y: auto;
-}
-
-.app-container::-webkit-scrollbar {
-  display: none;
 }
 
 /* Header */
@@ -491,6 +491,24 @@ svg {
   font-size: var(--font-xs);
 }
 
+.card-command {
+  display: flex;
+  align-items: center;
+  margin-top: var(--space-xs);
+}
+
+.card-command svg {
+  color: var(--text-muted);
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: var(--space-xs);
+}
+
+.card-command span {
+  color: var(--text-muted);
+  font-size: var(--font-xs);
+}
+
 .card-days {
   display: flex;
   align-items: center;
@@ -675,7 +693,7 @@ svg {
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-xs);
 }
 
 .form-row {

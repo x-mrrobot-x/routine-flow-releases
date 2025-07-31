@@ -18,10 +18,10 @@ const ModalUtils = (() => {
     });
   }
 
-  function updateModalTexts(title, description, buttonText) {
+  function updateModalTexts(title, description, buttonContent) {
     DOM.modalTitle.textContent = title;
     DOM.modalDescription.textContent = description;
-    DOM.submitButtonText.innerHTML = `${Icons.getIcon("check")} ${buttonText}`;
+    DOM.submitButtonText.innerHTML = buttonContent;
   }
 
   function resetForm() {
@@ -40,13 +40,15 @@ const ModalUtils = (() => {
       title: document.getElementById("title"),
       description: document.getElementById("description"),
       priority: document.getElementById("priority"),
-      time: document.getElementById("time")
+      time: document.getElementById("time"),
+      command: document.getElementById("command")
     };
 
     fields.title.value = routine.title;
     fields.description.value = routine.description;
     fields.priority.value = routine.priority;
     fields.time.value = Utils.secondsToTime(routine.time);
+    fields.command.value = routine.command;
   }
 
   function updateDaySelection(frequency) {
@@ -84,15 +86,21 @@ const ModalUtils = (() => {
 const Modal = (() => {
   const getRoutineModalContent = isEditMode => {
     const titleKey = isEditMode ? "edit_routine_title" : "create_routine_title";
+    
     const subtitleKey = isEditMode
       ? "edit_routine_subtitle"
       : "create_routine_subtitle";
+      
     const submitButtonKey = isEditMode ? "update_button" : "create_button";
+    
+    const submitIcon = Icons.getIcon(
+      isEditMode ? "calendar-sync" : "calendar-plus"
+    );
 
     return {
       title: I18n.get(titleKey),
       subtitle: I18n.get(subtitleKey),
-      submitButton: I18n.get(submitButtonKey)
+      submitButton: `${submitIcon} ${I18n.get(submitButtonKey)}`
     };
   };
 

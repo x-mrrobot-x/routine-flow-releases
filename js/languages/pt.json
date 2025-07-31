@@ -8,6 +8,8 @@
   "form_placeholder_title": "Ex: Exercícios matinais",
   "form_label_description": "Descrição",
   "form_placeholder_description": "Ex: 30 minutos de exercícios para começar o dia com energia",
+  "form_label_command": "Comando (opcional)",
+  "form_placeholder_command": "Ex: abrir_app",
   "form_label_priority": "Prioridade",
   "form_label_time": "Horário",
   "form_label_days": "Dias da semana",
@@ -57,6 +59,7 @@
   "edit_routine_subtitle": "Preencha os campos para editar a rotina.",
   "form_error_title_required": "Título é obrigatório",
   "form_error_description_required": "Descrição é obrigatória",
+  "form_error_command_spaces": "O comando não pode conter espaços. Use _ em vez disso.",
   "form_error_time_required": "Horário é obrigatório",
   "form_error_days_required": "Selecione pelo menos um dia da semana"
 }
