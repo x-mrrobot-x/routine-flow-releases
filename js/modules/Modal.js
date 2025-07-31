@@ -21,7 +21,7 @@ const ModalUtils = (() => {
   function updateModalTexts(title, description, buttonText) {
     DOM.modalTitle.textContent = title;
     DOM.modalDescription.textContent = description;
-    DOM.submitButtonText.innerHTML = buttonText;
+    DOM.submitButtonText.innerHTML = `${Icons.getIcon("check")} ${buttonText}`;
   }
 
   function resetForm() {
@@ -82,24 +82,32 @@ const ModalUtils = (() => {
 })();
 
 const Modal = (() => {
+  const getRoutineModalContent = isEditMode => {
+    const titleKey = isEditMode ? "edit_routine_title" : "create_routine_title";
+    const subtitleKey = isEditMode
+      ? "edit_routine_subtitle"
+      : "create_routine_subtitle";
+    const submitButtonKey = isEditMode ? "update_button" : "create_button";
+
+    return {
+      title: I18n.get(titleKey),
+      subtitle: I18n.get(subtitleKey),
+      submitButton: I18n.get(submitButtonKey)
+    };
+  };
+
   function setupCreateModal() {
     ModalUtils.setCreateModeState();
-    ModalUtils.updateModalTexts(
-      "Nova Rotina",
-      "Crie uma nova rotina para seu dia a dia.",
-      `${Icons.getIcon("check")} Salvar`
-    );
+    const { title, subtitle, submitButton } = getRoutineModalContent(false);
+    ModalUtils.updateModalTexts(title, subtitle, submitButton);
     ModalUtils.resetForm();
     ModalUtils.resetDaySelection();
   }
 
   function setupEditModal(routine, id) {
     ModalUtils.setEditModeState(id);
-    ModalUtils.updateModalTexts(
-      "Editar Rotina",
-      "Altere os dados da sua rotina.",
-      `${Icons.getIcon("check")} Atualizar`
-    );
+    const { title, subtitle, submitButton } = getRoutineModalContent(true);
+    ModalUtils.updateModalTexts(title, subtitle, submitButton);
     ModalUtils.populateFormFields(routine);
     ModalUtils.updateDaySelection(routine.frequency);
     Form.clearFormErrors();

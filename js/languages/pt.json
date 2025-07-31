@@ -19,7 +19,8 @@
   "day_fri": "Sex",
   "day_sat": "Sáb",
   "cancel_button": "Cancelar",
-  "save_button": "Salvar",
+  "create_button": "Criar",
+  "update_button": "Atualizar",
   "delete_modal_title": "Excluir Rotina",
   "delete_modal_description": "Tem certeza que deseja excluir esta rotina? Esta ação não pode ser desfeita.",
   "delete_button": "Excluir",
@@ -53,5 +54,9 @@
   "create_routine_title": "Criar Rotina",
   "edit_routine_title": "Editar Rotina",
   "create_routine_subtitle": "Preencha os campos para criar uma nova rotina.",
-  "edit_routine_subtitle": "Preencha os campos para editar a rotina."
+  "edit_routine_subtitle": "Preencha os campos para editar a rotina.",
+  "form_error_title_required": "Título é obrigatório",
+  "form_error_description_required": "Descrição é obrigatória",
+  "form_error_time_required": "Horário é obrigatório",
+  "form_error_days_required": "Selecione pelo menos um dia da semana"
 }

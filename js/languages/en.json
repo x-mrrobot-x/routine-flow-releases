@@ -19,7 +19,8 @@
   "day_fri": "Fri",
   "day_sat": "Sat",
   "cancel_button": "Cancel",
-  "save_button": "Save",
+  "create_button": "Create",
+  "update_button": "Update",
   "delete_modal_title": "Delete Routine",
   "delete_modal_description": "Are you sure you want to delete this routine? This action cannot be undone.",
   "delete_button": "Delete",
@@ -53,5 +54,9 @@
   "create_routine_title": "Create Routine",
   "edit_routine_title": "Edit Routine",
   "create_routine_subtitle": "Fill the fields to create a new routine.",
-  "edit_routine_subtitle": "Fill the fields to edit the routine."
+  "edit_routine_subtitle": "Fill the fields to edit the routine.",
+  "form_error_title_required": "Title is required",
+  "form_error_description_required": "Description is required",
+  "form_error_time_required": "Time is required",
+  "form_error_days_required": "Select at least one day of the week"
 }

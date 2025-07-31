@@ -70,7 +70,8 @@
           <div class="advanced-filters">
             <!-- Filter Status -->
             <label for="status-filter" data-i18n="status_filter_label"
-              >Status</label>
+              >Status</label
+            >
             <div class="select-wrapper">
               <select id="status-filter" class="select">
                 <option value="all" data-i18n="status_all">Todas</option>
@@ -82,7 +83,9 @@
             </div>
 
             <!-- Filter priority -->
-            <label for="priority-filter" data-i18n="priority_filter_label">Prioridade</label>
+            <label for="priority-filter" data-i18n="priority_filter_label"
+              >Prioridade</label
+            >
             <div class="select-wrapper">
               <select id="priority-filter" class="select">
                 <option value="all" data-i18n="priority_all">Todas</option>
@@ -95,7 +98,9 @@
             </div>
 
             <!-- Filter Day of Week -->
-            <label for="day-filter" data-i18n="day_filter_label">Dia da semana</label>
+            <label for="day-filter" data-i18n="day_filter_label"
+              >Dia da semana</label
+            >
             <div class="select-wrapper">
               <select id="day-filter" class="select">
                 <option value="all" data-i18n="day_all">Todos</option>
@@ -124,12 +129,12 @@
         <!-- Empty State -->
         <div class="empty-state" id="empty-state">
           <i data-icon="calendar-x"></i>
-          <p class="empty-text">
+          <p class="empty-text" data-i18n="empty_state_text">
             Nenhuma rotina encontrada para os filtros selecionados.
           </p>
           <button class="button tech-button" id="clear-filters">
             <i data-icon="brush-cleaning"></i>
-            Limpar filtros
+            <span data-i18n="clear_filters_button">Limpar filtros</span>
           </button>
         </div>
 
@@ -156,64 +161,125 @@
 
         <form id="routine-form" class="form">
           <div class="form-group">
-            <label for="title" class="form-label">Título</label>
+            <label for="title" class="form-label" data-i18n="form_label_name"
+              >Título</label
+            >
             <input
               id="title"
               name="title"
               type="text"
               class="form-input"
               placeholder="Ex: Exercícios matinais"
-              required
+              data-i18n="form_placeholder_title"
             />
             <div class="form-error" id="title-error"></div>
           </div>
 
           <div class="form-group">
-            <label for="description" class="form-label">Descrição</label>
+            <label
+              for="description"
+              class="form-label"
+              data-i18n="form_label_description"
+              >Descrição</label
+            >
             <textarea
               id="description"
               name="description"
               class="form-textarea"
               placeholder="Ex: 30 minutos de exercícios para começar o dia com energia"
-              required
+              data-i18n="form_placeholder_description"
             ></textarea>
             <div class="form-error" id="description-error"></div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="priority" class="form-label">Prioridade</label>
+              <label
+                for="priority"
+                class="form-label"
+                data-i18n="form_label_priority"
+                >Prioridade</label
+              >
               <select id="priority" name="priority" class="form-select">
-                <option value="low">Baixa</option>
-                <option value="medium" selected>Média</option>
-                <option value="high">Alta</option>
+                <option value="low" data-i18n="priority_low">Baixa</option>
+                <option value="medium" selected data-i18n="priority_medium">
+                  Média
+                </option>
+                <option value="high" data-i18n="priority_high">Alta</option>
               </select>
               <div class="form-error" id="priority-error"></div>
             </div>
 
             <div class="form-group">
-              <label for="time" class="form-label">Horário</label>
-              <input
-                id="time"
-                name="time"
-                type="time"
-                class="form-input"
-                required
-              />
+              <label for="time" class="form-label" data-i18n="form_label_time"
+                >Horário</label
+              >
+              <input id="time" name="time" type="time" class="form-input" />
               <div class="form-error" id="time-error"></div>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Dias da semana</label>
+            <label class="form-label" data-i18n="form_label_days"
+              >Dias da semana</label
+            >
             <div class="days-container" id="days-container">
-              <button type="button" class="day-button" data-day="0">Dom</button>
-              <button type="button" class="day-button" data-day="1">Seg</button>
-              <button type="button" class="day-button" data-day="2">Ter</button>
-              <button type="button" class="day-button" data-day="3">Qua</button>
-              <button type="button" class="day-button" data-day="4">Qui</button>
-              <button type="button" class="day-button" data-day="5">Sex</button>
-              <button type="button" class="day-button" data-day="6">Sáb</button>
+              <button
+                type="button"
+                class="day-button"
+                data-day="0"
+                data-i18n="day_sun"
+              >
+                Dom
+              </button>
+              <button
+                type="button"
+                class="day-button"
+                data-day="1"
+                data-i18n="day_mon"
+              >
+                Seg
+              </button>
+              <button
+                type="button"
+                class="day-button"
+                data-day="2"
+                data-i18n="day_tue"
+              >
+                Ter
+              </button>
+              <button
+                type="button"
+                class="day-button"
+                data-day="3"
+                data-i18n="day_wed"
+              >
+                Qua
+              </button>
+              <button
+                type="button"
+                class="day-button"
+                data-day="4"
+                data-i18n="day_thu"
+              >
+                Qui
+              </button>
+              <button
+                type="button"
+                class="day-button"
+                data-day="5"
+                data-i18n="day_fri"
+              >
+                Sex
+              </button>
+              <button
+                type="button"
+                class="day-button"
+                data-day="6"
+                data-i18n="day_sat"
+              >
+                Sáb
+              </button>
             </div>
             <div class="form-error" id="days-error"></div>
           </div>
@@ -224,7 +290,8 @@
               id="cancel-routine"
               class="button button-outline"
             >
-              <i data-icon="x"></i> Cancelar
+              <i data-icon="x"></i>
+              <span data-i18n="cancel_button">Cancelar</span>
             </button>
             <button type="submit" class="button button-primary">Salvar</button>
           </div>
@@ -237,8 +304,10 @@
       <div class="modal-overlay"></div>
       <div class="modal-content">
         <div class="modal-header">
-          <h3 class="modal-title text-gradient">Excluir Rotina</h3>
-          <p class="modal-description">
+          <h3 class="modal-title text-gradient" data-i18n="delete_modal_title">
+            Excluir Rotina
+          </h3>
+          <p class="modal-description" data-i18n="delete_modal_description">
             Tem certeza que deseja excluir esta rotina? Esta ação não pode ser
             desfeita.
           </p>
@@ -250,7 +319,7 @@
             id="cancel-delete"
           >
             <i data-icon="x"></i>
-            Cancelar
+            <span data-i18n="cancel_button">Cancelar</span>
           </button>
           <button
             type="button"
@@ -258,7 +327,7 @@
             id="confirm-delete"
           >
             <i data-icon="trash2"></i>
-            <span>Excluir</span>
+            <span data-i18n="delete_button">Excluir</span>
           </button>
         </div>
       </div>

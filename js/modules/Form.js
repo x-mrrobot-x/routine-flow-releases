@@ -8,9 +8,9 @@ const FormUtils = (() => {
   ];
 
   const REQUIRED_FIELDS = {
-    title: "Título é obrigatório",
-    description: "Descrição é obrigatória",
-    time: "Horário é obrigatório"
+    title: "form_error_title_required",
+    description: "form_error_description_required",
+    time: "form_error_time_required"
   };
 
   const getFormData = () => ({
@@ -24,7 +24,7 @@ const FormUtils = (() => {
 
   const validateField = (field, value, errors, showErrorFn) => {
     if (!value) {
-      showErrorFn(`${field}-error`, REQUIRED_FIELDS[field]);
+      showErrorFn(`${field}-error`, I18n.get(REQUIRED_FIELDS[field]));
       errors.push(field);
     }
   };
@@ -37,7 +37,7 @@ const FormUtils = (() => {
     validateField("time", formData.timeString, errors, showErrorFn);
 
     if (formData.selectedDays.length === 0) {
-      showErrorFn("days-error", "Selecione pelo menos um dia da semana");
+      showErrorFn("days-error", I18n.get("form_error_days_required"));
       errors.push("days");
     }
 
