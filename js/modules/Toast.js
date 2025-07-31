@@ -36,7 +36,8 @@ const Toast = (() => {
     DOM.toastContainer.appendChild(toast);
   }
 
-  function showToast(type, message) {
+  function showToast(type, messageKey) {
+    const message = I18n.get(messageKey);
     const toast = createToastElement(type, message);
     attachEventListeners(toast);
     setupAutoRemoval(toast);

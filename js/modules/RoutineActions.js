@@ -31,22 +31,16 @@ const RoutineUtils = (() => {
 })();
 
 const RoutineActions = (() => {
-  const MESSAGES = {
-    ROUTINE_ACTIVATED: "Rotina ativada!",
-    ROUTINE_DEACTIVATED: "Rotina desativada!",
-    ROUTINE_DELETED: "Rotina removida com sucesso!"
-  };
-
   function handleToggleActive(id) {
     const routine = Data.getRoutineById(id);
     const newActiveStatus = !routine.active;
     Data.updateRoutine(id, { active: newActiveStatus });
 
     RoutineUtils.updateUI();
-    const message = newActiveStatus
-      ? MESSAGES.ROUTINE_ACTIVATED
-      : MESSAGES.ROUTINE_DEACTIVATED;
-    Toast.showToast("success", message);
+    const messageKey = newActiveStatus
+      ? "toast_routine_activated"
+      : "toast_routine_deactivated";
+    Toast.showToast("success", messageKey);
   }
 
   function confirmDeleteRoutine() {
@@ -56,7 +50,7 @@ const RoutineActions = (() => {
 
     RoutineUtils.updateUI();
     Modal.closeDeleteModal();
-    Toast.showToast("success", MESSAGES.ROUTINE_DELETED);
+    Toast.showToast("success", "toast_routine_deleted");
   }
 
   function handleCardClick(event) {

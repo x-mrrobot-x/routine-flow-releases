@@ -71,7 +71,7 @@ const Form = (() => {
   const handleEditMode = routineData => {
     const routineToEdit = State.getState("routineToEdit");
     Data.updateRoutine(routineToEdit, routineData);
-    Toast.showToast("success", "Rotina atualizada com sucesso!");
+    Toast.showToast("success", "toast_routine_updated");
   };
 
   const handleCreateMode = routineData => {
@@ -83,7 +83,7 @@ const Form = (() => {
 
     Data.addRoutine(newRoutine);
     Render.updateRoutinesCount();
-    Toast.showToast("success", "Rotina criada com sucesso!");
+    Toast.showToast("success", "toast_routine_created");
   };
 
   const finalizeSave = () => {
