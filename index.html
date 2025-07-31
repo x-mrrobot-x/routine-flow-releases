@@ -17,6 +17,7 @@
     <script src="/js/modules/Icons.js" defer></script>
     <script src="/js/routineData.js" defer></script>
     <script src="/js/modules/Environment.js" defer></script>
+    <script src="/js/modules/I18n.js" defer></script>
     <script src="/js/modules/Data.js" defer></script>
     <script src="/js/modules/Utils.js" defer></script>
     <script src="/js/modules/DOM.js" defer></script>
@@ -31,7 +32,7 @@
     <script src="/js/modules/Event.js" defer></script>
     <script src="/js/modules/App.js" defer></script>
   </head>
-  <body>
+  <body class="loading">
     <div class="app-container">
       <!-- Header -->
       <header class="header">
@@ -49,7 +50,7 @@
           <div class="filters-header">
             <button id="toggle-filters-btn" class="toggle-filters-btn">
               <i data-icon="filter"></i>
-              Filtros
+              <span data-i18n="filters_title">Filtros</span>
               <i class="filter-chevron" data-icon="chevron-down"></i>
             </button>
           </div>
@@ -62,50 +63,58 @@
               id="search-filter"
               placeholder="Buscar rotinas..."
               class="input-search"
+              data-i18n="search_placeholder"
             />
           </div>
 
           <div class="advanced-filters">
             <!-- Filter Status -->
-            <label for="status-filter">Status</label>
+            <label for="status-filter" data-i18n="status_filter_label"
+              >Status</label>
             <div class="select-wrapper">
               <select id="status-filter" class="select">
-                <option value="all">Todas</option>
-                <option value="active">Ativas</option>
-                <option value="inactive">Inativas</option>
+                <option value="all" data-i18n="status_all">Todas</option>
+                <option value="active" data-i18n="status_active">Ativas</option>
+                <option value="inactive" data-i18n="status_inactive">
+                  Inativas
+                </option>
               </select>
             </div>
 
             <!-- Filter priority -->
-            <label for="priority-filter">Prioridade</label>
+            <label for="priority-filter" data-i18n="priority_filter_label">Prioridade</label>
             <div class="select-wrapper">
               <select id="priority-filter" class="select">
-                <option value="all">Todas</option>
-                <option value="high">Alta</option>
-                <option value="medium">Média</option>
-                <option value="low">Baixa</option>
+                <option value="all" data-i18n="priority_all">Todas</option>
+                <option value="high" data-i18n="priority_high">Alta</option>
+                <option value="medium" data-i18n="priority_medium">
+                  Média
+                </option>
+                <option value="low" data-i18n="priority_low">Baixa</option>
               </select>
             </div>
 
             <!-- Filter Day of Week -->
-            <label for="day-filter">Dia da semana</label>
+            <label for="day-filter" data-i18n="day_filter_label">Dia da semana</label>
             <div class="select-wrapper">
               <select id="day-filter" class="select">
-                <option value="all">Todos</option>
-                <option value="0">Domingo</option>
-                <option value="1">Segunda</option>
-                <option value="2">Terça</option>
-                <option value="3">Quarta</option>
-                <option value="4">Quinta</option>
-                <option value="5">Sexta</option>
-                <option value="6">Sábado</option>
+                <option value="all" data-i18n="day_all">Todos</option>
+                <option value="0" data-i18n="day_sunday">Domingo</option>
+                <option value="1" data-i18n="day_monday">Segunda</option>
+                <option value="2" data-i18n="day_tuesday">Terça</option>
+                <option value="3" data-i18n="day_wednesday">Quarta</option>
+                <option value="4" data-i18n="day_thursday">Quinta</option>
+                <option value="5" data-i18n="day_friday">Sexta</option>
+                <option value="6" data-i18n="day_saturday">Sábado</option>
               </select>
             </div>
           </div>
         </div>
 
         <div class="main-title">
-          <h2 class="text-gradient">Minhas Rotinas</h2>
+          <h2 class="text-gradient" data-i18n="routines_title">
+            Minhas Rotinas
+          </h2>
           <span class="badge" id="routines-count">0</span>
         </div>
 
@@ -125,7 +134,10 @@
         </div>
 
         <!-- Add Routine Button -->
-        <button id="add-routine-button" class="button tech-button routine-add-button">
+        <button
+          id="add-routine-button"
+          class="button tech-button routine-add-button"
+        >
           <i data-icon="plus"></i>
         </button>
       </main>
@@ -141,7 +153,7 @@
             Crie uma nova rotina para seu dia a dia.
           </p>
         </div>
-        
+
         <form id="routine-form" class="form">
           <div class="form-group">
             <label for="title" class="form-label">Título</label>
@@ -214,9 +226,7 @@
             >
               <i data-icon="x"></i> Cancelar
             </button>
-            <button type="submit" class="button button-primary">
-              Salvar
-            </button>
+            <button type="submit" class="button button-primary">Salvar</button>
           </div>
         </form>
       </div>
@@ -234,11 +244,19 @@
           </p>
         </div>
         <div class="form-actions">
-          <button type="button" class="button button-outline" id="cancel-delete">
+          <button
+            type="button"
+            class="button button-outline"
+            id="cancel-delete"
+          >
             <i data-icon="x"></i>
             Cancelar
           </button>
-          <button type="button" class="button routine-delete-btn" id="confirm-delete">
+          <button
+            type="button"
+            class="button routine-delete-btn"
+            id="confirm-delete"
+          >
             <i data-icon="trash2"></i>
             <span>Excluir</span>
           </button>

@@ -129,6 +129,10 @@ body {
   background-color: var(--bg-primary);
 }
 
+body.loading {
+  visibility: hidden;
+}
+
 button,
 input,
 select,

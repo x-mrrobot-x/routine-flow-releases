@@ -128,5 +128,3 @@ const Icons = (() => {
     init
   };
 })();
-
-Icons.init();
