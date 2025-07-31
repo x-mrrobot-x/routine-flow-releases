@@ -1,7 +1,15 @@
 const Utils = (() => {
   const SECONDS_PER_HOUR = 3600;
   const SECONDS_PER_MINUTE = 60;
-  const DAY_NAMES = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  const DAY_KEYS = [
+    "day_sun",
+    "day_mon",
+    "day_tue",
+    "day_wed",
+    "day_thu",
+    "day_fri",
+    "day_sat"
+  ];
 
   function secondsToTime(seconds) {
     const hours = Math.floor(seconds / SECONDS_PER_HOUR);
@@ -15,7 +23,8 @@ const Utils = (() => {
   }
 
   function getDayName(dayNumber) {
-    return DAY_NAMES[dayNumber] || "";
+    const dayKey = DAY_KEYS[dayNumber];
+    return I18n.get(dayKey) || "";
   }
 
   function timeToSeconds(timeString) {

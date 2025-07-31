@@ -1,17 +1,14 @@
 const RenderUtils = (() => {
   const PRIORITY_CONFIG = {
     low: {
-      label: "Baixa",
       className: "priority-low",
       icon: "💡"
     },
     medium: {
-      label: "Média",
       className: "priority-medium",
       icon: "⚡"
     },
     high: {
-      label: "Alta",
       className: "priority-high",
       icon: "🔥"
     }
@@ -39,7 +36,8 @@ const RenderUtils = (() => {
   }
 
   function createCardHTML(routine) {
-    const { label, className, icon } = getPriorityConfig(routine.priority);
+    const { className, icon } = getPriorityConfig(routine.priority);
+    const label = I18n.get(className.replace("-", "_"))
 
     return `
       <div class="card-header">
