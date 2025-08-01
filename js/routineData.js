@@ -1,4 +1,4 @@
-let routineData = [
+let DEFAULT_ROUTINES = [
   {
     id: 1722410400,
     title: "Exercícios matinais",

@@ -1,10 +1,10 @@
 const DOM = (() => {
-  const $ = selector => {
-    return document.querySelector(selector);
+  const $ = (selector, element = document) => {
+    return element.querySelector(selector);
   };
 
-  const $$ = selector => {
-    return document.querySelectorAll(selector);
+  const $$ = (selector, element = document) => {
+    return element.querySelectorAll(selector);
   };
 
   const elements = {
@@ -30,6 +30,13 @@ const DOM = (() => {
     modalDescription: $(".modal-description"),
     submitButtonText: $('button[type="submit"]'),
 
+    // Settings
+    settingsButton: $("#settings-button"),
+    settingsModal: $("#settings-modal"),
+    voiceToggle: $("#voice-toggle"),
+    toastToggle: $("#toast-toggle"),
+    vibrateToggle: $("#vibrate-toggle"),
+
     // Form inputs
     titleInput: $("#title"),
     descriptionInput: $("#description"),
@@ -47,10 +54,12 @@ const DOM = (() => {
     toastContainer: $("#toast-container")
   };
 
-  elements.routineModalOverlay =
-    elements.routineModal.querySelector(".modal-overlay");
-  elements.deleteModalOverlay =
-    elements.deleteRoutineModal.querySelector(".modal-overlay");
+  elements.routineModalOverlay = $(".modal-overlay", elements.routineModal);
+  elements.deleteModalOverlay = $(
+    ".modal-overlay",
+    elements.deleteRoutineModal
+  );
+  elements.settingsModalOverlay = $(".modal-overlay", elements.settingsModal);
 
   return {
     ...elements

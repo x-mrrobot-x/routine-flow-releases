@@ -43,11 +43,21 @@ const Event = (() => {
     DOM.routinesGrid.addEventListener("click", RoutineActions.handleCardClick);
   }
 
+  function setupSettingsEvents() {
+    DOM.settingsButton.addEventListener("click", Settings.openSettingsModal);
+    DOM.settingsModalOverlay.addEventListener(
+      "click",
+      Settings.closeSettingsModal
+    );
+    DOM.settingsModal.addEventListener("change", Settings.handleSettingsChange);
+  }
+
   function init() {
     setupModalEvents();
     setupFormEvents();
     setupFilterEvents();
     setupRoutineActionEvents();
+    setupSettingsEvents();
   }
 
   return {

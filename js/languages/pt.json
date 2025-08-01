@@ -61,5 +61,10 @@
   "form_error_description_required": "Descrição é obrigatória",
   "form_error_command_spaces": "O comando não pode conter espaços. Use _ em vez disso.",
   "form_error_time_required": "Horário é obrigatório",
-  "form_error_days_required": "Selecione pelo menos um dia da semana"
+  "form_error_days_required": "Selecione pelo menos um dia da semana",
+  "settings_modal_title": "Anúncio de Rotinas",
+  "settings_modal_description": "Configure como ser notificado quando uma rotina executar.",
+  "setting_voice_label": "Anunciar com voz do google",
+  "setting_toast_label": "Exibir toast na tela",
+  "setting_vibrate_label": "Vibrar dispositivo"
 }

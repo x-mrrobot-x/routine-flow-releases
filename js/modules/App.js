@@ -5,6 +5,7 @@ const App = (() => {
     Data.init();
     Render.init();
     Event.init();
+    Settings.init();
   }
 
   return {

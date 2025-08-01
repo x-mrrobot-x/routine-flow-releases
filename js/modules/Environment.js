@@ -4,18 +4,23 @@ const WebEnvironment = {
 
   execute(command, ...args) {
     const commandHandlers = {
-      get_routines: () => {
-        const storedRoutines = localStorage.getItem("routines");
-        return storedRoutines ? JSON.parse(storedRoutines) : routineData;
-      },
-
       load_language: async lang => {
         const response = await fetch(`/js/languages/${lang}.json`);
         return await response.json();
       },
 
+      get_routines: () => {
+        return localStorage.getItem("@routine-flow:routines");
+      },
       save_routines: data => {
-        localStorage.setItem("routines", data);
+        localStorage.setItem("@routine-flow:routines", data);
+      },
+
+      get_settings: () => {
+        return localStorage.getItem("@routine-flow:settings");
+      },
+      save_settings: settings => {
+        localStorage.setItem("@routine-flow:settings", settings);
       }
     };
 
