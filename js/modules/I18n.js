@@ -26,17 +26,17 @@ const I18n = (function (env) {
     try {
       const [baseLang] = lang.split("-");
 
-      data = await env.execute("load_language", baseLang);
+      data = await env.loadLanguage(baseLang);
     } catch (error) {
-      data = await env.execute("load_language", DEFAULT_LANGUAGE);
+      data = await env.loadLanguage(DEFAULT_LANGUAGE);
       console.error("Error: ", error);
     }
   }
 
   async function init() {
-    await loadLanguage(env.lang);
+    await loadLanguage(env.langCode);
 
-    if (!env.lang.includes(APP_LANGUAGE)) {
+    if (!env.langCode.includes(APP_LANGUAGE)) {
       translateUI();
     }
     document.body.classList.remove("loading");

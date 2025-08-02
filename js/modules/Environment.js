@@ -1,43 +1,40 @@
-const WebEnvironment = {
-  name: "web",
-  lang: "pt-BR",
-
-  execute(command, ...args) {
-    const commandHandlers = {
-      load_language: async lang => {
-        const response = await fetch(`/js/languages/${lang}.json`);
-        return await response.json();
-      },
-
-      get_routines: () => {
-        return localStorage.getItem("@routine-flow:routines");
-      },
-      save_routines: data => {
-        localStorage.setItem("@routine-flow:routines", data);
-      },
-
-      get_settings: () => {
-        return localStorage.getItem("@routine-flow:settings");
-      },
-      save_settings: settings => {
-        localStorage.setItem("@routine-flow:settings", settings);
-      }
-    };
-
-    const handler = commandHandlers[command];
-    if (handler) {
-      return handler(...args);
-    }
-  },
-
-  terminate() {
-    alert("Fechando aplicação...");
-  }
-};
-
 const EnvironmentManager = (() => {
+  const WebEnvironment = {
+    name: "web",
+    langCode: "pt-BR",
+    workDir: ".",
+
+    async loadLanguage(langCode) {
+      const response = await fetch(
+        `${this.workDir}/js/languages/${langCode}.json`
+      );
+      return await response.json();
+    },
+
+    getRoutines() {
+      return localStorage.getItem("@routine-flow:routines");
+    },
+
+    saveRoutines(data) {
+      localStorage.setItem("@routine-flow:routines", data);
+    },
+
+    getSettings() {
+      return localStorage.getItem("@routine-flow:settings");
+    },
+
+    saveSettings(settings) {
+      localStorage.setItem("@routine-flow:settings", settings);
+    },
+
+    exit() {
+      alert("Fechando aplicação...");
+    }
+  };
+
   const detectEnvironment = () => {
-    return typeof tk === "undefined" ? WebEnvironment : taskerEnvironment;
+    const isWebEnvironment = typeof tk === "undefined";
+    return isWebEnvironment ? WebEnvironment : TaskerEnvironment;
   };
 
   return {

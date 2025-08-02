@@ -1,4 +1,4 @@
-const Settings = (() => {
+const Settings = ((env) => {
   const DEFAULT_SETTINGS = {
     voice: true,
     toast: true,
@@ -6,14 +6,11 @@ const Settings = (() => {
   };
 
   const saveSettings = settings => {
-    currentEnvironment.execute(
-      "save_settings",
-      JSON.stringify(settings, null, 2)
-    );
+    env.saveSettings(JSON.stringify(settings, null, 2));
   };
 
   const getStoredSettings = () => {
-    const storedSettings = currentEnvironment.execute("get_settings");
+    const storedSettings = env.getSettings();
     return storedSettings ? JSON.parse(storedSettings) : null;
   };
 
@@ -62,4 +59,4 @@ const Settings = (() => {
     closeSettingsModal,
     handleSettingsChange
   };
-})();
+})(currentEnvironment);

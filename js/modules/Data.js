@@ -2,7 +2,7 @@ const Data = (env => {
   let routines = [];
 
   function loadRoutines() {
-    let storedRoutines = env.execute("get_routines");
+    const storedRoutines = env.getRoutines();
     if (!storedRoutines) {
       routines = DEFAULT_ROUTINES;
       return;
@@ -12,7 +12,7 @@ const Data = (env => {
 
   function saveRoutines() {
     const data = JSON.stringify(routines, null, 2);
-    env.execute("save_routines", data);
+    env.saveRoutines(data);
   }
 
   function getRoutines() {
