@@ -36,30 +36,25 @@ const ModalUtils = (() => {
   }
 
   function populateFormFields(routine) {
-    const fields = {
-      title: document.getElementById("title"),
-      description: document.getElementById("description"),
-      priority: document.getElementById("priority"),
-      time: document.getElementById("time"),
-      command: document.getElementById("command")
-    };
-
-    fields.title.value = routine.title;
-    fields.description.value = routine.description;
-    fields.priority.value = routine.priority;
-    fields.time.value = Utils.secondsToTime(routine.time);
-    fields.command.value = routine.command;
+    DOM.titleInput.value = routine.title;
+    DOM.descriptionInput.value = routine.description;
+    DOM.commandInput.value = routine.command;
+    DOM.prioritySelect.value = routine.priority;
+    DOM.timeInput.value = Utils.secondsToTime(routine.time);
   }
 
-  function updateDaySelection(frequency) {
+  const updateDayButtonSelection = (button, frequency) => {
+    const dayNumber = parseInt(button.dataset.day);
+    const isSelected = frequency.includes(dayNumber);
+    button.classList.toggle("selected", isSelected);
+  };
+
+  const updateDaySelection = frequency => {
     State.setState("selectedDays", [...frequency]);
-
     DOM.dayButtons.forEach(button => {
-      const dayNumber = parseInt(button.dataset.day);
-      const isSelected = frequency.includes(dayNumber);
-      button.classList.toggle("selected", isSelected);
+      updateDayButtonSelection(button, frequency);
     });
-  }
+  };
 
   function showModal(modalElement) {
     modalElement.classList.add("show");
@@ -84,23 +79,29 @@ const ModalUtils = (() => {
 })();
 
 const Modal = (() => {
+  const MODAL_CONTENT_KEYS = {
+    create: {
+      title: "create_routine_title",
+      subtitle: "create_routine_subtitle",
+      button: "create_button",
+      icon: "calendar-plus"
+    },
+    edit: {
+      title: "edit_routine_title",
+      subtitle: "edit_routine_subtitle",
+      button: "update_button",
+      icon: "calendar-sync"
+    }
+  };
+
   const getRoutineModalContent = isEditMode => {
-    const titleKey = isEditMode ? "edit_routine_title" : "create_routine_title";
-    
-    const subtitleKey = isEditMode
-      ? "edit_routine_subtitle"
-      : "create_routine_subtitle";
-      
-    const submitButtonKey = isEditMode ? "update_button" : "create_button";
-    
-    const submitIcon = Icons.getIcon(
-      isEditMode ? "calendar-sync" : "calendar-plus"
-    );
+    const mode = isEditMode ? "edit" : "create";
+    const config = MODAL_CONTENT_KEYS[mode];
 
     return {
-      title: I18n.get(titleKey),
-      subtitle: I18n.get(subtitleKey),
-      submitButton: `${submitIcon} ${I18n.get(submitButtonKey)}`
+      title: I18n.get(config.title),
+      subtitle: I18n.get(config.subtitle),
+      submitButton: `${Icons.getIcon(config.icon)} ${I18n.get(config.button)}`
     };
   };
 

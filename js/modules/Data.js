@@ -1,18 +1,8 @@
 const Data = (env => {
   let routines = [];
 
-  function loadRoutines() {
-    const storedRoutines = env.getRoutines();
-    if (!storedRoutines) {
-      routines = DEFAULT_ROUTINES;
-      return;
-    }
-    routines = JSON.parse(storedRoutines);
-  }
-
-  function saveRoutines() {
-    const data = JSON.stringify(routines, null, 2);
-    env.saveRoutines(data);
+  function getRoutineById(id) {
+    return routines.find(r => r.id === id) || null;
   }
 
   function getRoutines() {
@@ -40,8 +30,14 @@ const Data = (env => {
     saveRoutines();
   }
 
-  function getRoutineById(id) {
-    return routines.find(r => r.id === id) || null;
+  function loadRoutines() {
+    const storedRoutines = env.getRoutines();
+    routines = storedRoutines ? JSON.parse(storedRoutines) : DEFAULT_ROUTINES;
+  }
+
+  function saveRoutines() {
+    const data = JSON.stringify(routines, null, 2);
+    env.saveRoutines(data);
   }
 
   function init() {
@@ -50,12 +46,12 @@ const Data = (env => {
 
   return {
     init,
+    loadRoutines,
     getRoutines,
     addRoutine,
     updateRoutine,
     deleteRoutine,
-    getRoutineById,
     saveRoutines,
-    loadRoutines
+    getRoutineById
   };
 })(currentEnvironment);

@@ -1,48 +1,69 @@
 const Toast = (() => {
-  function createToastElement(type, message) {
+  const TOAST_ICON_CONFIG = {
+    success: "check-circle",
+    error: "alert-circle",
+    warning: "alert-triangle",
+    info: "info"
+  };
+
+  const AUTO_REMOVE_DELAY = 3000;
+  const REMOVE_ANIMATION_DELAY = 10;
+
+  const createToastHTML = (type, message) => `
+    ${Icons.getIcon(TOAST_ICON_CONFIG[type])}
+    <span>${message}</span>
+  `;
+
+  const createToastElement = (type, message) => {
     const toast = document.createElement("div");
     toast.className = `toast toast-${type}`;
-
-    const icon = type === "success" ? "check-circle" : "alert-circle";
-
-    toast.innerHTML = `
-      ${Icons.getIcon(icon)}
-      <span>${message}</span>
-    `;
-
+    toast.innerHTML = createToastHTML(type, message);
     return toast;
-  }
+  };
 
-  function removeToast(toast) {
-    clearTimeout(toast.autoRemoveTimer);
-    setTimeout(() => toast.remove(), 10);
-  }
+  const clearToastTimer = toast => {
+    if (toast.autoRemoveTimer) {
+      clearTimeout(toast.autoRemoveTimer);
+      toast.autoRemoveTimer = null;
+    }
+  };
 
-  function attachEventListeners(toast) {
-    toast.addEventListener("click", () => {
-      removeToast(toast);
-    });
-  }
+  const removeToastWithAnimation = toast => {
+    setTimeout(() => toast.remove(), REMOVE_ANIMATION_DELAY);
+  };
 
-  function setupAutoRemoval(toast) {
+  const removeToast = toast => {
+    clearToastTimer(toast);
+    removeToastWithAnimation(toast);
+  };
+
+  const attachClickHandler = toast => {
+    toast.addEventListener("click", () => removeToast(toast));
+  };
+
+  const setupAutoRemoval = toast => {
     const autoRemoveTimer = setTimeout(() => {
       removeToast(toast);
-    }, 3000);
+    }, AUTO_REMOVE_DELAY);
 
     toast.autoRemoveTimer = autoRemoveTimer;
-  }
+  };
 
-  function addToastToDOM(toast) {
+  const addToastToDOM = toast => {
     DOM.toastContainer.appendChild(toast);
-  }
+  };
 
-  function showToast(type, messageKey) {
-    const message = I18n.get(messageKey);
-    const toast = createToastElement(type, message);
-    attachEventListeners(toast);
+  const initializeToast = toast => {
+    attachClickHandler(toast);
     setupAutoRemoval(toast);
     addToastToDOM(toast);
-  }
+  };
+
+  const showToast = (type, messageKey) => {
+    const message = I18n.get(messageKey);
+    const toast = createToastElement(type, message);
+    initializeToast(toast);
+  };
 
   return {
     showToast

@@ -1,119 +1,169 @@
-const Filter = (() => {
-  function handleFilterChange(filterType, value) {
-    const processedValue =
-      filterType === "currentSearchFilter" ? value.toLowerCase().trim() : value;
+const FilterUtils = (() => {
+  const FILTER_CONFIG = {
+    search: {
+      stateKey: "currentSearchFilter",
+      processor: value => value.toLowerCase().trim()
+    },
+    status: {
+      stateKey: "currentFilter",
+      processor: value => value
+    },
+    priority: {
+      stateKey: "currentPriorityFilter",
+      processor: value => value
+    },
+    day: {
+      stateKey: "currentDayFilter",
+      processor: value => value
+    }
+  };
 
-    State.setState(filterType, processedValue);
+  const DEFAULT_FILTER_VALUES = {
+    statusFilter: "all",
+    priorityFilter: "all",
+    dayFilter: "all",
+    searchFilter: ""
+  };
+
+  const STATUS_MAP = {
+    active: routine => routine.active,
+    inactive: routine => !routine.active,
+    pending: routine => routine.status === "pending"
+  };
+
+  const resetFilterStates = () => {
+    State.setState({
+      currentFilter: "all",
+      currentPriorityFilter: "all",
+      currentDayFilter: "all",
+      currentSearchFilter: ""
+    });
+  };
+
+  const processFilterValue = (filterType, value) => {
+    const config = FILTER_CONFIG[filterType];
+    return config ? config.processor(value) : value;
+  };
+
+  const updateStateAndRender = (stateKey, value) => {
+    State.setState(stateKey, value);
     Render.renderRoutines();
-  }
+  };
 
-  function handleSearchFilterChange(e) {
-    handleFilterChange("currentSearchFilter", e.target.value);
-  }
+  const handleFilterChange = (filterType, value) => {
+    const config = FILTER_CONFIG[filterType];
+    if (!config) return;
 
-  function handleToggleFilter() {
+    const processedValue = processFilterValue(filterType, value);
+    updateStateAndRender(config.stateKey, processedValue);
+  };
+
+  const createFilterHandler = filterType => e => {
+    handleFilterChange(filterType, e.target.value);
+  };
+
+  const toggleAdvancedFilters = () => {
     const showAdvancedFilters = !State.getState("showAdvancedFilters");
     State.setState("showAdvancedFilters", showAdvancedFilters);
     DOM.filtersBar.classList.toggle("extended", showAdvancedFilters);
-  }
+  };
 
-  function handleStatusFilterChange(e) {
-    handleFilterChange("currentFilter", e.target.value);
-  }
+  const isClickOutsideFilters = target => !DOM.filtersBar.contains(target);
 
-  function handlePriorityFilterChange(e) {
-    handleFilterChange("currentPriorityFilter", e.target.value);
-  }
+  const resetDOMFilters = () => {
+    Object.entries(DEFAULT_FILTER_VALUES).forEach(([key, value]) => {
+      DOM[key].value = value;
+    });
+  };
 
-  function handleDayFilterChange(e) {
-    handleFilterChange("currentDayFilter", e.target.value);
-  }
-
-  function handleClickOutsideFilters(e) {
-    const isClickOutside = !DOM.filtersBar.contains(e.target);
-    const isAdvancedFiltersOpen = State.getState("showAdvancedFilters");
-
-    if (isClickOutside && isAdvancedFiltersOpen) {
-      handleToggleFilter();
-    }
-  }
-
-  function resetFilters() {
-    const defaultValues = {
-      statusFilter: "all",
-      priorityFilter: "all",
-      dayFilter: "all",
-      searchFilter: ""
-    };
-
-    Object.entries(defaultValues).forEach(
-      ([key, value]) => (DOM[key].value = value)
-    );
-
-    State.resetFilters();
-    Render.renderRoutines();
-  }
-
-  function sortRoutinesByTime(routines) {
-    return routines.sort((a, b) => a.time - b.time);
-  }
+  const sortRoutinesByTime = routines =>
+    [...routines].sort((a, b) => a.time - b.time);
 
   const filterStrategies = {
     status: (routine, filterValue) => {
       if (filterValue === "all") return true;
 
-      const statusMap = {
-        active: routine.active,
-        inactive: !routine.active,
-        pending: routine.status === "pending"
-      };
-
-      return statusMap[filterValue] || false;
+      const statusHandler = STATUS_MAP[filterValue];
+      return statusHandler ? statusHandler(routine) : false;
     },
 
-    priority: (routine, filterValue) => {
-      return filterValue === "all" || routine.priority === filterValue;
-    },
+    priority: (routine, filterValue) =>
+      filterValue === "all" || routine.priority === filterValue,
 
-    day: (routine, filterValue) => {
-      return (
-        filterValue === "all" ||
-        routine.frequency.includes(parseInt(filterValue))
-      );
-    },
+    day: (routine, filterValue) =>
+      filterValue === "all" ||
+      routine.frequency.includes(parseInt(filterValue)),
 
     search: (routine, searchTerm) => {
       if (!searchTerm) return true;
 
-      const searchableText = [
-        routine.title.toLowerCase(),
-        routine.description.toLowerCase()
-      ].join(" ");
-
+      const searchableText = `${routine.title.toLowerCase()} ${routine.description.toLowerCase()}`;
       return searchableText.includes(searchTerm);
     }
   };
 
-  function filterRoutines(routines) {
+  const getFilterValues = state => ({
+    status: state.currentFilter,
+    priority: state.currentPriorityFilter,
+    day: state.currentDayFilter,
+    search: state.currentSearchFilter
+  });
+
+  const applyFilters = (routines, filterValues) => {
+    return routines.filter(routine =>
+      Object.entries(filterStrategies).every(([filterType, strategy]) =>
+        strategy(routine, filterValues[filterType])
+      )
+    );
+  };
+
+  return {
+    resetFilterStates,
+    createFilterHandler,
+    toggleAdvancedFilters,
+    isClickOutsideFilters,
+    resetDOMFilters,
+    sortRoutinesByTime,
+    getFilterValues,
+    applyFilters
+  };
+})();
+
+const Filter = (() => {
+  const handleSearchFilterChange = FilterUtils.createFilterHandler("search");
+
+  const handleStatusFilterChange = FilterUtils.createFilterHandler("status");
+
+  const handlePriorityFilterChange =
+    FilterUtils.createFilterHandler("priority");
+
+  const handleDayFilterChange = FilterUtils.createFilterHandler("day");
+
+  const handleToggleFilter = () => {
+    FilterUtils.toggleAdvancedFilters();
+  };
+
+  const handleClickOutsideFilters = e => {
+    const isAdvancedFiltersOpen = State.getState("showAdvancedFilters");
+
+    if (FilterUtils.isClickOutsideFilters(e.target) && isAdvancedFiltersOpen) {
+      handleToggleFilter();
+    }
+  };
+
+  const resetFilters = () => {
+    FilterUtils.resetDOMFilters();
+    FilterUtils.resetFilterStates();
+    Render.renderRoutines();
+  };
+
+  const filterRoutines = routines => {
     const state = State.getState();
+    const filterValues = FilterUtils.getFilterValues(state);
+    const filteredRoutines = FilterUtils.applyFilters(routines, filterValues);
 
-    const filteredRoutines = routines.filter(routine => {
-      return Object.entries(filterStrategies).every(
-        ([filterType, strategy]) => {
-          const filterMap = {
-            status: state.currentFilter,
-            priority: state.currentPriorityFilter,
-            day: state.currentDayFilter,
-            search: state.currentSearchFilter
-          };
-
-          return strategy(routine, filterMap[filterType]);
-        }
-      );
-    });
-
-    return sortRoutinesByTime(filteredRoutines);
-  }
+    return FilterUtils.sortRoutinesByTime(filteredRoutines);
+  };
 
   return {
     handleToggleFilter,

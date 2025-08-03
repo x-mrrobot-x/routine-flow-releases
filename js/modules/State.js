@@ -24,19 +24,8 @@ const State = (() => {
     state[key] = value;
   }
 
-  function resetFilters() {
-    const filterUpdates = {
-      currentFilter: "all",
-      currentPriorityFilter: "all",
-      currentDayFilter: "all",
-      currentSearchFilter: ""
-    };
-    setState(filterUpdates);
-  }
-
   return {
     getState,
-    setState,
-    resetFilters
+    setState
   };
 })();

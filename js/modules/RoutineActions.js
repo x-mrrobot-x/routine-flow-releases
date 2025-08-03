@@ -17,10 +17,14 @@ const RoutineUtils = (() => {
     }
   }
 
+  function extractRoutineId(routineCard) {
+    const id = routineCard.dataset.id;
+    return id ? Number(id) : null;
+  }
+
   function getRoutineIdFromElement(element) {
     const routineCard = element.closest(".routine-card");
-    const id = routineCard.getAttribute("data-id");
-    return Number(id);
+    return extractRoutineId(routineCard);
   }
 
   return {
@@ -43,14 +47,20 @@ const RoutineActions = (() => {
     Toast.showToast("success", messageKey);
   }
 
-  function confirmDeleteRoutine() {
+  const deleteRoutineFromState = () => {
     const routineToDelete = State.getState("routineToDelete");
-
     Data.deleteRoutine(routineToDelete);
+  };
 
+  const finalizeDeletion = () => {
     RoutineUtils.updateUI();
     Modal.closeDeleteModal();
     Toast.showToast("success", "toast_routine_deleted");
+  };
+
+  function confirmDeleteRoutine() {
+    Data.deleteRoutine(routineToDelete);
+    finalizeDeletion();
   }
 
   function handleCardClick(event) {

@@ -40,6 +40,7 @@ const DOM = (() => {
     // Form inputs
     titleInput: $("#title"),
     descriptionInput: $("#description"),
+    commandInput: $("#command"),
     prioritySelect: $("#priority"),
     timeInput: $("#time"),
     dayButtons: $$(".day-button"),

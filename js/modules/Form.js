@@ -14,14 +14,15 @@ const FormUtils = (() => {
     time: "form_error_time_required"
   };
 
+  const getFieldValue = el => el.value.trim();
+
   const getFormData = () => ({
-    title: document.getElementById("title").value.trim(),
-    description: document.getElementById("description").value.trim(),
-    priority: document.getElementById("priority").value,
-    timeString: document.getElementById("time").value,
-    timeInSeconds: Utils.timeToSeconds(document.getElementById("time").value),
+    title: getFieldValue(DOM.titleInput),
+    description: getFieldValue(DOM.descriptionInput),
+    priority: getFieldValue(DOM.prioritySelect),
+    time: Utils.timeToSeconds(getFieldValue(DOM.timeInput)),
     selectedDays: State.getState("selectedDays"),
-    command: document.getElementById("command").value.trim()
+    command: getFieldValue(DOM.commandInput)
   });
 
   const validateField = (field, value, errors, showErrorFn) => {
@@ -31,32 +32,34 @@ const FormUtils = (() => {
     }
   };
 
+  const validateCommandField = (command, errors, showErrorFn) => {
+    if (command && command.includes(" ")) {
+      showErrorFn("command-error", I18n.get("form_error_command_spaces"));
+      errors.push("command");
+    }
+  };
+
+  const validateDaysField = (selectedDays, errors, showErrorFn) => {
+    if (selectedDays.length === 0) {
+      showErrorFn("days-error", I18n.get("form_error_days_required"));
+      errors.push("days");
+    }
+  };
+
   const validateForm = (formData, showErrorFn) => {
     const errors = [];
 
     validateField("title", formData.title, errors, showErrorFn);
     validateField("description", formData.description, errors, showErrorFn);
-    validateField("time", formData.timeString, errors, showErrorFn);
-
-    if (formData.command && formData.command.includes(" ")) {
-      showErrorFn("command-error", I18n.get("form_error_command_spaces"));
-      errors.push("command");
-    }
-
-    if (formData.selectedDays.length === 0) {
-      showErrorFn("days-error", I18n.get("form_error_days_required"));
-      errors.push("days");
-    }
+    validateCommandField(formData.command, errors, showErrorFn);
+    validateField("time", formData.time, errors, showErrorFn);
+    validateDaysField(formData.selectedDays, errors, showErrorFn);
 
     return errors.length === 0;
   };
 
   const createRoutineData = formData => ({
-    title: formData.title,
-    description: formData.description,
-    command: formData.command,
-    priority: formData.priority,
-    time: formData.timeInSeconds,
+    ...formData,
     frequency: [...formData.selectedDays]
   });
 
@@ -100,7 +103,17 @@ const Form = (() => {
     Data.saveRoutines();
   };
 
-  function handleFormSubmit(e) {
+  const updateSelectedDays = (dayNumber, isSelected) => {
+    let selectedDays = State.getState("selectedDays");
+
+    selectedDays = isSelected
+      ? [...selectedDays, dayNumber]
+      : selectedDays.filter(day => day !== dayNumber);
+
+    State.setState("selectedDays", selectedDays);
+  };
+
+  const handleFormSubmit = e => {
     e.preventDefault();
     FormUtils.clearErrors();
 
@@ -117,31 +130,24 @@ const Form = (() => {
     }
 
     finalizeSave();
-  }
+  };
 
-  function toggleDaySelection(e) {
+  const toggleDaySelection = e => {
     const dayNumber = parseInt(e.target.dataset.day);
     e.target.classList.toggle("selected");
 
-    let selectedDays = State.getState("selectedDays");
+    const isSelected = e.target.classList.contains("selected");
+    updateSelectedDays(dayNumber, isSelected);
+  };
 
-    if (e.target.classList.contains("selected")) {
-      selectedDays.push(dayNumber);
-    } else {
-      selectedDays = selectedDays.filter(day => day !== dayNumber);
-    }
-
-    State.setState("selectedDays", selectedDays);
-  }
-
-  function clearFormErrors() {
+  const clearFormErrors = () => {
     FormUtils.clearErrors();
-  }
+  };
 
-  function showError(elementId, message) {
+  const showError = (elementId, message) => {
     const element = document.getElementById(elementId);
     if (element) element.textContent = message;
-  }
+  };
 
   return {
     handleFormSubmit,

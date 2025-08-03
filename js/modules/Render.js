@@ -35,18 +35,19 @@ const RenderUtils = (() => {
       .join("");
   }
 
+  const createCommandHTML = command =>
+    command
+      ? `
+      <div class="card-command">
+        ${Icons.getIcon("terminal")}
+        <span>${command}</span>
+      </div>
+    `
+      : "";
+
   function createCardHTML(routine) {
     const { className, icon } = getPriorityConfig(routine.priority);
     const label = I18n.get(className.replace("-", "_"));
-
-    const commandHTML = routine.command
-    ? `
-    <div class="card-command">
-      ${Icons.getIcon("terminal")}
-      <span>${routine.command}</span>
-    </div>
-    `
-    : "";
 
     return `
       <div class="card-header">
@@ -61,7 +62,7 @@ const RenderUtils = (() => {
           <span>${Utils.secondsToTime(routine.time)}</span>
         </div>
         
-        ${commandHTML}
+        ${createCommandHTML(routine.command)}
         
         <div class="card-days">
           ${Icons.getIcon("calendar")}
@@ -90,56 +91,71 @@ const RenderUtils = (() => {
     DOM.routinesGrid.innerHTML = "";
   }
 
+  const showEmptyState = () => {
+    DOM.emptyState.style.display = "flex";
+  };
+
+  const hideEmptyState = () => {
+    DOM.emptyState.style.display = "none";
+  };
+
   return {
     getPriorityConfig,
     createCardHTML,
     createDayTags,
     createActionButton,
     getCardClassName,
-    clearContainer
+    clearContainer,
+    showEmptyState,
+    hideEmptyState
   };
 })();
 
 const Render = (() => {
-  function createRoutineCard(routine) {
+  const createRoutineCard = routine => {
     const card = document.createElement("div");
     card.className = RenderUtils.getCardClassName(routine);
     card.dataset.id = routine.id;
     card.innerHTML = RenderUtils.createCardHTML(routine);
     return card;
-  }
+  };
 
-  function appendRoutineCards(routines) {
-    const routineCards = routines.map(routine => createRoutineCard(routine));
+  const appendRoutineCards = routines => {
+    const routineCards = routines.map(createRoutineCard);
     DOM.routinesGrid.append(...routineCards);
-  }
+  };
 
-  function renderRoutines() {
+  const hasRoutines = routines => routines.length > 0;
+
+  const renderRoutineCards = routines => {
+    if (hasRoutines(routines)) {
+      RenderUtils.hideEmptyState();
+      appendRoutineCards(routines);
+    } else {
+      RenderUtils.showEmptyState();
+    }
+  };
+
+  const renderRoutines = () => {
     const routines = Data.getRoutines();
     const filteredRoutines = Filter.filterRoutines(routines);
 
     RenderUtils.clearContainer();
+    renderRoutineCards(filteredRoutines);
+  };
 
-    if (filteredRoutines.length > 0) {
-      DOM.emptyState.style.display = "none";
-      appendRoutineCards(filteredRoutines);
-    } else {
-      DOM.emptyState.style.display = "flex";
-    }
-  }
-
-  function updateRoutinesCount() {
+  const updateRoutinesCount = () => {
     DOM.routinesCount.textContent = Data.getRoutines().length;
-  }
+  };
 
-  function updateAll() {
+  const updateAll = () => {
     updateRoutinesCount();
     renderRoutines();
-  }
+  };
 
-  function init() {
+  const init = () => {
     updateAll();
-  }
+  };
 
   return {
     init,

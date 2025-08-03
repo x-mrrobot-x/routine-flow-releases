@@ -11,15 +11,17 @@ const Utils = (() => {
     "day_sat"
   ];
 
+  function padTimeUnit(time) {
+    return time.toString().padStart(2, "0");
+  }
+
   function secondsToTime(seconds) {
     const hours = Math.floor(seconds / SECONDS_PER_HOUR);
     const minutes = Math.floor(
       (seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE
     );
 
-    return `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}`;
+    return `${padTimeUnit(hours)}:${padTimeUnit(minutes)}`;
   }
 
   function getDayName(dayNumber) {
