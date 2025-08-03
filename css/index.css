@@ -464,21 +464,18 @@ svg {
 }
 
 .priority-high {
-  border-color: rgb(var(--danger-medium-rgb));
-  background-color: rgba(var(--danger-medium-rgb), 0.2);
-  color: var(--danger-medium);
+  background-image: linear-gradient(to right, #ef4444, #f87171);
+  color: var(--text-primary);
 }
 
 .priority-medium {
-  border-color: rgb(var(--warning-medium-rgb));
-  background-color: rgba(var(--warning-medium-rgb), 0.2);
-  color: var(--warning-light);
+  background-image: linear-gradient(to right, #f97316, #fbbf24);
+  color: var(--text-primary);
 }
 
 .priority-low {
-  border-color: rgb(var(--success-medium-rgb));
-  background-color: rgba(var(--success-medium-rgb), 0.2);
-  color: var(--success-light);
+  background-image: linear-gradient(to right, #10b981, #34d399);
+  color: var(--text-primary);
 }
 
 .card-body {
