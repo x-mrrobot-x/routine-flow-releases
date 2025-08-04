@@ -47,19 +47,19 @@ const RoutineActions = (() => {
     Toast.showToast("success", messageKey);
   }
 
-  const deleteRoutineFromState = () => {
-    const routineToDelete = AppState.getState("routineToDelete");
-    RoutineService.deleteRoutine(routineToDelete);
-  };
-
   const finalizeDeletion = () => {
     RoutineUtils.updateUI();
     Modal.closeDeleteModal();
     Toast.showToast("success", "toast_routine_deleted");
   };
 
-  function confirmDeleteRoutine() {
+  const deleteRoutineFromState = () => {
+    const routineToDelete = AppState.getState("routineToDelete");
     RoutineService.deleteRoutine(routineToDelete);
+  };
+
+  function confirmDeleteRoutine() {
+    deleteRoutineFromState();
     finalizeDeletion();
   }
 
