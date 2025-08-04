@@ -1,7 +1,5 @@
 {
-  "app_title": "Fluxo do Tempo",
   "routines_title": "Minhas Rotinas",
-  "add_routine_button": "Adicionar Rotina",
   "modal_title": "Nova Rotina",
   "modal_description": "Crie uma nova rotina para seu dia a dia.",
   "form_label_name": "Título",

@@ -1,7 +1,5 @@
 {
-  "app_title": "Time Flow",
   "routines_title": "My Routines",
-  "add_routine_button": "Add Routine",
   "modal_title": "New Routine",
   "modal_description": "Create a new routine for your day to day.",
   "form_label_name": "Title",
