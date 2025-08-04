@@ -15,12 +15,13 @@ const DOM = (() => {
     statusFilter: $("#status-filter"),
     priorityFilter: $("#priority-filter"),
     dayFilter: $("#day-filter"),
-    resetFiltersButton: $("#clear-filters"),
 
     // Routines
     routinesGrid: $("#routines-grid"),
     routinesCount: $("#routines-count"),
     emptyState: $("#empty-state"),
+    emptyStateText: $("#empty-state p"),
+    emptyStateButton: $("#empty-state button"),
 
     // Modals
     routineModal: $("#routine-modal"),

@@ -47,6 +47,8 @@
   "empty_state_text": "No se encontraron rutinas para los filtros seleccionados.",
   "clear_filters_button": "Limpiar filtros",
   "toast_routine_created": "¡Rutina creada con éxito!",
+  "empty_routines_text": "Aún no has creado ninguna rutina. ¡Crea una ahora!",
+  "create_routine_button": "Crear Rutina",
   "toast_routine_updated": "¡Rutina actualizada con éxito!",
   "toast_routine_deleted": "¡Rutina eliminada con éxito!",
   "toast_routine_activated": "¡Rutina activada!",

@@ -46,6 +46,8 @@
   "day_saturday": "Sábado",
   "empty_state_text": "Nenhuma rotina encontrada para os filtros selecionados.",
   "clear_filters_button": "Limpar filtros",
+  "empty_routines_text": "Nenhuma rotina criada ainda. Crie uma agora!",
+  "create_routine_button": "Criar Rotina",
   "toast_routine_created": "Rotina criada com sucesso!",
   "toast_routine_updated": "Rotina atualizada com sucesso!",
   "toast_routine_deleted": "Rotina excluída com sucesso!",

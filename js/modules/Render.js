@@ -91,8 +91,43 @@ const RenderUtils = (() => {
     DOM.routinesGrid.innerHTML = "";
   }
 
-  const showEmptyState = () => {
+  const removeAllEventListeners = element => {
+    const newElement = element.cloneNode(true);
+    element.parentNode.replaceChild(newElement, element);
+    return newElement;
+  };
+
+  const setupFilterEmptyState = () => {
+    DOM.emptyStateText.textContent = I18n.get("empty_state_text");
+    DOM.emptyStateButton.innerHTML = Icons.getIcon("brush-cleaning");
+    DOM.emptyStateButton.innerHTML += I18n.get("clear_filters_button");
+
+    DOM.emptyStateButton = removeAllEventListeners(DOM.emptyStateButton);
+    DOM.emptyStateButton.addEventListener("click", Filter.resetFilters);
+    console.log(Filter.resetFilters);
+  };
+
+  const setupRoutinesEmptyState = () => {
+    DOM.emptyStateText.textContent = I18n.get("empty_routines_text");
+    DOM.emptyStateButton.innerHTML = Icons.getIcon("calendar-plus");
+    DOM.emptyStateButton.innerHTML += I18n.get("create_routine_button");
+
+    DOM.emptyStateButton = removeAllEventListeners(DOM.emptyStateButton);
+    DOM.emptyStateButton.addEventListener("click", Modal.openCreateModal);
+  };
+
+  const displayEmptyState = () => {
     DOM.emptyState.style.display = "flex";
+  };
+
+  const showEmptyState = isFilter => {
+    if (isFilter) {
+      setupFilterEmptyState();
+    } else {
+      setupRoutinesEmptyState();
+    }
+
+    displayEmptyState();
   };
 
   const hideEmptyState = () => {
@@ -127,21 +162,22 @@ const Render = (() => {
 
   const hasRoutines = routines => routines.length > 0;
 
-  const renderRoutineCards = routines => {
+  const renderRoutineCards = (routines, isFilter) => {
     if (hasRoutines(routines)) {
       RenderUtils.hideEmptyState();
       appendRoutineCards(routines);
     } else {
-      RenderUtils.showEmptyState();
+      RenderUtils.showEmptyState(isFilter);
     }
   };
 
   const renderRoutines = () => {
     const routines = RoutineService.getRoutines();
     const filteredRoutines = Filter.filterRoutines(routines);
+    const isFilter = Filter.isAnyFilterActive();
 
     RenderUtils.clearContainer();
-    renderRoutineCards(filteredRoutines);
+    renderRoutineCards(filteredRoutines, isFilter);
   };
 
   const updateRoutinesCount = () => {

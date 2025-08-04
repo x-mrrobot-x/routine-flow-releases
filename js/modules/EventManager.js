@@ -30,7 +30,7 @@ const EventManager = (() => {
     );
     DOM.dayFilter.addEventListener("change", Filter.handleDayFilterChange);
     DOM.searchFilter.addEventListener("input", Filter.handleSearchFilterChange);
-    DOM.resetFiltersButton.addEventListener("click", Filter.resetFilters);
+    DOM.emptyStateButton.addEventListener("click", Filter.resetFilters);
     document.addEventListener("click", Filter.handleClickOutsideFilters);
   }
 

@@ -165,6 +165,18 @@ const Filter = (() => {
     return FilterUtils.sortRoutinesByTime(filteredRoutines);
   };
 
+  const isAnyFilterActive = () => {
+    const state = AppState.getState();
+    const filterValues = FilterUtils.getFilterValues(state);
+
+    return (
+      filterValues.status !== "all" ||
+      filterValues.priority !== "all" ||
+      filterValues.day !== "all" ||
+      filterValues.search !== ""
+    );
+  };
+
   return {
     handleToggleFilter,
     handleSearchFilterChange,
@@ -173,6 +185,7 @@ const Filter = (() => {
     handleDayFilterChange,
     handleClickOutsideFilters,
     resetFilters,
-    filterRoutines
+    filterRoutines,
+    isAnyFilterActive
   };
 })();
