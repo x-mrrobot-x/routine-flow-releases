@@ -160,6 +160,7 @@ const Render = (() => {
   return {
     init,
     renderRoutines,
+    updateRoutinesCount,
     updateAll
   };
 })();
