@@ -1,4 +1,4 @@
-const Event = (() => {
+const EventManager = (() => {
   function setupModalEvents() {
     DOM.addRoutineButton.addEventListener("click", Modal.openCreateModal);
     DOM.cancelRoutineButton.addEventListener("click", Modal.closeModal);

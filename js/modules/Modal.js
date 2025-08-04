@@ -1,6 +1,6 @@
 const ModalUtils = (() => {
   function resetState() {
-    State.setState({
+    AppState.setState({
       isEditMode: false,
       routineToEdit: null
     });
@@ -8,11 +8,11 @@ const ModalUtils = (() => {
 
   function setCreateModeState() {
     resetState();
-    State.setState("selectedDays", []);
+    AppState.setState("selectedDays", []);
   }
 
   function setEditModeState(id) {
-    State.setState({
+    AppState.setState({
       isEditMode: true,
       routineToEdit: id
     });
@@ -50,7 +50,7 @@ const ModalUtils = (() => {
   };
 
   const updateDaySelection = frequency => {
-    State.setState("selectedDays", [...frequency]);
+    AppState.setState("selectedDays", [...frequency]);
     DOM.dayButtons.forEach(button => {
       updateDayButtonSelection(button, frequency);
     });
@@ -128,7 +128,7 @@ const Modal = (() => {
   }
 
   function openEditModal(id) {
-    const routine = Data.getRoutineById(id);
+    const routine = RoutineService.getRoutineById(id);
     setupEditModal(routine, id);
     ModalUtils.showModal(DOM.routineModal);
   }
@@ -140,12 +140,12 @@ const Modal = (() => {
 
   function openDeleteModal(id) {
     ModalUtils.showModal(DOM.deleteRoutineModal);
-    State.setState("routineToDelete", id);
+    AppState.setState("routineToDelete", id);
   }
 
   function closeDeleteModal() {
     ModalUtils.hideModal(DOM.deleteRoutineModal);
-    State.setState("routineToDelete", null);
+    AppState.setState("routineToDelete", null);
   }
 
   return {

@@ -36,9 +36,9 @@ const RoutineUtils = (() => {
 
 const RoutineActions = (() => {
   function handleToggleActive(id) {
-    const routine = Data.getRoutineById(id);
+    const routine = RoutineService.getRoutineById(id);
     const newActiveStatus = !routine.active;
-    Data.updateRoutine(id, { active: newActiveStatus });
+    RoutineService.updateRoutine(id, { active: newActiveStatus });
 
     RoutineUtils.updateUI();
     const messageKey = newActiveStatus
@@ -48,8 +48,8 @@ const RoutineActions = (() => {
   }
 
   const deleteRoutineFromState = () => {
-    const routineToDelete = State.getState("routineToDelete");
-    Data.deleteRoutine(routineToDelete);
+    const routineToDelete = AppState.getState("routineToDelete");
+    RoutineService.deleteRoutine(routineToDelete);
   };
 
   const finalizeDeletion = () => {
@@ -59,7 +59,7 @@ const RoutineActions = (() => {
   };
 
   function confirmDeleteRoutine() {
-    Data.deleteRoutine(routineToDelete);
+    RoutineService.deleteRoutine(routineToDelete);
     finalizeDeletion();
   }
 

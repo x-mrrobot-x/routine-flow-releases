@@ -21,7 +21,7 @@ const FormUtils = (() => {
     description: getFieldValue(DOM.descriptionInput),
     priority: getFieldValue(DOM.prioritySelect),
     time: Utils.timeToSeconds(getFieldValue(DOM.timeInput)),
-    selectedDays: State.getState("selectedDays"),
+    selectedDays: AppState.getState("selectedDays"),
     command: getFieldValue(DOM.commandInput)
   });
 
@@ -80,8 +80,8 @@ const FormUtils = (() => {
 
 const Form = (() => {
   const handleEditMode = routineData => {
-    const routineToEdit = State.getState("routineToEdit");
-    Data.updateRoutine(routineToEdit, routineData);
+    const routineToEdit = AppState.getState("routineToEdit");
+    RoutineService.updateRoutine(routineToEdit, routineData);
     Toast.showToast("success", "toast_routine_updated");
   };
 
@@ -92,7 +92,7 @@ const Form = (() => {
       active: true
     };
 
-    Data.addRoutine(newRoutine);
+    RoutineService.addRoutine(newRoutine);
     Render.updateRoutinesCount();
     Toast.showToast("success", "toast_routine_created");
   };
@@ -100,17 +100,17 @@ const Form = (() => {
   const finalizeSave = () => {
     Render.renderRoutines();
     Modal.closeModal();
-    Data.saveRoutines();
+    RoutineService.saveRoutines();
   };
 
   const updateSelectedDays = (dayNumber, isSelected) => {
-    let selectedDays = State.getState("selectedDays");
+    let selectedDays = AppState.getState("selectedDays");
 
     selectedDays = isSelected
       ? [...selectedDays, dayNumber]
       : selectedDays.filter(day => day !== dayNumber);
 
-    State.setState("selectedDays", selectedDays);
+    AppState.setState("selectedDays", selectedDays);
   };
 
   const handleFormSubmit = e => {
@@ -123,7 +123,7 @@ const Form = (() => {
 
     const routineData = FormUtils.createRoutineData(formData);
 
-    if (State.getState("isEditMode")) {
+    if (AppState.getState("isEditMode")) {
       handleEditMode(routineData);
     } else {
       handleCreateMode(routineData);

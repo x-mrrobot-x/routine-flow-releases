@@ -32,7 +32,7 @@ const FilterUtils = (() => {
   };
 
   const resetFilterStates = () => {
-    State.setState({
+    AppState.setState({
       currentFilter: "all",
       currentPriorityFilter: "all",
       currentDayFilter: "all",
@@ -46,7 +46,7 @@ const FilterUtils = (() => {
   };
 
   const updateStateAndRender = (stateKey, value) => {
-    State.setState(stateKey, value);
+    AppState.setState(stateKey, value);
     Render.renderRoutines();
   };
 
@@ -63,8 +63,8 @@ const FilterUtils = (() => {
   };
 
   const toggleAdvancedFilters = () => {
-    const showAdvancedFilters = !State.getState("showAdvancedFilters");
-    State.setState("showAdvancedFilters", showAdvancedFilters);
+    const showAdvancedFilters = !AppState.getState("showAdvancedFilters");
+    AppState.setState("showAdvancedFilters", showAdvancedFilters);
     DOM.filtersBar.classList.toggle("extended", showAdvancedFilters);
   };
 
@@ -144,7 +144,7 @@ const Filter = (() => {
   };
 
   const handleClickOutsideFilters = e => {
-    const isAdvancedFiltersOpen = State.getState("showAdvancedFilters");
+    const isAdvancedFiltersOpen = AppState.getState("showAdvancedFilters");
 
     if (FilterUtils.isClickOutsideFilters(e.target) && isAdvancedFiltersOpen) {
       handleToggleFilter();
@@ -158,7 +158,7 @@ const Filter = (() => {
   };
 
   const filterRoutines = routines => {
-    const state = State.getState();
+    const state = AppState.getState();
     const filterValues = FilterUtils.getFilterValues(state);
     const filteredRoutines = FilterUtils.applyFilters(routines, filterValues);
 

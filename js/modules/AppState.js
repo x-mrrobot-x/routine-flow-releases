@@ -1,4 +1,4 @@
-const State = (() => {
+const AppState = (() => {
   let state = {
     showAdvancedFilters: false,
     currentFilter: "all",

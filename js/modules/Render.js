@@ -137,7 +137,7 @@ const Render = (() => {
   };
 
   const renderRoutines = () => {
-    const routines = Data.getRoutines();
+    const routines = RoutineService.getRoutines();
     const filteredRoutines = Filter.filterRoutines(routines);
 
     RenderUtils.clearContainer();
@@ -145,7 +145,7 @@ const Render = (() => {
   };
 
   const updateRoutinesCount = () => {
-    DOM.routinesCount.textContent = Data.getRoutines().length;
+    DOM.routinesCount.textContent = RoutineService.getRoutines().length;
   };
 
   const updateAll = () => {
@@ -160,7 +160,6 @@ const Render = (() => {
   return {
     init,
     renderRoutines,
-    updateRoutinesCount,
     updateAll
   };
 })();

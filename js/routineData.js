@@ -1,4 +1,4 @@
-let DEFAULT_ROUTINES = [
+const DEFAULT_ROUTINES = [
   {
     id: 1722410400,
     title: "Exercícios matinais",
