@@ -610,27 +610,37 @@ svg {
   display: none;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-xxl) 0;
+  justify-content: center;
+  padding: var(--space-xxl);
+  margin: var(--space-md);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  animation: fade-in 0.5s ease-out;
 }
 
 .empty-state > svg {
-  color: var(--text-muted);
-  width: 8rem;
-  height: 8rem;
-  margin-bottom: var(--space-md);
+  width: 6rem;
+  height: 6rem;
+  color: rgba(var(--gradient-start-rgb), 0.8);
+  margin-bottom: var(--space-lg);
 }
 
 .empty-text {
-  text-align: center;
-  color: var(--text-muted);
+  font-size: var(--font-lg);
+  color: var(--text-secondary);
+  max-width: 40ch;
+  margin-bottom: var(--space-xl);
 }
 
 .empty-state button {
-  margin-top: var(--space-md);
+  font-size: var(--font-md);
+  padding: var(--space-sm) var(--space-lg);
 }
 
 .empty-state button svg {
-  margin-right: var(--space-xs);
+  margin-right: var(--space-sm);
+  width: var(--icon-md);
+  height: var(--icon-md);
 }
 
 /* Modal */
