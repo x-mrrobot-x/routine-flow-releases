@@ -59,7 +59,11 @@ const FormUtils = (() => {
   };
 
   const createRoutineData = formData => ({
-    ...formData,
+    title: formData.title,
+    description: formData.description,
+    command: formData.command,
+    priority: formData.priority,
+    time: formData.time,
     frequency: [...formData.selectedDays]
   });
 
