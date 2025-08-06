@@ -66,5 +66,6 @@
   "settings_modal_description": "Configure how to be notified when a routine runs.",
   "setting_voice_label": "Announce with Google voice",
   "setting_toast_label": "Show toast on screen",
-  "setting_vibrate_label": "Vibrate device"
+  "setting_vibrate_label": "Vibrate device",
+  "next_routine_title": "Next Routine"
 }

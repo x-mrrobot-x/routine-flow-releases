@@ -66,5 +66,6 @@
   "settings_modal_description": "Configure como ser notificado quando uma rotina executar.",
   "setting_voice_label": "Anunciar com voz do google",
   "setting_toast_label": "Exibir toast na tela",
-  "setting_vibrate_label": "Vibrar dispositivo"
+  "setting_vibrate_label": "Vibrar dispositivo",
+  "next_routine_title": "Próxima Rotina"
 }

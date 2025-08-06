@@ -40,6 +40,37 @@ const RoutineService = (env => {
     env.saveRoutines(data);
   }
 
+  function findNextRoutine() {
+    const now = new Date();
+    const currentDay = now.getDay();
+    const currentTimeInSeconds =
+      now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+    for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+      const targetDay = (currentDay + dayOffset) % 7;
+      const activeRoutines = routines.filter(
+        r => r.active && r.frequency.includes(targetDay)
+      );
+
+      for (const routine of activeRoutines) {
+        const isToday = dayOffset === 0;
+        const canRunToday = isToday && routine.time > currentTimeInSeconds;
+
+        if (canRunToday || !isToday) {
+          const targetDate = new Date(now.getTime() + dayOffset * 86400000);
+          const dayStart = new Date(
+            targetDate.getFullYear(),
+            targetDate.getMonth(),
+            targetDate.getDate()
+          );
+          return dayStart.getTime() / 1000 + routine.time;
+        }
+      }
+    }
+
+    return null;
+  }
+
   function init() {
     loadRoutines();
   }
@@ -52,6 +83,7 @@ const RoutineService = (env => {
     updateRoutine,
     deleteRoutine,
     saveRoutines,
-    getRoutineById
+    getRoutineById,
+    findNextRoutine
   };
 })(currentEnvironment);

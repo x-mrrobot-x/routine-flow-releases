@@ -1,4 +1,4 @@
-const RenderUtils = (() => {
+const RenderUtils = (env => {
   const PRIORITY_CONFIG = {
     low: {
       className: "priority-low",
@@ -133,6 +133,29 @@ const RenderUtils = (() => {
     DOM.emptyState.style.display = "none";
   };
 
+  const formatRoutineDateTime = timestamp => {
+    const date = new Date(timestamp * 1000);
+
+    const formattedTime = date.toLocaleTimeString(env.langCode, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    });
+
+    const formattedDate = date.toLocaleDateString(env.langCode, {
+      weekday: "long",
+      day: "2-digit",
+      month: "2-digit"
+    });
+
+    return `${formattedDate} - ${formattedTime}`;
+  };
+
+  const displayNextRoutine = formattedDateTime => {
+    DOM.nextRoutineText.textContent = formattedDateTime;
+    DOM.nextRoutineContainer.style.display = "block";
+  };
+
   return {
     getPriorityConfig,
     createCardHTML,
@@ -141,11 +164,25 @@ const RenderUtils = (() => {
     getCardClassName,
     clearContainer,
     showEmptyState,
-    hideEmptyState
+    hideEmptyState,
+    formatRoutineDateTime,
+    displayNextRoutine
   };
-})();
+})(currentEnvironment);
 
 const Render = (() => {
+  const renderNextRoutine = () => {
+    const nextRoutineTimestamp = RoutineService.findNextRoutine();
+
+    if (nextRoutineTimestamp) {
+      const formattedDateTime =
+        RenderUtils.formatRoutineDateTime(nextRoutineTimestamp);
+      RenderUtils.displayNextRoutine(formattedDateTime);
+    } else {
+      DOM.nextRoutineContainer.style.display = "none";
+    }
+  };
+
   const createRoutineCard = routine => {
     const card = document.createElement("div");
     card.className = RenderUtils.getCardClassName(routine);
@@ -185,6 +222,7 @@ const Render = (() => {
 
   const updateAll = () => {
     updateRoutinesCount();
+    renderNextRoutine();
     renderRoutines();
   };
 

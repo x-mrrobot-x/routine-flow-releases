@@ -22,6 +22,8 @@ const DOM = (() => {
     emptyState: $("#empty-state"),
     emptyStateText: $("#empty-state p"),
     emptyStateButton: $("#empty-state button"),
+    nextRoutineContainer: $("#next-routine"),
+    nextRoutineText: $("#next-routine-text"),
 
     // Modals
     routineModal: $("#routine-modal"),

@@ -264,7 +264,7 @@ svg {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   backdrop-filter: blur(0.4rem);
-  background-color: var(--bg-secondary);
+  background-color: rgba(var(--bg-secondary-rgb), 0.8);
 }
 
 .filters-header {
@@ -384,6 +384,49 @@ svg {
   background-color: var(--bg-primary);
 }
 
+/* Next Routine */
+
+.next-routine {
+  display: none;
+  border: 1px solid rgba(var(--gradient-start-rgb), 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-top: var(--space-lg);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--gradient-start-rgb), 0.08),
+    rgba(var(--gradient-end-rgb), 0.01)
+  );
+  /* background-color: var(--bg-secondary); */
+
+  animation: fade-in 0.5s ease-out;
+}
+
+.next-routine-title {
+  font-size: var(--font-md);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.next-routine-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.next-routine-info svg {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+  color: rgb(var(--gradient-start-rgb));
+}
+
+.next-routine-info span {
+  font-size: calc(var(--font-md) + 0.1rem);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
 /* Main Title */
 
 .main-title {
@@ -424,7 +467,7 @@ svg {
 .routine-card {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background-color: var(--bg-secondary);
+  background-color: rgba(var(--bg-secondary-rgb), 0.8);
   box-shadow:
     0 0.4rem 0.6rem -0.1rem rgba(var(--black-rgb), 0.1),
     0 0.2rem 0.4rem -0.1rem rgba(var(--black-rgb), 0.06);
