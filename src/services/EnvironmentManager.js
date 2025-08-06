@@ -6,7 +6,7 @@ const EnvironmentManager = (() => {
 
     async loadLanguageData(langCode) {
       const response = await fetch(
-        `${this.workDir}/js/languages/${langCode}.json`
+        `${this.workDir}/src/lang/${langCode}.json`
       );
       return await response.json();
     },

@@ -104,7 +104,6 @@ const RenderUtils = (() => {
 
     DOM.emptyStateButton = removeAllEventListeners(DOM.emptyStateButton);
     DOM.emptyStateButton.addEventListener("click", Filter.resetFilters);
-    console.log(Filter.resetFilters);
   };
 
   const setupRoutinesEmptyState = () => {
