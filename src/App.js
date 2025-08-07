@@ -6,6 +6,7 @@ const App = (() => {
     Render.init();
     EventManager.init();
     Settings.init();
+    TimeService.init();
   }
 
   return {

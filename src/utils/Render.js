@@ -171,16 +171,21 @@ const RenderUtils = (env => {
 })(currentEnvironment);
 
 const Render = (() => {
-  const renderNextRoutine = () => {
+  const updateNextRoutine = () => {
     const nextRoutineTimestamp = RoutineService.findNextActivationTimestamp();
 
     if (nextRoutineTimestamp) {
       const formattedDateTime =
         RenderUtils.formatRoutineDateTime(nextRoutineTimestamp);
       RenderUtils.displayNextRoutine(formattedDateTime);
+      AppState.setState("nextRoutineTimestamp", nextRoutineTimestamp);
     } else {
       DOM.nextRoutineContainer.style.display = "none";
     }
+  };
+
+  const updateRoutinesCount = () => {
+    DOM.routinesCount.textContent = RoutineService.getRoutines().length;
   };
 
   const createRoutineCard = routine => {
@@ -216,13 +221,9 @@ const Render = (() => {
     renderRoutineCards(filteredRoutines, isFilter);
   };
 
-  const updateRoutinesCount = () => {
-    DOM.routinesCount.textContent = RoutineService.getRoutines().length;
-  };
-
   const updateAll = () => {
     updateRoutinesCount();
-    renderNextRoutine();
+    updateNextRoutine();
     renderRoutines();
   };
 
@@ -232,8 +233,9 @@ const Render = (() => {
 
   return {
     init,
-    renderRoutines,
+    updateNextRoutine,
     updateRoutinesCount,
+    renderRoutines,
     updateAll
   };
 })();

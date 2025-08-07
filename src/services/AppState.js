@@ -9,7 +9,8 @@ const AppState = (() => {
     routineToEdit: null,
     routineToDelete: null,
     selectedDays: [],
-    currentTab: "home"
+    currentTab: "home",
+    nextRoutineTimestamp: Infinity
   };
 
   function getState(key) {
