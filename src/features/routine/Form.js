@@ -97,12 +97,11 @@ const Form = (() => {
     };
 
     RoutineService.addRoutine(newRoutine);
-    Render.updateRoutinesCount();
     Toast.showToast("success", "toast_routine_created");
   };
 
   const finalizeSave = () => {
-    Render.renderRoutines();
+    Render.updateAll();
     Modal.closeModal();
     RoutineService.saveRoutines();
   };

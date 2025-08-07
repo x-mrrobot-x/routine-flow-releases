@@ -40,32 +40,51 @@ const RoutineService = (env => {
     env.saveRoutines(data);
   }
 
-  function findNextRoutine() {
+  function findNextActivationTimestamp() {
     const now = new Date();
     const currentDay = now.getDay();
-    const currentTimeInSeconds =
+    const currentTime =
       now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
 
-    for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-      const targetDay = (currentDay + dayOffset) % 7;
-      const activeRoutines = routines.filter(
-        r => r.active && r.frequency.includes(targetDay)
-      );
+    if (!routines?.length) return null;
 
-      for (const routine of activeRoutines) {
-        const isToday = dayOffset === 0;
-        const canRunToday = isToday && routine.time > currentTimeInSeconds;
+    const activeRoutines = routines.filter(r => r?.active);
+    if (!activeRoutines.length) return null;
 
-        if (canRunToday || !isToday) {
-          const targetDate = new Date(now.getTime() + dayOffset * 86400000);
-          const dayStart = new Date(
-            targetDate.getFullYear(),
-            targetDate.getMonth(),
-            targetDate.getDate()
-          );
-          return dayStart.getTime() / 1000 + routine.time;
+    let nextActivation = null;
+    let nextActivationTime = Infinity;
+
+    for (let day = 0; day < 7; day++) {
+      const targetDay = (currentDay + day) % 7;
+      const dayRoutines = activeRoutines
+        .filter(r => r.frequency?.includes(targetDay))
+        .sort((a, b) => a.time - b.time);
+
+      for (const routine of dayRoutines) {
+        if (day === 0 && routine.time <= currentTime) continue;
+
+        const activationDate = new Date(now);
+        activationDate.setDate(now.getDate() + day);
+
+        const hours = Math.floor(routine.time / 3600);
+        const minutes = Math.floor((routine.time % 3600) / 60);
+        const seconds = routine.time % 60;
+
+        activationDate.setHours(hours, minutes, seconds, 0);
+
+        const timestamp = Math.floor(activationDate.getTime() / 1000);
+
+        if (timestamp < nextActivationTime) {
+          nextActivation = routine;
+          nextActivationTime = timestamp;
         }
       }
+
+      if (nextActivation && day === 0) break;
+    }
+
+    if (nextActivation) {
+      return nextActivationTime;
     }
 
     return null;
@@ -84,6 +103,6 @@ const RoutineService = (env => {
     deleteRoutine,
     saveRoutines,
     getRoutineById,
-    findNextRoutine
+    findNextActivationTimestamp
   };
 })(currentEnvironment);

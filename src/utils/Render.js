@@ -172,7 +172,7 @@ const RenderUtils = (env => {
 
 const Render = (() => {
   const renderNextRoutine = () => {
-    const nextRoutineTimestamp = RoutineService.findNextRoutine();
+    const nextRoutineTimestamp = RoutineService.findNextActivationTimestamp();
 
     if (nextRoutineTimestamp) {
       const formattedDateTime =
