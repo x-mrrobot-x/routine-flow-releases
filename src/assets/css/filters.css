@@ -1,0 +1,124 @@
+.filters-bar {
+  padding: var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(0.4rem);
+  background-color: var(--bg-secondary);
+}
+
+.filters-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.toggle-filters-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  background: transparent;
+  transition: color 0.3s;
+}
+
+.toggle-filters-btn:active {
+  color: var(--text-primary);
+}
+
+.toggle-filters-btn svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.filter-chevron {
+  width: 1.6rem;
+  height: 1.6rem;
+  transition: transform 0.3s;
+}
+
+.filters-bar.extended .filter-chevron {
+  transform: rotate(180deg);
+}
+
+/* Search */
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  padding: var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-primary);
+  transition: border 0.3s ease;
+}
+
+.search-wrapper svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--text-secondary);
+}
+
+.input-search {
+  flex: 1;
+  color: var(--text-primary);
+  margin-left: var(--space-xs);
+  background: transparent;
+  transition: border-color 0.3s;
+}
+
+.input-search:focus {
+  border: none;
+  box-shadow: none;
+}
+
+/* Advanced filters */
+
+.advanced-filters {
+  display: none;
+}
+
+.filters-bar.extended .advanced-filters {
+  display: block;
+}
+
+.filter-group {
+  margin-top: var(--space-sm);
+}
+
+.advanced-filters label {
+  display: block;
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+  margin-bottom: var(--space-xxs);
+}
+
+.select-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.select-wrapper::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  right: var(--space-sm);
+  display: inline-block;
+  border-left: 0.4rem solid transparent;
+  border-right: 0.4rem solid transparent;
+  border-top: 0.4rem solid var(--text-secondary);
+  transform: translateY(-50%);
+}
+
+.select {
+  cursor: pointer;
+  appearance: none;
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-primary);
+}

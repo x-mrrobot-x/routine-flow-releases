@@ -1,0 +1,81 @@
+.button {
+  display: flex;
+  font-weight: 500;
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.button svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.btn-gradient-glass {
+  border: 1px solid rgba(var(--gradient-start-rgb), 0.3);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--gradient-start-rgb), 0.2),
+    rgba(var(--gradient-end-rgb), 0.1)
+  );
+}
+
+.button-primary {
+  color: var(--text-primary);
+  background-color: rgba(var(--gradient-start-rgb), 0.7);
+}
+
+.button-primary:active {
+  background-color: rgba(var(--gradient-start-rgb), 0.9);
+}
+
+.button-outline {
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  background-color: transparent;
+}
+
+.button-outline:active {
+  background-color: var(--bg-button-hover);
+}
+
+.tech-button {
+  color: var(--text-primary);
+  background: linear-gradient(
+    135deg,
+    rgb(var(--gradient-start-rgb)),
+    rgb(var(--gradient-end-rgb))
+  );
+  box-shadow: 0 0.4rem 1.2rem rgba(var(--gradient-end-rgb), 0.3);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.tech-button:active {
+  box-shadow:
+    0 0.6rem 1.6rem rgba(var(--gradient-end-rgb), 0.4),
+    0 0 0 0.2rem rgba(var(--gradient-start-rgb), 0.2);
+}
+
+.routine-add-button {
+  position: fixed;
+  right: var(--space-lg);
+  bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: var(--radius-full);
+  z-index: 40;
+}
+
+.routine-add-button:active {
+  transform: scale(1.1);
+}
+
+.routine-add-button svg {
+  width: 2.4rem;
+  height: 2.4rem;
+}

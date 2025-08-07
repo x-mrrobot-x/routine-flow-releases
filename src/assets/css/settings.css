@@ -1,0 +1,57 @@
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-lg);
+}
+
+.setting-item label {
+  color: var(--text-secondary);
+}
+
+/* Switch toggle */
+
+.settings-list {
+  margin-bottom: var(--space-sm);
+}
+
+.setting-item input {
+  --toggle-padding: 0.3rem;
+  --toggle-width: 4.4rem;
+  --toggle-height: 2.4rem;
+  --toggle-bubble: calc(var(--toggle-height) - (var(--toggle-padding) * 2));
+  appearance: none;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--toggle-padding);
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 3.4rem;
+  outline: none;
+  transition: all 0.4s ease;
+}
+
+.setting-item input {
+  box-shadow: none;
+}
+
+.setting-item input:checked {
+  background-color: rgba(var(--gradient-start-rgb), 0.5);
+  border-color: rgba(var(--gradient-start-rgb), 0.2);
+}
+
+.setting-item input::before {
+  content: "";
+  width: var(--toggle-bubble);
+  height: var(--toggle-bubble);
+  background-color: var(--text-muted);
+  border-radius: 50%;
+  transition: margin 0.3s ease;
+}
+
+.setting-item input:checked::before {
+  margin-left: calc(100% - var(--toggle-bubble));
+  background-color: var(--text-secondary);
+}

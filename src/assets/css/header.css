@@ -1,0 +1,45 @@
+.header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(var(--bg-primary-rgb), 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+}
+
+.header-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-icon {
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+  color: rgb(var(--gradient-start-rgb));
+  margin-right: var(--space-xs);
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: var(--font-xl);
+}
+
+.settings-button {
+  background-color: transparent;
+}
+
+.settings-button svg {
+  color: rgb(var(--gradient-start-rgb));
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+  transition: color 0.3s ease;
+}
+
+.settings-button:active svg {
+  color: var(--text-secondary);
+}
