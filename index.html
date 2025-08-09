@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="/src/assets/css/media-queries.css" />
     <link rel="stylesheet" href="/src/assets/css/modal.css" />
     <link rel="stylesheet" href="/src/assets/css/routines.css" />
+    <link rel="stylesheet" href="/src/assets/css/commands.css" />
+    <link rel="stylesheet" href="/src/assets/css/app-selector.css" />
     <link rel="stylesheet" href="/src/assets/css/settings.css" />
     <link rel="stylesheet" href="/src/assets/css/toast.css" />
 
@@ -23,6 +25,12 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Debbug -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>
+      eruda.init();
+    </script>
 
     <!-- Script -->
     <script src="/src/services/EnvironmentManager.js" defer></script>
@@ -34,16 +42,20 @@
     <script src="/src/utils/DOM.js" defer></script>
     <script src="/src/utils/Render.js" defer></script>
     <script src="/src/features/routine/routineData.js" defer></script>
+    <script src="/src/features/routine/appsData.js" defer></script>
     <script src="/src/features/routine/RoutineService.js" defer></script>
     <script src="/src/features/routine/Filter.js" defer></script>
     <script src="/src/features/routine/Form.js" defer></script>
     <script src="/src/features/routine/RoutineActions.js" defer></script>
+    <script src="/src/features/routine/AppSelector.js" defer></script>
+    <script src="/src/features/routine/CommandDropdown.js" defer></script>
     <script src="/src/components/Modal.js" defer></script>
     <script src="/src/components/Toast.js" defer></script>
     <script src="/src/features/settings/Settings.js" defer></script>
     <script src="/src/services/TimeService.js" defer></script>
     <script src="/src/App.js" defer></script>
   </head>
+
   <body class="loading">
     <div class="app-container">
       <!-- Header -->
@@ -180,6 +192,40 @@
       </main>
     </div>
 
+    <!-- App Selector Modal -->
+    <div id="app-selector-modal" class="modal">
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3
+            class="modal-title text-gradient"
+            data-i18n="app_selector_modal_title"
+          >
+            Selecionar Aplicativo
+          </h3>
+          <p
+            class="modal-description"
+            data-i18n="app_selector_modal_description"
+          >
+            Escolha o aplicativo que será aberto quando a rotina for acionada.
+          </p>
+        </div>
+
+        <div id="apps-grid" class="apps-grid"></div>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="button button-outline"
+            id="cancel-app-selector"
+          >
+            <i data-icon="x"></i>
+            <span>Cancelar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Create Routine Modal -->
     <div id="routine-modal" class="modal">
       <div class="modal-overlay"></div>
@@ -192,57 +238,60 @@
         </div>
 
         <form id="routine-form" class="form">
-          <div class="form-group">
-            <label for="title" class="form-label" data-i18n="form_label_name"
-              >Título</label
-            >
-            <input
-              id="title"
-              name="title"
-              type="text"
-              class="form-input"
-              placeholder="Ex: Exercícios matinais"
-              data-i18n="form_placeholder_title"
-            />
-            <div class="form-error" id="title-error"></div>
-          </div>
+          <div class="form-content">
+            <div class="form-group">
+              <label for="title" class="form-label" data-i18n="form_label_name"
+                >Título</label
+              >
+              <input
+                id="title"
+                name="title"
+                type="text"
+                class="form-input"
+                placeholder="Ex: Exercícios matinais"
+                data-i18n="form_placeholder_title"
+              />
+              <div class="form-error" id="title-error"></div>
+            </div>
 
-          <div class="form-group">
-            <label
-              for="description"
-              class="form-label"
-              data-i18n="form_label_description"
-              >Descrição</label
-            >
-            <textarea
-              id="description"
-              name="description"
-              class="form-textarea"
-              placeholder="Ex: 30 minutos de exercícios para começar o dia com energia"
-              data-i18n="form_placeholder_description"
-            ></textarea>
-            <div class="form-error" id="description-error"></div>
-          </div>
+            <div class="form-group">
+              <label
+                for="description"
+                class="form-label"
+                data-i18n="form_label_description"
+                >Descrição</label
+              >
+              <textarea
+                id="description"
+                name="description"
+                class="form-textarea"
+                placeholder="Ex: 30 minutos de exercícios para começar o dia com energia"
+                data-i18n="form_placeholder_description"
+              ></textarea>
+              <div class="form-error" id="description-error"></div>
+            </div>
 
-          <div class="form-group">
-            <label
-              for="command"
-              class="form-label"
-              data-i18n="form_label_command"
-              >Comando (opcional)</label
-            >
-            <input
-              id="command"
-              name="command"
-              type="text"
-              class="form-input"
-              placeholder="Ex: open_app"
-              data-i18n="form_placeholder_command"
-            />
-            <div class="form-error" id="command-error"></div>
-          </div>
+            <div class="form-group">
+              <!-- Command Suggestions Dropdown -->
+              <div id="command-dropdown" class="command-dropdown"></div>
 
-          <div class="form-row">
+              <label
+                for="command"
+                class="form-label"
+                data-i18n="form_label_command"
+                >Comando (opcional)</label
+              >
+              <input
+                id="command"
+                name="command"
+                type="text"
+                class="form-input"
+                placeholder="Ex: open_app"
+                data-i18n="form_placeholder_command"
+              />
+              <div class="form-error" id="command-error"></div>
+            </div>
+
             <div class="form-group">
               <label
                 for="priority"
@@ -267,74 +316,74 @@
               <input id="time" name="time" type="time" class="form-input" />
               <div class="form-error" id="time-error"></div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label class="form-label" data-i18n="form_label_days"
-              >Dias da semana</label
-            >
-            <div class="days-container" id="days-container">
-              <button
-                type="button"
-                class="day-button"
-                data-day="0"
-                data-i18n="day_sun"
+            <div class="form-group">
+              <label class="form-label" data-i18n="form_label_days"
+                >Dias da semana</label
               >
-                Dom
-              </button>
-              <button
-                type="button"
-                class="day-button"
-                data-day="1"
-                data-i18n="day_mon"
-              >
-                Seg
-              </button>
-              <button
-                type="button"
-                class="day-button"
-                data-day="2"
-                data-i18n="day_tue"
-              >
-                Ter
-              </button>
-              <button
-                type="button"
-                class="day-button"
-                data-day="3"
-                data-i18n="day_wed"
-              >
-                Qua
-              </button>
-              <button
-                type="button"
-                class="day-button"
-                data-day="4"
-                data-i18n="day_thu"
-              >
-                Qui
-              </button>
-              <button
-                type="button"
-                class="day-button"
-                data-day="5"
-                data-i18n="day_fri"
-              >
-                Sex
-              </button>
-              <button
-                type="button"
-                class="day-button"
-                data-day="6"
-                data-i18n="day_sat"
-              >
-                Sáb
-              </button>
+              <div class="days-container" id="days-container">
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="0"
+                  data-i18n="day_sun"
+                >
+                  Dom
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="1"
+                  data-i18n="day_mon"
+                >
+                  Seg
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="2"
+                  data-i18n="day_tue"
+                >
+                  Ter
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="3"
+                  data-i18n="day_wed"
+                >
+                  Qua
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="4"
+                  data-i18n="day_thu"
+                >
+                  Qui
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="5"
+                  data-i18n="day_fri"
+                >
+                  Sex
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="6"
+                  data-i18n="day_sat"
+                >
+                  Sáb
+                </button>
+              </div>
+              <div class="form-error" id="days-error"></div>
             </div>
-            <div class="form-error" id="days-error"></div>
           </div>
 
-          <div class="form-actions">
+          <div class="modal-actions">
             <button
               type="button"
               id="cancel-routine"
@@ -362,7 +411,8 @@
             desfeita.
           </p>
         </div>
-        <div class="form-actions">
+
+        <div class="modal-actions">
           <button
             type="button"
             class="button button-outline"

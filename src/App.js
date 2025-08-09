@@ -5,8 +5,10 @@ const App = (() => {
     RoutineService.init();
     Render.init();
     EventManager.init();
-    Settings.init();
     TimeService.init();
+    Settings.init();
+    AppSelector.init();
+    CommandDropdown.init();
   }
 
   return {

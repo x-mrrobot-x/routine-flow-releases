@@ -59,7 +59,7 @@
   "edit_routine_subtitle": "Completa los campos para editar la rutina.",
   "form_error_title_required": "El título es obligatorio",
   "form_error_description_required": "La descripción es obligatoria",
-  "form_error_command_spaces": "El comando no puede contener espacios. Usa _ en su lugar.",
+  "form_error_command_invalid": "Comando no válido.",
   "form_error_time_required": "El horario es obligatorio",
   "form_error_days_required": "Selecciona al menos un día de la semana",
   "settings_modal_title": "Anuncio de Rutinas",
@@ -67,5 +67,7 @@
   "setting_voice_label": "Anunciar con voz de Google",
   "setting_toast_label": "Mostrar toast en pantalla",
   "setting_vibrate_label": "Vibrar dispositivo",
-  "next_routine_title": "Próxima Rutina"
+  "next_routine_title": "Próxima Rutina",
+  "app_selector_modal_title": "Seleccionar Aplicación",
+  "app_selector_modal_description": "Selecciona la aplicación que se abrirá cuando se active la rutina."
 }

@@ -59,7 +59,7 @@
   "edit_routine_subtitle": "Preencha os campos para editar a rotina.",
   "form_error_title_required": "Título é obrigatório",
   "form_error_description_required": "Descrição é obrigatória",
-  "form_error_command_spaces": "O comando não pode conter espaços. Use _ em vez disso.",
+  "form_error_command_invalid": "Comando inválido.",
   "form_error_time_required": "Horário é obrigatório",
   "form_error_days_required": "Selecione pelo menos um dia da semana",
   "settings_modal_title": "Anúncio de Rotinas",
@@ -67,5 +67,7 @@
   "setting_voice_label": "Anunciar com voz do google",
   "setting_toast_label": "Exibir toast na tela",
   "setting_vibrate_label": "Vibrar dispositivo",
-  "next_routine_title": "Próxima Rotina"
+  "next_routine_title": "Próxima Rotina",
+  "app_selector_modal_title": "Selecionar Aplicativo",
+  "app_selector_modal_description": "Escolha o aplicativo que será aberto quando a rotina for acionada."
 }

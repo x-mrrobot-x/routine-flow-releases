@@ -33,9 +33,17 @@ const FormUtils = (() => {
   };
 
   const validateCommandField = (command, errors, showErrorFn) => {
-    if (command && command.includes(" ")) {
-      showErrorFn("command-error", I18n.get("form_error_command_spaces"));
-      errors.push("command");
+    if (command) {
+      const validCommands = CommandUtils.getCommands();
+
+      const startsWithValidCommand = validCommands.some(validCmd =>
+        command.startsWith(validCmd)
+      );
+
+      if (!startsWithValidCommand) {
+        showErrorFn("command-error", I18n.get("form_error_command_invalid"));
+        errors.push("command");
+      }
     }
   };
 

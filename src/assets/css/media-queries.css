@@ -26,10 +26,6 @@
   .routines-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .form-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (min-width: 102.4rem) {

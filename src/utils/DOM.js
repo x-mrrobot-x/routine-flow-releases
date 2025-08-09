@@ -29,9 +29,15 @@ const DOM = (() => {
     routineModal: $("#routine-modal"),
     deleteRoutineModal: $("#delete-routine-modal"),
     routineForm: $("#routine-form"),
-    modalTitle: $(".modal-title"),
-    modalDescription: $(".modal-description"),
+    modalTitle: $("#routine-modal .modal-title"),
+    modalDescription: $("#routine-modal .modal-description"),
     submitButtonText: $('button[type="submit"]'),
+    appModal: $("#app-selector-modal"),
+
+    // Apps selector modal
+    appSelectorModal: $("#app-selector-modal"),
+    cancelAppSelector: $("#cancel-app-selector"),
+    appsGrid: $("#apps-grid"),
 
     // Settings
     settingsButton: $("#settings-button"),
@@ -47,6 +53,7 @@ const DOM = (() => {
     prioritySelect: $("#priority"),
     timeInput: $("#time"),
     dayButtons: $$(".day-button"),
+    commandDropdown: $("#command-dropdown"),
 
     // Action buttons
     addRoutineButton: $("#add-routine-button"),
@@ -64,6 +71,7 @@ const DOM = (() => {
     elements.deleteRoutineModal
   );
   elements.settingsModalOverlay = $(".modal-overlay", elements.settingsModal);
+  elements.appsModalOverlay = $(".modal-overlay", elements.appSelectorModal);
 
   return {
     ...elements

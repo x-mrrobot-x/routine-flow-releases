@@ -3,12 +3,15 @@ const EnvironmentManager = (() => {
     name: "web",
     langCode: "pt-BR",
     workDir: ".",
+    iconPath: "/src/assets/icons/",
 
     async loadLanguageData(langCode) {
-      const response = await fetch(
-        `${this.workDir}/src/lang/${langCode}.json`
-      );
+      const response = await fetch(`${this.workDir}/src/lang/${langCode}.json`);
       return await response.json();
+    },
+
+    loadAppsData() {
+      return DEFAULT_APPS_DATA;
     },
 
     getRoutines() {
