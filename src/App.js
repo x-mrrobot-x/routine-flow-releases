@@ -3,12 +3,15 @@ const App = (() => {
     Icons.init();
     await I18n.init();
     RoutineService.init();
-    Render.init();
-    EventManager.init();
+    RoutineRenderer.init();
     TimeService.init();
-    Settings.init();
-    AppSelector.init();
+    RoutineFilter.init();
+    SettingsModal.init();
+    RoutineActions.init();
+    RoutineModal.init();
+    DeleteRoutineModal.init();
     CommandDropdown.init();
+    AppSelectorModal.init();
   }
 
   return {

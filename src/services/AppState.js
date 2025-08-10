@@ -5,11 +5,6 @@ const AppState = (() => {
     currentPriorityFilter: "all",
     currentDayFilter: "all",
     currentSearchFilter: "",
-    isEditMode: false,
-    routineToEdit: null,
-    routineToDelete: null,
-    selectedDays: [],
-    currentTab: "home",
     nextRoutineTimestamp: Infinity
   };
 

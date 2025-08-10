@@ -7,73 +7,8 @@ const DOM = (() => {
     return element.querySelectorAll(selector);
   };
 
-  const elements = {
-    // Filters
-    filtersBar: $("#filters-bar"),
-    toggleFiltersButton: $("#toggle-filters-btn"),
-    searchFilter: $("#search-filter"),
-    statusFilter: $("#status-filter"),
-    priorityFilter: $("#priority-filter"),
-    dayFilter: $("#day-filter"),
-
-    // Routines
-    routinesGrid: $("#routines-grid"),
-    routinesCount: $("#routines-count"),
-    emptyState: $("#empty-state"),
-    emptyStateText: $("#empty-state p"),
-    emptyStateButton: $("#empty-state button"),
-    nextRoutineContainer: $("#next-routine"),
-    nextRoutineText: $("#next-routine-text"),
-
-    // Modals
-    routineModal: $("#routine-modal"),
-    deleteRoutineModal: $("#delete-routine-modal"),
-    routineForm: $("#routine-form"),
-    modalTitle: $("#routine-modal .modal-title"),
-    modalDescription: $("#routine-modal .modal-description"),
-    submitButtonText: $('button[type="submit"]'),
-    appModal: $("#app-selector-modal"),
-
-    // Apps selector modal
-    appSelectorModal: $("#app-selector-modal"),
-    cancelAppSelector: $("#cancel-app-selector"),
-    appsGrid: $("#apps-grid"),
-
-    // Settings
-    settingsButton: $("#settings-button"),
-    settingsModal: $("#settings-modal"),
-    voiceToggle: $("#voice-toggle"),
-    toastToggle: $("#toast-toggle"),
-    vibrateToggle: $("#vibrate-toggle"),
-
-    // Form inputs
-    titleInput: $("#title"),
-    descriptionInput: $("#description"),
-    commandInput: $("#command"),
-    prioritySelect: $("#priority"),
-    timeInput: $("#time"),
-    dayButtons: $$(".day-button"),
-    commandDropdown: $("#command-dropdown"),
-
-    // Action buttons
-    addRoutineButton: $("#add-routine-button"),
-    cancelRoutineButton: $("#cancel-routine"),
-    confirmDeleteButton: $("#confirm-delete"),
-    cancelDeleteButton: $("#cancel-delete"),
-
-    // Toast
-    toastContainer: $("#toast-container")
-  };
-
-  elements.routineModalOverlay = $(".modal-overlay", elements.routineModal);
-  elements.deleteModalOverlay = $(
-    ".modal-overlay",
-    elements.deleteRoutineModal
-  );
-  elements.settingsModalOverlay = $(".modal-overlay", elements.settingsModal);
-  elements.appsModalOverlay = $(".modal-overlay", elements.appSelectorModal);
-
   return {
-    ...elements
+    $,
+    $$
   };
 })();

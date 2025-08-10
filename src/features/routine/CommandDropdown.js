@@ -48,17 +48,33 @@ const CommandUtils = (() => {
 const CommandDropdown = (() => {
   let isVisible = false;
 
-  const toggle = show => {
-    DOM.commandDropdown.classList.toggle("show", show);
-    isVisible = show;
+  const elements = {
+    dropdown: DOM.$("#command-dropdown")
   };
 
-  const show = () => toggle(true);
-  const hide = () => toggle(false);
+  function open() {
+    isVisible = true;
+    Modal.show(elements.dropdown);
+  }
+
+  function close() {
+    isVisible = false;
+    Modal.hide(elements.dropdown);
+  }
+
+  const handleCommandInput = event => {
+    const { value } = event.target;
+
+    if (value === "/") {
+      open();
+    } else if (isVisible) {
+      close();
+    }
+  };
 
   const handleOutsideClick = event => {
-    if (!DOM.commandDropdown.contains(event.target) && isVisible) {
-      hide();
+    if (!elements.dropdown.contains(event.target) && isVisible) {
+      close();
     }
   };
 
@@ -69,31 +85,19 @@ const CommandDropdown = (() => {
     const { command } = item.dataset;
 
     if (command === "/open") {
-      hide();
-      AppSelector.show();
+      close();
+      AppSelectorModal.open();
       return;
     }
 
-    DOM.commandInput.value = command;
-    DOM.commandInput.focus();
+    RoutineForm.setCommandInput(command);
 
-    hide();
-  };
-
-  const handleInput = event => {
-    const { value } = event.target;
-
-    if (value === "/") {
-      show();
-    } else if (isVisible) {
-      hide();
-    }
+    close();
   };
 
   const bindEvents = () => {
     const events = [
-      [DOM.commandInput, "input", handleInput],
-      [DOM.commandDropdown, "click", handleSuggestionClick],
+      [elements.dropdown, "click", handleSuggestionClick],
       [document, "click", handleOutsideClick]
     ];
 
@@ -104,7 +108,7 @@ const CommandDropdown = (() => {
 
   const renderSuggestions = () => {
     const suggestionItems = CommandUtils.createSuggestionItems();
-    DOM.commandDropdown.innerHTML = suggestionItems;
+    elements.dropdown.innerHTML = suggestionItems;
   };
 
   const init = () => {
@@ -114,7 +118,6 @@ const CommandDropdown = (() => {
 
   return {
     init,
-    show,
-    hide
+    handleCommandInput
   };
 })();

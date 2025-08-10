@@ -1,4 +1,8 @@
 const Toast = (() => {
+  const elements = {
+    toastContainer: DOM.$("#toast-container")
+  };
+
   const TOAST_ICON_CONFIG = {
     success: "check-circle",
     error: "alert-circle",
@@ -50,7 +54,7 @@ const Toast = (() => {
   };
 
   const addToastToDOM = toast => {
-    DOM.toastContainer.appendChild(toast);
+    elements.toastContainer.appendChild(toast);
   };
 
   const initializeToast = toast => {

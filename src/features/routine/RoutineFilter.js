@@ -1,4 +1,4 @@
-const FilterUtils = (() => {
+const RoutineFilterUtils = (() => {
   const FILTER_CONFIG = {
     search: {
       stateKey: "currentSearchFilter",
@@ -47,7 +47,7 @@ const FilterUtils = (() => {
 
   const updateStateAndRender = (stateKey, value) => {
     AppState.setState(stateKey, value);
-    Render.renderRoutines();
+    RoutineRenderer.renderRoutines();
   };
 
   const handleFilterChange = (filterType, value) => {
@@ -62,17 +62,18 @@ const FilterUtils = (() => {
     handleFilterChange(filterType, e.target.value);
   };
 
-  const toggleAdvancedFilters = () => {
+  const toggleAdvancedFilters = filtersBar => {
     const showAdvancedFilters = !AppState.getState("showAdvancedFilters");
     AppState.setState("showAdvancedFilters", showAdvancedFilters);
-    DOM.filtersBar.classList.toggle("extended", showAdvancedFilters);
+    filtersBar.classList.toggle("extended", showAdvancedFilters);
   };
 
-  const isClickOutsideFilters = target => !DOM.filtersBar.contains(target);
+  const isClickOutsideFilters = (target, filtersBar) =>
+    !filtersBar.contains(target);
 
-  const resetDOMFilters = () => {
+  const resetDOMFilters = elements => {
     Object.entries(DEFAULT_FILTER_VALUES).forEach(([key, value]) => {
-      DOM[key].value = value;
+      elements[key].value = value;
     });
   };
 
@@ -129,45 +130,63 @@ const FilterUtils = (() => {
   };
 })();
 
-const Filter = (() => {
-  const handleSearchFilterChange = FilterUtils.createFilterHandler("search");
+const RoutineFilter = (() => {
+  const elements = {
+    filtersBar: DOM.$("#filters-bar"),
+    toggleFiltersButton: DOM.$("#toggle-filters-btn"),
+    searchFilter: DOM.$("#search-filter"),
+    statusFilter: DOM.$("#status-filter"),
+    priorityFilter: DOM.$("#priority-filter"),
+    dayFilter: DOM.$("#day-filter"),
+    emptyStateButton: DOM.$("#empty-state button")
+  };
 
-  const handleStatusFilterChange = FilterUtils.createFilterHandler("status");
+  const handleSearchFilterChange =
+    RoutineFilterUtils.createFilterHandler("search");
+
+  const handleStatusFilterChange =
+    RoutineFilterUtils.createFilterHandler("status");
 
   const handlePriorityFilterChange =
-    FilterUtils.createFilterHandler("priority");
+    RoutineFilterUtils.createFilterHandler("priority");
 
-  const handleDayFilterChange = FilterUtils.createFilterHandler("day");
+  const handleDayFilterChange = RoutineFilterUtils.createFilterHandler("day");
 
   const handleToggleFilter = () => {
-    FilterUtils.toggleAdvancedFilters();
+    RoutineFilterUtils.toggleAdvancedFilters(elements.filtersBar);
   };
 
   const handleClickOutsideFilters = e => {
     const isAdvancedFiltersOpen = AppState.getState("showAdvancedFilters");
 
-    if (FilterUtils.isClickOutsideFilters(e.target) && isAdvancedFiltersOpen) {
+    if (
+      RoutineFilterUtils.isClickOutsideFilters(e.target, elements.filtersBar) &&
+      isAdvancedFiltersOpen
+    ) {
       handleToggleFilter();
     }
   };
 
   const resetFilters = () => {
-    FilterUtils.resetDOMFilters();
-    FilterUtils.resetFilterStates();
-    Render.renderRoutines();
+    RoutineFilterUtils.resetDOMFilters(elements);
+    RoutineFilterUtils.resetFilterStates();
+    RoutineRenderer.renderRoutines();
   };
 
   const filterRoutines = routines => {
     const state = AppState.getState();
-    const filterValues = FilterUtils.getFilterValues(state);
-    const filteredRoutines = FilterUtils.applyFilters(routines, filterValues);
+    const filterValues = RoutineFilterUtils.getFilterValues(state);
+    const filteredRoutines = RoutineFilterUtils.applyFilters(
+      routines,
+      filterValues
+    );
 
-    return FilterUtils.sortRoutinesByTime(filteredRoutines);
+    return RoutineFilterUtils.sortRoutinesByTime(filteredRoutines);
   };
 
   const isAnyFilterActive = () => {
     const state = AppState.getState();
-    const filterValues = FilterUtils.getFilterValues(state);
+    const filterValues = RoutineFilterUtils.getFilterValues(state);
 
     return (
       filterValues.status !== "all" ||
@@ -177,7 +196,28 @@ const Filter = (() => {
     );
   };
 
+  const bindEvents = () => {
+    const events = [
+      [elements.toggleFiltersButton, "click", handleToggleFilter],
+      [elements.statusFilter, "change", handleStatusFilterChange],
+      [elements.priorityFilter, "change", handlePriorityFilterChange],
+      [elements.dayFilter, "change", handleDayFilterChange],
+      [elements.searchFilter, "input", handleSearchFilterChange],
+      [elements.emptyStateButton, "click", resetFilters],
+      [document, "click", handleClickOutsideFilters]
+    ];
+
+    events.forEach(([element, event, handler]) =>
+      element.addEventListener(event, handler)
+    );
+  };
+
+  const init = () => {
+    bindEvents();
+  };
+
   return {
+    init,
     handleToggleFilter,
     handleSearchFilterChange,
     handleStatusFilterChange,

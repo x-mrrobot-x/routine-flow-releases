@@ -1,4 +1,4 @@
-const RenderUtils = (env => {
+const RoutineRenderUtils = (env => {
   const PRIORITY_CONFIG = {
     low: {
       className: "priority-low",
@@ -14,29 +14,27 @@ const RenderUtils = (env => {
     }
   };
 
-  function getPriorityConfig(priority) {
-    return PRIORITY_CONFIG[priority] || PRIORITY_CONFIG.medium;
-  }
+  const getPriorityConfig = priority => PRIORITY_CONFIG[priority];
 
-  function createActionButton(action, iconName, className) {
+  const createActionButton = (action, iconName, className) => {
     return `
       <button class="button ${className}" data-action="${action}">
         ${Icons.getIcon(iconName)}
       </button>
     `;
-  }
+  };
 
-  function createDayTags(frequency) {
+  const createDayTags = frequency => {
     return frequency
       .map(
         dayNumber =>
           `<span class="day-tag">${Utils.getDayName(dayNumber)}</span>`
       )
       .join("");
-  }
+  };
 
-  const createCommandHTML = command =>
-    command
+  const createCommandHTML = command => {
+    return command
       ? `
       <div class="card-command">
         ${Icons.getIcon("terminal")}
@@ -44,8 +42,9 @@ const RenderUtils = (env => {
       </div>
     `
       : "";
+  };
 
-  function createCardHTML(routine) {
+  const createRoutineCardHTML = routine => {
     const { className, icon } = getPriorityConfig(routine.priority);
     const label = I18n.get(className.replace("-", "_"));
 
@@ -81,15 +80,15 @@ const RenderUtils = (env => {
         </div>
       </div>
     `;
-  }
+  };
 
-  function getCardClassName(routine) {
+  const getCardClassName = routine => {
     return `routine-card ${!routine.active ? "inactive" : ""}`;
-  }
+  };
 
-  function clearContainer() {
-    DOM.routinesGrid.innerHTML = "";
-  }
+  const clearContainer = elements => {
+    elements.routinesGrid.innerHTML = "";
+  };
 
   const removeAllEventListeners = element => {
     const newElement = element.cloneNode(true);
@@ -97,40 +96,45 @@ const RenderUtils = (env => {
     return newElement;
   };
 
-  const setupFilterEmptyState = () => {
-    DOM.emptyStateText.textContent = I18n.get("empty_state_text");
-    DOM.emptyStateButton.innerHTML = Icons.getIcon("brush-cleaning");
-    DOM.emptyStateButton.innerHTML += I18n.get("clear_filters_button");
+  const setupFilterEmptyState = (elements) => {
+    elements.emptyStateText.textContent = I18n.get("empty_state_text");
+    elements.emptyStateButton.innerHTML = Icons.getIcon("brush-cleaning");
+    elements.emptyStateButton.innerHTML += I18n.get("clear_filters_button");
 
-    DOM.emptyStateButton = removeAllEventListeners(DOM.emptyStateButton);
-    DOM.emptyStateButton.addEventListener("click", Filter.resetFilters);
+    elements.emptyStateButton = removeAllEventListeners(
+      elements.emptyStateButton
+    );
+    elements.emptyStateButton.addEventListener(
+      "click",
+      RoutineFilter.resetFilters
+    );
   };
 
-  const setupRoutinesEmptyState = () => {
-    DOM.emptyStateText.textContent = I18n.get("empty_routines_text");
-    DOM.emptyStateButton.innerHTML = Icons.getIcon("calendar-plus");
-    DOM.emptyStateButton.innerHTML += I18n.get("create_routine_button");
+  const setupRoutinesEmptyState = elements => {
+    elements.emptyStateText.textContent = I18n.get("empty_routines_text");
+    elements.emptyStateButton.innerHTML = Icons.getIcon("calendar-plus");
+    elements.emptyStateButton.innerHTML += I18n.get("create_routine_button");
 
-    DOM.emptyStateButton = removeAllEventListeners(DOM.emptyStateButton);
-    DOM.emptyStateButton.addEventListener("click", Modal.openCreateModal);
+    elements.emptyStateButton = removeAllEventListeners(
+      elements.emptyStateButton
+    );
+    elements.emptyStateButton.addEventListener(
+      "click",
+      RoutineModal.openCreateModal
+    );
   };
 
-  const displayEmptyState = () => {
-    DOM.emptyState.style.display = "flex";
-  };
-
-  const showEmptyState = isFilter => {
+  const showEmptyState = (isFilter, elements) => {
     if (isFilter) {
-      setupFilterEmptyState();
+      setupFilterEmptyState(elements);
     } else {
-      setupRoutinesEmptyState();
+      setupRoutinesEmptyState(elements);
     }
-
-    displayEmptyState();
+    elements.emptyState.style.display = "flex";
   };
 
-  const hideEmptyState = () => {
-    DOM.emptyState.style.display = "none";
+  const hideEmptyState = elements => {
+    elements.emptyState.style.display = "none";
   };
 
   const formatRoutineDateTime = timestamp => {
@@ -151,14 +155,17 @@ const RenderUtils = (env => {
     return `${formattedDate} - ${formattedTime}`;
   };
 
-  const displayNextRoutine = formattedDateTime => {
-    DOM.nextRoutineText.textContent = formattedDateTime;
-    DOM.nextRoutineContainer.style.display = "block";
+  const showNextRoutine = (formattedDateTime, elements) => {
+    elements.nextRoutineText.textContent = formattedDateTime;
+    elements.nextRoutineContainer.style.display = "block";
+  };
+
+  const hideNextRoutine = elements => {
+    elements.nextRoutineContainer.style.display = "none";
   };
 
   return {
-    getPriorityConfig,
-    createCardHTML,
+    createRoutineCardHTML,
     createDayTags,
     createActionButton,
     getCardClassName,
@@ -166,59 +173,69 @@ const RenderUtils = (env => {
     showEmptyState,
     hideEmptyState,
     formatRoutineDateTime,
-    displayNextRoutine
+    showNextRoutine,
+    hideNextRoutine
   };
 })(currentEnvironment);
 
-const Render = (() => {
-  const updateNextRoutine = () => {
-    const nextRoutineTimestamp = RoutineService.findNextActivationTimestamp();
-
-    if (nextRoutineTimestamp) {
-      const formattedDateTime =
-        RenderUtils.formatRoutineDateTime(nextRoutineTimestamp);
-      RenderUtils.displayNextRoutine(formattedDateTime);
-      AppState.setState("nextRoutineTimestamp", nextRoutineTimestamp);
-    } else {
-      DOM.nextRoutineContainer.style.display = "none";
-    }
-  };
-
-  const updateRoutinesCount = () => {
-    DOM.routinesCount.textContent = RoutineService.getRoutines().length;
+const RoutineRenderer = (() => {
+  const elements = {
+    routinesGrid: DOM.$("#routines-grid"),
+    routinesCount: DOM.$("#routines-count"),
+    emptyState: DOM.$("#empty-state"),
+    emptyStateText: DOM.$("#empty-state p"),
+    emptyStateButton: DOM.$("#empty-state button"),
+    nextRoutineContainer: DOM.$("#next-routine"),
+    nextRoutineText: DOM.$("#next-routine-text")
   };
 
   const createRoutineCard = routine => {
     const card = document.createElement("div");
-    card.className = RenderUtils.getCardClassName(routine);
+    card.className = RoutineRenderUtils.getCardClassName(routine);
     card.dataset.id = routine.id;
-    card.innerHTML = RenderUtils.createCardHTML(routine);
+    card.innerHTML = RoutineRenderUtils.createRoutineCardHTML(routine);
     return card;
   };
 
   const appendRoutineCards = routines => {
     const routineCards = routines.map(createRoutineCard);
-    DOM.routinesGrid.append(...routineCards);
+    elements.routinesGrid.append(...routineCards);
   };
 
-  const hasRoutines = routines => routines.length > 0;
-
   const renderRoutineCards = (routines, isFilter) => {
-    if (hasRoutines(routines)) {
-      RenderUtils.hideEmptyState();
+    if (routines.length > 0) {
+      RoutineRenderUtils.hideEmptyState(elements);
       appendRoutineCards(routines);
     } else {
-      RenderUtils.showEmptyState(isFilter);
+      RoutineRenderUtils.showEmptyState(isFilter, elements);
     }
   };
 
   const renderRoutines = () => {
     const routines = RoutineService.getRoutines();
-    const filteredRoutines = Filter.filterRoutines(routines);
-    const isFilter = Filter.isAnyFilterActive();
+    const filteredRoutines = RoutineFilter.filterRoutines(routines);
+    const isFilter = RoutineFilter.isAnyFilterActive();
 
-    RenderUtils.clearContainer();
+    RoutineRenderUtils.clearContainer(elements);
     renderRoutineCards(filteredRoutines, isFilter);
+  };
+
+  const updateNextRoutine = () => {
+    const nextRoutineTimestamp = RoutineService.findNextActivationTimestamp();
+
+    if (nextRoutineTimestamp) {
+      const formattedDateTime =
+        RoutineRenderUtils.formatRoutineDateTime(nextRoutineTimestamp);
+      RoutineRenderUtils.showNextRoutine(formattedDateTime, elements);
+      AppState.setState("nextRoutineTimestamp", nextRoutineTimestamp);
+    } else {
+      RoutineRenderUtils.hideNextRoutine(elements);
+    }
+  };
+
+  const updateRoutinesCount = () => {
+    const count = RoutineService.getRoutines().length;
+    elements.routinesCount.textContent = count;
   };
 
   const updateAll = () => {
