@@ -14,7 +14,7 @@ const AppSelectorModal = (env => {
 
     return `
     <div class="app-card" data-app="${name}">
-      <img src="${iconPath}" class="app-icon" />
+      <img src="${iconPath}" class="app-icon" loading="lazy" />
       <p class="app-name">${name}</p>
     </div>`;
   }
@@ -58,9 +58,23 @@ const AppSelectorModal = (env => {
     );
   }
 
+  function appendApps(apps) {
+    const html = createItems(apps);
+    elements.grid.insertAdjacentHTML("beforeend", html);
+  }
+
   function render(data) {
     const apps = data || env.loadApps();
-    elements.grid.innerHTML = createItems(apps);
+    elements.grid.innerHTML = "";
+
+    const appsPager = PaginationManager.create({
+      scrollElement: elements.grid,
+      pageSize: 10,
+      thresholdPx: 200,
+      renderAppend: appendApps
+    });
+
+    appsPager.init(apps);
   }
 
   function init() {

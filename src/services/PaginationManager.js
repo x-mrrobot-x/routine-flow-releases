@@ -49,10 +49,6 @@ const PaginationManager = (() => {
       scrollElement.addEventListener("scroll", onScroll, { passive: true });
     }
 
-    function detach() {
-      scrollElement.removeEventListener("scroll", onScroll);
-    }
-
     function fill() {
       let counter = 0;
       while (
@@ -75,7 +71,7 @@ const PaginationManager = (() => {
     attach();
 
     return {
-      init,
+      init
     };
   }
 
