@@ -1,14 +1,11 @@
 const DOM = (() => {
-  const $ = (selector, element = document) => {
-    return element.querySelector(selector);
-  };
+  function $(selector, el = document) {
+    return el.querySelector(selector);
+  }
 
-  const $$ = (selector, element = document) => {
-    return element.querySelectorAll(selector);
-  };
+  function $$(selector, el = document) {
+    return el.querySelectorAll(selector);
+  }
 
-  return {
-    $,
-    $$
-  };
+  return { $, $$ };
 })();

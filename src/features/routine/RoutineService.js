@@ -1,46 +1,46 @@
 const RoutineService = (env => {
   let routines = [];
 
-  function getRoutineById(id) {
+  function getById(id) {
     return routines.find(r => r.id === id) || null;
   }
 
-  function getRoutines() {
+  function getAll() {
     return Array.isArray(routines) ? routines : [];
   }
 
-  function addRoutine(routine) {
+  function add(routine) {
     const newRoutine = {
       ...routine,
       id: Date.now()
     };
 
     routines.push(newRoutine);
-    saveRoutines();
+    save();
   }
 
-  function updateRoutine(id, updatedData) {
+  function update(id, data) {
     const index = routines.findIndex(r => r.id === id);
-    routines[index] = { ...routines[index], ...updatedData };
-    saveRoutines();
+    routines[index] = { ...routines[index], ...data };
+    save();
   }
 
-  function deleteRoutine(id) {
-    routines = routines.filter(routine => routine.id !== id);
-    saveRoutines();
+  function remove(id) {
+    routines = routines.filter(r => r.id !== id);
+    save();
   }
 
-  function loadRoutines() {
-    const storedRoutines = env.getRoutines();
-    routines = storedRoutines ? JSON.parse(storedRoutines) : DEFAULT_ROUTINES;
+  function load() {
+    const stored = env.getRoutines();
+    routines = stored ? JSON.parse(stored) : DEFAULT_ROUTINES;
   }
 
-  function saveRoutines() {
+  function save() {
     const data = JSON.stringify(routines, null, 2);
     env.saveRoutines(data);
   }
 
-  function findNextActivationTimestamp() {
+  function findNextTimestamp() {
     const now = new Date();
     const currentDay = now.getDay();
     const currentTime =
@@ -48,61 +48,58 @@ const RoutineService = (env => {
 
     if (!routines?.length) return null;
 
-    const activeRoutines = routines.filter(r => r?.active);
-    if (!activeRoutines.length) return null;
+    const active = routines.filter(r => r?.active);
+    if (!active.length) return null;
 
-    let nextActivation = null;
-    let nextActivationTime = Infinity;
+    let nextRoutine = null;
+    let nextTime = Infinity;
 
-    for (let day = 0; day < 7; day++) {
+    for (let day = 0; day <= 7; day++) {
       const targetDay = (currentDay + day) % 7;
-      const dayRoutines = activeRoutines
+      const dayRoutines = active
         .filter(r => r.frequency?.includes(targetDay))
         .sort((a, b) => a.time - b.time);
 
       for (const routine of dayRoutines) {
         if (day === 0 && routine.time <= currentTime) continue;
 
-        const activationDate = new Date(now);
-        activationDate.setDate(now.getDate() + day);
+        const date = new Date(now);
+        date.setDate(now.getDate() + day);
 
         const hours = Math.floor(routine.time / 3600);
         const minutes = Math.floor((routine.time % 3600) / 60);
         const seconds = routine.time % 60;
 
-        activationDate.setHours(hours, minutes, seconds, 0);
+        date.setHours(hours, minutes, seconds, 0);
 
-        const timestamp = Math.floor(activationDate.getTime() / 1000);
+        const timestamp = Math.floor(date.getTime() / 1000);
 
-        if (timestamp < nextActivationTime) {
-          nextActivation = routine;
-          nextActivationTime = timestamp;
+        if (timestamp < nextTime) {
+          nextRoutine = routine;
+          nextTime = timestamp;
         }
       }
 
-      if (nextActivation && day === 0) break;
+      if (nextRoutine && day === 0) break;
     }
 
-    if (nextActivation) {
-      return nextActivationTime;
-    }
-
-    return null;
+    return nextRoutine ? nextTime : null;
   }
 
   function init() {
-    loadRoutines();
+    load();
+    RoutineRenderer.init();
   }
 
   return {
     init,
-    loadRoutines,
-    getRoutines,
-    addRoutine,
-    updateRoutine,
-    deleteRoutine,
-    saveRoutines,
-    getRoutineById,
-    findNextActivationTimestamp
+    load,
+    getAll,
+    add,
+    update,
+    remove,
+    save,
+    getById,
+    findNextTimestamp
   };
 })(currentEnvironment);

@@ -5,22 +5,23 @@ const SettingsService = (env => {
     vibrate: false
   };
 
-  const saveSettings = settings => {
+  function save(settings) {
     env.saveSettings(JSON.stringify(settings, null, 2));
-  };
+  }
 
-  const loadSettings = () => {
-    const storedSettings = env.getSettings();
+  function load() {
+    const stored = env.getSettings();
 
-    if (!storedSettings) {
-      saveSettings(DEFAULT_SETTINGS);
+    if (!stored) {
+      save(DEFAULT_SETTINGS);
+      return DEFAULT_SETTINGS;
     }
 
-    return storedSettings ? JSON.parse(storedSettings) : DEFAULT_SETTINGS;
-  };
+    return JSON.parse(stored);
+  }
 
   return {
-    loadSettings,
-    saveSettings
+    load,
+    save
   };
 })(currentEnvironment);

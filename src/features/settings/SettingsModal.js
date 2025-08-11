@@ -1,6 +1,6 @@
 const SettingsModal = (() => {
   const elements = {
-    button: DOM.$("#settings-button"),
+    btn: DOM.$("#settings-btn"),
     modal: DOM.$("#settings-modal"),
     overlay: DOM.$("#settings-modal .modal-overlay"),
     voiceToggle: DOM.$("#voice-toggle"),
@@ -8,50 +8,56 @@ const SettingsModal = (() => {
     vibrateToggle: DOM.$("#vibrate-toggle")
   };
 
-  const getCurrentSettings = () => ({
-    voice: elements.voiceToggle.checked,
-    toast: elements.toastToggle.checked,
-    vibrate: elements.vibrateToggle.checked
-  });
+  function getCurrent() {
+    return {
+      voice: elements.voiceToggle.checked,
+      toast: elements.toastToggle.checked,
+      vibrate: elements.vibrateToggle.checked
+    };
+  }
 
-  const handleSettingsChange = () => {
-    const settings = getCurrentSettings();
-    SettingsService.saveSettings(settings);
-  };
+  function handleChange() {
+    const settings = getCurrent();
+    SettingsService.save(settings);
+  }
 
-  function openModal() {
+  function open() {
     Modal.show(elements.modal);
   }
 
-  function closeModal() {
+  function close() {
     Modal.hide(elements.modal);
   }
 
+  const handlers = {
+    open: open,
+    close: close,
+    change: handleChange
+  };
+
   function bindEvents() {
     const events = [
-      [elements.button, "click", openModal],
-      [elements.overlay, "click", closeModal],
-      [elements.modal, "change", handleSettingsChange]
+      [elements.btn, "click", handlers.open],
+      [elements.overlay, "click", handlers.close],
+      [elements.modal, "change", handlers.change]
     ];
 
-    events.forEach(([element, event, handler]) =>
-      element.addEventListener(event, handler)
+    events.forEach(([el, event, handler]) =>
+      el.addEventListener(event, handler)
     );
   }
 
-  const applySettingsToDOM = settings => {
+  function applyToDOM(settings) {
     elements.voiceToggle.checked = settings.voice;
     elements.toastToggle.checked = settings.toast;
     elements.vibrateToggle.checked = settings.vibrate;
-  };
+  }
 
   function init() {
-    const storedSettings = SettingsService.loadSettings();
-    applySettingsToDOM(storedSettings);
+    const settings = SettingsService.load();
+    applyToDOM(settings);
     bindEvents();
   }
 
-  return {
-    init
-  };
+  return { init };
 })();

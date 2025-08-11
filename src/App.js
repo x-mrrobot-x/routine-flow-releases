@@ -3,7 +3,6 @@ const App = (() => {
     Icons.init();
     await I18n.init();
     RoutineService.init();
-    RoutineRenderer.init();
     TimeService.init();
     RoutineFilter.init();
     SettingsModal.init();
@@ -14,9 +13,7 @@ const App = (() => {
     AppSelectorModal.init();
   }
 
-  return {
-    init
-  };
+  return { init };
 })();
 
 App.init();

@@ -1,13 +1,13 @@
 const RoutineModalUtils = (() => {
-  const setCreateModeState = () => {
+  function setCreateState() {
     RoutineModal.setState({
       selectedDays: [],
       isEditMode: false,
       routineToEdit: null
     });
-  };
+  }
 
-  function setEditModeState(id, routine) {
+  function setEditState(id, routine) {
     RoutineModal.setState({
       selectedDays: [...routine.frequency],
       isEditMode: true,
@@ -15,16 +15,16 @@ const RoutineModalUtils = (() => {
     });
   }
 
-  function updateModalTexts(title, description, buttonContent, elements) {
+  function updateTexts(title, desc, btnContent, elements) {
     elements.title.textContent = title;
-    elements.description.textContent = description;
-    elements.submitButton.innerHTML = buttonContent;
+    elements.description.textContent = desc;
+    elements.submitBtn.innerHTML = btnContent;
   }
 
   return {
-    setCreateModeState,
-    setEditModeState,
-    updateModalTexts
+    setCreateState,
+    setEditState,
+    updateTexts
   };
 })();
 
@@ -34,11 +34,11 @@ const RoutineModal = (() => {
     overlay: DOM.$("#routine-modal .modal-overlay"),
     title: DOM.$("#routine-modal .modal-title"),
     description: DOM.$("#routine-modal .modal-description"),
-    cancelButton: DOM.$("#cancel-routine"),
-    submitButton: DOM.$('button[type="submit"]')
+    cancelBtn: DOM.$("#cancel-routine"),
+    submitBtn: DOM.$('button[type="submit"]')
   };
 
-  const MODAL_CONTENT_KEYS = {
+  const CONTENT_KEYS = {
     create: {
       title: "create_routine_title",
       subtitle: "create_routine_subtitle",
@@ -59,50 +59,51 @@ const RoutineModal = (() => {
     routineToEdit: null
   };
 
-  const getState = key => state[key];
+  function getState(key) {
+    return state[key];
+  }
 
-  const setState = (key, value) => {
+  function setState(key, value) {
     if (typeof key === "object") {
       state = { ...state, ...key };
       return;
     }
     state[key] = value;
-  };
+  }
 
-  const getRoutineModalContent = isEditMode => {
-    const mode = isEditMode ? "edit" : "create";
-    const config = MODAL_CONTENT_KEYS[mode];
+  function getContent(isEdit) {
+    const mode = isEdit ? "edit" : "create";
+    const config = CONTENT_KEYS[mode];
 
     return {
       title: I18n.get(config.title),
       subtitle: I18n.get(config.subtitle),
       submitButton: `${Icons.getIcon(config.icon)} ${I18n.get(config.button)}`
     };
-  };
-
-  function setupEditModal(routine, id) {
-    RoutineModalUtils.setEditModeState(id, routine);
-    const { title, subtitle, submitButton } = getRoutineModalContent(true);
-    RoutineModalUtils.updateModalTexts(title, subtitle, submitButton, elements);
-    RoutineForm.setupEditForm(routine);
   }
 
-  function openEditModal(id) {
-    const routine = RoutineService.getRoutineById(id);
-    setupEditModal(routine, id);
+  function setupEdit(routine, id) {
+    RoutineModalUtils.setEditState(id, routine);
+    const { title, subtitle, submitButton } = getContent(true);
+    RoutineModalUtils.updateTexts(title, subtitle, submitButton, elements);
+    RoutineForm.setupEdit(routine);
+  }
+
+  function openEdit(id) {
+    const routine = RoutineService.getById(id);
+    setupEdit(routine, id);
     Modal.show(elements.modal);
   }
 
-  function setupCreateModal() {
-    RoutineModalUtils.setCreateModeState();
-
-    const { title, subtitle, submitButton } = getRoutineModalContent(false);
-    RoutineModalUtils.updateModalTexts(title, subtitle, submitButton, elements);
-    RoutineForm.resetForm();
+  function setupCreate() {
+    RoutineModalUtils.setCreateState();
+    const { title, subtitle, submitButton } = getContent(false);
+    RoutineModalUtils.updateTexts(title, subtitle, submitButton, elements);
+    RoutineForm.reset();
   }
 
-  function openCreateModal() {
-    setupCreateModal();
+  function openCreate() {
+    setupCreate();
     Modal.show(elements.modal);
   }
 
@@ -110,26 +111,31 @@ const RoutineModal = (() => {
     Modal.hide(elements.modal);
   }
 
+  const handlers = {
+    overlay: close,
+    cancel: close
+  };
+
   function bindEvents() {
     const events = [
-      [elements.overlay, "click", close],
-      [elements.cancelButton, "click", close]
+      [elements.overlay, "click", handlers.overlay],
+      [elements.cancelBtn, "click", handlers.cancel]
     ];
 
-    events.forEach(([element, event, handler]) =>
-      element.addEventListener(event, handler)
+    events.forEach(([el, event, handler]) =>
+      el.addEventListener(event, handler)
     );
   }
 
   function init() {
-    bindEvents();
     RoutineForm.init();
+    bindEvents();
   }
 
   return {
     init,
-    openCreateModal,
-    openEditModal,
+    openCreate,
+    openEdit,
     close,
     getState,
     setState

@@ -1,12 +1,15 @@
 const TimeService = (() => {
   let intervalId = null;
+  let nextTimestamp = Infinity;
+
+  function setNext(timestamp) {
+    nextTimestamp = timestamp;
+  }
 
   function checkTime() {
-    const nextTimestamp = AppState.getState("nextRoutineTimestamp");
-
     const now = Math.floor(Date.now() / 1000);
     if (now >= nextTimestamp) {
-      Render.updateNextRoutine();
+      RoutineRenderer.updateNext();
     }
   }
 
@@ -19,6 +22,7 @@ const TimeService = (() => {
   }
 
   return {
-    init
+    init,
+    setNext
   };
 })();

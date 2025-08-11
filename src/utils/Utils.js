@@ -1,6 +1,6 @@
 const Utils = (() => {
-  const SECONDS_PER_HOUR = 3600;
-  const SECONDS_PER_MINUTE = 60;
+  const HOUR_SECS = 3600;
+  const MINUTE_SECS = 60;
   const DAY_KEYS = [
     "day_sun",
     "day_mon",
@@ -11,27 +11,25 @@ const Utils = (() => {
     "day_sat"
   ];
 
-  function padTimeUnit(time) {
+  function pad(time) {
     return time.toString().padStart(2, "0");
   }
 
-  function secondsToTime(seconds) {
-    const hours = Math.floor(seconds / SECONDS_PER_HOUR);
-    const minutes = Math.floor(
-      (seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE
-    );
-
-    return `${padTimeUnit(hours)}:${padTimeUnit(minutes)}`;
+  function secondsToTime(secs) {
+    const hours = Math.floor(secs / HOUR_SECS);
+    const minutes = Math.floor((secs % HOUR_SECS) / MINUTE_SECS);
+    return `${pad(hours)}:${pad(minutes)}`;
   }
 
-  function getDayName(dayNumber) {
-    const dayKey = DAY_KEYS[dayNumber];
-    return I18n.get(dayKey) || "";
+  function getDayName(day) {
+    const key = DAY_KEYS[day];
+    return I18n.get(key) || "";
   }
 
-  function timeToSeconds(timeString) {
-    const [hours, minutes] = timeString.split(":").map(Number);
-    return hours * SECONDS_PER_HOUR + minutes * SECONDS_PER_MINUTE;
+  function timeToSeconds(time) {
+    const parts = time.split(":").map(Number);
+    const [hours, minutes] = parts;
+    return hours * HOUR_SECS + minutes * MINUTE_SECS;
   }
 
   return {

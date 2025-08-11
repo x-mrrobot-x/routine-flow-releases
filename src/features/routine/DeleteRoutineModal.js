@@ -1,48 +1,51 @@
 const DeleteRoutineModal = (() => {
-  let routineToDelete = null;
+  let routineId = null;
 
   const elements = {
     modal: DOM.$("#delete-routine-modal"),
     overlay: DOM.$("#delete-routine-modal .modal-overlay"),
-    confirmButton: DOM.$("#confirm-delete"),
-    cancelButton: DOM.$("#cancel-delete")
+    confirmBtn: DOM.$("#confirm-delete"),
+    cancelBtn: DOM.$("#cancel-delete")
   };
 
-  function open(routineId) {
+  function handleConfirm() {
+    RoutineService.remove(routineId);
+    RoutineRenderer.updateAll();
+    close();
+    Toast.show("success", "toast_routine_deleted");
+  }
+
+  function open(id) {
+    routineId = id;
     Modal.show(elements.modal);
-    routineToDelete = routineId;
   }
 
   function close() {
+    routineId = null;
     Modal.hide(elements.modal);
-    routineToDelete = null;
   }
 
-  function handleDeleteRoutine() {
-    RoutineService.deleteRoutine(routineToDelete);
-    RoutineRenderer.updateAll();
-    close();
-    Toast.showToast("success", "toast_routine_deleted");
-  }
+  const handlers = {
+    cancel: close,
+    overlay: close,
+    confirm: handleConfirm
+  };
 
   function bindEvents() {
     const events = [
-      [elements.cancelButton, "click", close],
-      [elements.overlay, "click", close],
-      [elements.confirmButton, "click", handleDeleteRoutine]
+      [elements.cancelBtn, "click", handlers.cancel],
+      [elements.overlay, "click", handlers.overlay],
+      [elements.confirmBtn, "click", handlers.confirm]
     ];
 
-    events.forEach(([element, event, handler]) => {
-      element.addEventListener(event, handler);
-    });
+    events.forEach(([el, event, handler]) =>
+      el.addEventListener(event, handler)
+    );
   }
 
   function init() {
     bindEvents();
   }
 
-  return {
-    init,
-    open
-  };
+  return { init, open };
 })();

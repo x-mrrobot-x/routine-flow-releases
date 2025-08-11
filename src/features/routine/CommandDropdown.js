@@ -22,9 +22,11 @@ const CommandUtils = (() => {
     }
   ];
 
-  const getCommands = () => SUGGESTIONS.map(s => s.command);
+  function getCommands() {
+    return SUGGESTIONS.map(s => s.command);
+  }
 
-  const createSuggestionCard = ({ command, description, icon }) => {
+  function createCard({ command, description, icon }) {
     return `
       <div class="suggestion-item" data-command="${command}">
         ${Icons.getIcon(icon)}
@@ -33,53 +35,24 @@ const CommandUtils = (() => {
           <div class="suggestion-description">${description}</div>
         </div>
       </div>`;
-  };
+  }
 
-  const createSuggestionItems = () => {
-    return SUGGESTIONS.map(createSuggestionCard).join("");
-  };
+  function createItems() {
+    return SUGGESTIONS.map(createCard).join("");
+  }
 
-  return {
-    getCommands,
-    createSuggestionItems
-  };
+  return { getCommands, createItems };
 })();
 
 const CommandDropdown = (() => {
-  let isVisible = false;
+  let visible = false;
 
   const elements = {
     dropdown: DOM.$("#command-dropdown")
   };
 
-  function open() {
-    isVisible = true;
-    Modal.show(elements.dropdown);
-  }
-
-  function close() {
-    isVisible = false;
-    Modal.hide(elements.dropdown);
-  }
-
-  const handleCommandInput = event => {
-    const { value } = event.target;
-
-    if (value === "/") {
-      open();
-    } else if (isVisible) {
-      close();
-    }
-  };
-
-  const handleOutsideClick = event => {
-    if (!elements.dropdown.contains(event.target) && isVisible) {
-      close();
-    }
-  };
-
-  const handleSuggestionClick = event => {
-    const item = event.target.closest(".suggestion-item");
+  function handleSuggestion(e) {
+    const item = e.target.closest(".suggestion-item");
     if (!item) return;
 
     const { command } = item.dataset;
@@ -91,30 +64,54 @@ const CommandDropdown = (() => {
     }
 
     RoutineForm.setCommandInput(command);
-
     close();
+  }
+
+  function handleOutside(e) {
+    if (!elements.dropdown.contains(e.target) && visible) {
+      close();
+    }
+  }
+
+  function handleCommandInput(e) {
+    const { value } = e.target;
+    value === "/" ? open() : visible && close();
+  }
+
+  function open() {
+    visible = true;
+    Modal.show(elements.dropdown);
+  }
+
+  function close() {
+    visible = false;
+    Modal.hide(elements.dropdown);
+  }
+
+  const handlers = {
+    suggestion: handleSuggestion,
+    outside: handleOutside
   };
 
-  const bindEvents = () => {
+  function bindEvents() {
     const events = [
-      [elements.dropdown, "click", handleSuggestionClick],
-      [document, "click", handleOutsideClick]
+      [elements.dropdown, "click", handlers.suggestion],
+      [document, "click", handlers.outside]
     ];
 
-    events.forEach(([element, event, handler]) =>
-      element.addEventListener(event, handler)
+    events.forEach(([el, event, handler]) =>
+      el.addEventListener(event, handler)
     );
-  };
+  }
 
-  const renderSuggestions = () => {
-    const suggestionItems = CommandUtils.createSuggestionItems();
-    elements.dropdown.innerHTML = suggestionItems;
-  };
+  function render() {
+    elements.dropdown.innerHTML = CommandUtils.createItems();
+  }
 
-  const init = () => {
-    renderSuggestions();
+  function init() {
+    render();
     bindEvents();
-  };
+  }
 
   return {
     init,

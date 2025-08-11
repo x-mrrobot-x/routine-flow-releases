@@ -2,11 +2,11 @@ const AppSelectorModal = (env => {
   const elements = {
     modal: DOM.$("#app-selector-modal"),
     overlay: DOM.$("#app-selector-modal .modal-overlay"),
-    cancelButton: DOM.$("#cancel-app-selector"),
+    cancelBtn: DOM.$("#cancel-app-selector"),
     grid: DOM.$("#apps-grid")
   };
 
-  const createAppCard = ({ name, pkg }) => {
+  function createCard({ name, pkg }) {
     const iconPath =
       env.name === "web"
         ? `${env.iconPath}${pkg}.png`
@@ -16,9 +16,21 @@ const AppSelectorModal = (env => {
     <div class="app-card" data-app="${name}">
       <img src="${iconPath}" class="app-icon" />
       <p class="app-name">${name}</p>
-    </div>
-  `;
-  };
+    </div>`;
+  }
+
+  function createItems(apps) {
+    return apps.map(createCard).join("");
+  }
+
+  function handleAppSelect(e) {
+    const card = e.target.closest(".app-card");
+    if (!card) return;
+
+    const appName = card.dataset.app;
+    RoutineForm.setCommandInput(`/open ${appName}`);
+    close();
+  }
 
   function open() {
     Modal.show(elements.modal);
@@ -28,40 +40,37 @@ const AppSelectorModal = (env => {
     Modal.hide(elements.modal);
   }
 
-  const handleAppSelector = event => {
-    const appItem = event.target.closest(".app-card");
-    if (!appItem) return;
-
-    const appName = appItem.dataset.app;
-    RoutineForm.setCommandInput(`/open ${appName}`);
-    close();
+  const handlers = {
+    cancel: close,
+    overlay: close,
+    appSelect: handleAppSelect
   };
 
-  const bindEvents = () => {
+  function bindEvents() {
     const events = [
-      [elements.cancelButton, "click", close],
-      [elements.overlay, "click", close],
-      [elements.grid, "click", handleAppSelector]
+      [elements.cancelBtn, "click", handlers.cancel],
+      [elements.overlay, "click", handlers.overlay],
+      [elements.grid, "click", handlers.appSelect]
     ];
 
-    events.forEach(([element, event, handler]) =>
-      element.addEventListener(event, handler)
+    events.forEach(([el, event, handler]) =>
+      el.addEventListener(event, handler)
     );
-  };
+  }
 
-  const renderApps = appsData => {
-    const apps = appsData ? appsData : env.loadAppsData();
-    elements.grid.innerHTML = apps.map(createAppCard).join("");
-  };
+  function render(data) {
+    const apps = data || env.loadApps();
+    elements.grid.innerHTML = createItems(apps);
+  }
 
-  const init = () => {
-    renderApps();
+  function init() {
+    render();
     bindEvents();
-  };
+  }
 
   return {
     init,
     open,
-    renderApps
+    render
   };
 })(currentEnvironment);

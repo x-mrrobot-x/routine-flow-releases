@@ -1,16 +1,16 @@
 const EnvironmentManager = (() => {
-  const WebEnvironment = {
+  const WEB_ENV = {
     name: "web",
     langCode: "pt-BR",
     workDir: ".",
     iconPath: "/src/assets/icons/",
 
-    async loadLanguageData(langCode) {
-      const response = await fetch(`${this.workDir}/src/lang/${langCode}.json`);
+    async loadLang(code) {
+      const response = await fetch(`${this.workDir}/src/lang/${code}.json`);
       return await response.json();
     },
 
-    loadAppsData() {
+    loadApps() {
       return DEFAULT_APPS_DATA;
     },
 
@@ -35,14 +35,12 @@ const EnvironmentManager = (() => {
     }
   };
 
-  const detectEnvironment = () => {
-    const isWebEnvironment = typeof tk === "undefined";
-    return isWebEnvironment ? WebEnvironment : TaskerEnvironment;
-  };
+  function detect() {
+    const isWeb = typeof tk === "undefined";
+    return isWeb ? WEB_ENV : TaskerEnvironment;
+  }
 
-  return {
-    detectEnvironment
-  };
+  return { detect };
 })();
 
-const currentEnvironment = EnvironmentManager.detectEnvironment();
+const currentEnvironment = EnvironmentManager.detect();

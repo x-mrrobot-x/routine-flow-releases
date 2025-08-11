@@ -1,54 +1,58 @@
 const I18n = (function (env) {
-  const DEFAULT_LANGUAGE = "en";
-  const APP_LANGUAGE = "pt";
-  let languageData = {};
+  const DEFAULT_LANG = "en";
+  const APP_LANG = "pt";
+  let data = {};
 
-  const get = key => languageData[key] || key;
+  function get(key) {
+    return data[key] || key;
+  }
 
-  const isInputElement = element =>
-    element.tagName === "INPUT" || element.tagName === "TEXTAREA";
+  function isInput(el) {
+    return el.tagName === "INPUT" || el.tagName === "TEXTAREA";
+  }
 
-  const translateElement = element => {
-    const key = element.getAttribute("data-i18n");
+  function translateEl(el) {
+    const key = el.getAttribute("data-i18n");
     const text = get(key);
 
-    if (isInputElement(element)) {
-      element.placeholder = text;
+    if (isInput(el)) {
+      el.placeholder = text;
     } else {
-      element.textContent = text;
+      el.textContent = text;
     }
-  };
+  }
 
-  const translateUI = () => {
-    const textElements = document.querySelectorAll("[data-i18n]");
-    textElements.forEach(translateElement);
-  };
+  function translateUI() {
+    const elements = document.querySelectorAll("[data-i18n]");
+    elements.forEach(translateEl);
+  }
 
-  const extractBaseLang = lang => lang.split("-")[0];
+  function extractBase(lang) {
+    return lang.split("-")[0];
+  }
 
-  const loadLanguageData = async lang => {
+  async function loadData(lang) {
     try {
-      return await env.loadLanguageData(extractBaseLang(lang));
+      data = await env.loadLang(extractBase(lang));
     } catch (error) {
       console.error("Error loading language data:", error);
-      return await env.loadLanguageData(DEFAULT_LANGUAGE);
+      data = await env.loadLang(DEFAULT_LANG);
     }
-  };
+  }
 
-  const shouldTranslateUI = () => !env.langCode.includes(APP_LANGUAGE);
+  function shouldTranslate() {
+    return !env.langCode.includes(APP_LANG);
+  }
 
-  const init = async () => {
-    languageData = await loadLanguageData(env.langCode);
+  async function init() {
+    await loadData(env.langCode);
 
-    if (shouldTranslateUI()) {
+    if (shouldTranslate()) {
       translateUI();
     }
 
     document.body.classList.remove("loading");
-  };
+  }
 
-  return {
-    init,
-    get
-  };
+  return { init, get };
 })(currentEnvironment);

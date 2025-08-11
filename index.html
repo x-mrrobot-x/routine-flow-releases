@@ -20,23 +20,21 @@
     <link rel="stylesheet" href="/src/assets/css/app-selector.css" />
     <link rel="stylesheet" href="/src/assets/css/settings.css" />
     <link rel="stylesheet" href="/src/assets/css/toast.css" />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Debbug -->
+    <!-- Debug -->
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>
       eruda.init();
     </script>
 
-    <!-- Script -->
+    <!-- Scripts -->
     <script src="/src/services/EnvironmentManager.js" defer></script>
     <script src="/src/services/I18n.js" defer></script>
     <script src="/src/services/Icons.js" defer></script>
-    <script src="/src/services/AppState.js" defer></script>
     <script src="/src/utils/Utils.js" defer></script>
     <script src="/src/utils/DOM.js" defer></script>
     <script src="/src/features/routine/RoutineRenderer.js" defer></script>
@@ -45,11 +43,11 @@
     <script src="/src/features/routine/RoutineService.js" defer></script>
     <script src="/src/features/routine/RoutineFilter.js" defer></script>
     <script src="/src/components/Modal.js" defer></script>
-    <script src="/src/features/routine/RoutineActions.js" defer></script>
+    <script src="/src/features/routine/CommandDropdown.js" defer></script>
     <script src="/src/features/routine/RoutineForm.js" defer></script>
     <script src="/src/features/routine/RoutineModal.js" defer></script>
     <script src="/src/features/routine/DeleteRoutineModal.js" defer></script>
-    <script src="/src/features/routine/CommandDropdown.js" defer></script>
+    <script src="/src/features/routine/RoutineActions.js" defer></script>
     <script src="/src/features/routine/AppSelectorModal.js" defer></script>
     <script src="/src/features/settings/SettingsService.js" defer></script>
     <script src="/src/features/settings/SettingsModal.js" defer></script>
@@ -66,17 +64,15 @@
           <i data-icon="calendar-clock" class="logo-icon"></i>
           <h1 class="logo-text text-gradient">Routine Flow</h1>
         </div>
-
-        <button id="settings-button" class="settings-button">
+        <button id="settings-btn" class="settings-button">
           <i data-icon="settings-2"></i>
         </button>
       </header>
 
-      <!-- Main Content Area -->
+      <!-- Main -->
       <main class="main">
-        <!-- Filter Bar -->
+        <!-- Filters -->
         <div class="filters-bar" id="filters-bar">
-          <!-- Filters Header -->
           <div class="filters-header">
             <button id="toggle-filters-btn" class="toggle-filters-btn">
               <i data-icon="filter"></i>
@@ -85,7 +81,6 @@
             </button>
           </div>
 
-          <!-- Filters Search -->
           <div class="search-wrapper">
             <i data-icon="search"></i>
             <input
@@ -98,7 +93,6 @@
           </div>
 
           <div class="advanced-filters">
-            <!-- Filter Status -->
             <div class="filter-group">
               <label for="status-filter" data-i18n="status_filter_label"
                 >Status</label
@@ -116,7 +110,6 @@
               </div>
             </div>
 
-            <!-- Filter priority -->
             <div class="filter-group">
               <label for="priority-filter" data-i18n="priority_filter_label"
                 >Prioridade</label
@@ -133,7 +126,6 @@
               </div>
             </div>
 
-            <!-- Filter Day of Week -->
             <div class="filter-group">
               <label for="day-filter" data-i18n="day_filter_label"
                 >Dia da semana</label
@@ -171,10 +163,8 @@
           <span class="badge" id="routines-count">0</span>
         </div>
 
-        <!-- Routines Grid -->
         <div class="routines-grid" id="routines-grid"></div>
 
-        <!-- Empty State -->
         <div class="empty-state" id="empty-state">
           <i data-icon="calendar"></i>
           <p class="empty-text"></p>
@@ -184,9 +174,8 @@
           </button>
         </div>
 
-        <!-- Add Routine Button -->
         <button
-          id="add-routine-button"
+          id="add-routine-btn"
           class="button tech-button routine-add-button"
         >
           <i data-icon="calendar-plus"></i>
@@ -274,9 +263,7 @@
             </div>
 
             <div class="form-group">
-              <!-- Command Suggestions Dropdown -->
               <div id="command-dropdown" class="command-dropdown"></div>
-
               <label
                 for="command"
                 class="form-label"
@@ -400,7 +387,7 @@
       </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
+    <!-- Delete Modal -->
     <div id="delete-routine-modal" class="modal">
       <div class="modal-overlay"></div>
       <div class="modal-content">
@@ -453,30 +440,30 @@
 
         <div class="settings-list">
           <div class="setting-item">
-            <label for="voice-toggle" data-i18n="setting_voice_label">
-              Anunciar com voz do google
-            </label>
+            <label for="voice-toggle" data-i18n="setting_voice_label"
+              >Anunciar com voz do google</label
+            >
             <input type="checkbox" id="voice-toggle" />
           </div>
 
           <div class="setting-item">
-            <label for="toast-toggle" data-i18n="setting_toast_label">
-              Exibir toast na tela
-            </label>
+            <label for="toast-toggle" data-i18n="setting_toast_label"
+              >Exibir toast na tela</label
+            >
             <input type="checkbox" id="toast-toggle" />
           </div>
 
           <div class="setting-item">
-            <label for="vibrate-toggle" data-i18n="setting_vibrate_label">
-              Vibrar dispositivo
-            </label>
+            <label for="vibrate-toggle" data-i18n="setting_vibrate_label"
+              >Vibrar dispositivo</label
+            >
             <input type="checkbox" id="vibrate-toggle" />
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Toast Container -->
+    <!-- Toast -->
     <div class="toast-container" id="toast-container"></div>
   </body>
 </html>

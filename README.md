@@ -63,7 +63,6 @@ A5: End If
 ├── js/
 │   ├── modules/
 │   │   ├── App.js
-│   │   ├── AppState.js
 │   │   ├── DOM.js
 │   │   ├── EnvironmentManager.js
 │   │   ├── EventManager.js

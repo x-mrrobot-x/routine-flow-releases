@@ -1,75 +1,42 @@
 const Toast = (() => {
   const elements = {
-    toastContainer: DOM.$("#toast-container")
+    container: DOM.$("#toast-container")
   };
 
-  const TOAST_ICON_CONFIG = {
+  const ICONS = {
     success: "check-circle",
-    error: "alert-circle",
-    warning: "alert-triangle",
-    info: "info"
+    error: "circle-alert"
   };
 
-  const AUTO_REMOVE_DELAY = 3000;
-  const REMOVE_ANIMATION_DELAY = 10;
+  const AUTO_DELAY = 3000;
+  const ANIMATION_DELAY = 10;
 
-  const createToastHTML = (type, message) => `
-    ${Icons.getIcon(TOAST_ICON_CONFIG[type])}
-    <span>${message}</span>
-  `;
-
-  const createToastElement = (type, message) => {
+  function create(type, message) {
     const toast = document.createElement("div");
     toast.className = `toast toast-${type}`;
-    toast.innerHTML = createToastHTML(type, message);
+    toast.innerHTML = `${Icons.getIcon(ICONS[type])}<span>${message}</span>`;
     return toast;
-  };
+  }
 
-  const clearToastTimer = toast => {
-    if (toast.autoRemoveTimer) {
-      clearTimeout(toast.autoRemoveTimer);
-      toast.autoRemoveTimer = null;
+  function remove(toast) {
+    if (toast.timer) {
+      clearTimeout(toast.timer);
+      toast.timer = null;
     }
-  };
+    setTimeout(() => toast.remove(), ANIMATION_DELAY);
+  }
 
-  const removeToastWithAnimation = toast => {
-    setTimeout(() => toast.remove(), REMOVE_ANIMATION_DELAY);
-  };
+  function setup(toast) {
+    toast.addEventListener("click", () => remove(toast));
+    toast.timer = setTimeout(() => remove(toast), AUTO_DELAY);
+    elements.container.appendChild(toast);
+  }
 
-  const removeToast = toast => {
-    clearToastTimer(toast);
-    removeToastWithAnimation(toast);
-  };
-
-  const attachClickHandler = toast => {
-    toast.addEventListener("click", () => removeToast(toast));
-  };
-
-  const setupAutoRemoval = toast => {
-    const autoRemoveTimer = setTimeout(() => {
-      removeToast(toast);
-    }, AUTO_REMOVE_DELAY);
-
-    toast.autoRemoveTimer = autoRemoveTimer;
-  };
-
-  const addToastToDOM = toast => {
-    elements.toastContainer.appendChild(toast);
-  };
-
-  const initializeToast = toast => {
-    attachClickHandler(toast);
-    setupAutoRemoval(toast);
-    addToastToDOM(toast);
-  };
-
-  const showToast = (type, messageKey) => {
+  function show(type, messageKey) {
     const message = I18n.get(messageKey);
-    const toast = createToastElement(type, message);
-    initializeToast(toast);
-  };
+    const toast = create(type, message);
+    setup(toast);
+  }
 
-  return {
-    showToast
-  };
+  return { show };
 })();

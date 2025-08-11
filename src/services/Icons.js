@@ -1,46 +1,35 @@
 const IconUtils = (() => {
-  const mergeAttributes = (defaultAttrs, customAttrs = {}) => ({
-    ...defaultAttrs,
-    ...customAttrs
-  });
+  function buildAttrs(attrs) {
+    const entries = Object.entries(attrs);
+    return entries.map(([k, v]) => `${k}="${v}"`).join(" ");
+  }
 
-  const buildAttrString = attrs => {
-    return Object.entries(attrs)
-      .map(([key, value]) => `${key}="${value}"`)
-      .join(" ");
-  };
-
-  const copyAttributes = (source, attributes) => {
+  function copy(source, attributes) {
     const attrs = {};
     attributes.forEach(attr => {
-      const value = source.getAttribute(attr);
-      if (value) attrs[attr] = value;
+      const v = source.getAttribute(attr);
+      if (v) attrs[attr] = v;
     });
     return attrs;
-  };
+  }
 
-  const buildSvg = (content, attrs = {}) => {
-    const attrString = buildAttrString(attrs);
-    return `<svg ${attrString}>${content}</svg>`;
-  };
+  function buildSvg(content, attrs = {}) {
+    return `<svg ${buildAttrs(attrs)}>${content}</svg>`;
+  }
 
-  const createElement = htmlString => {
+  function createElement(html) {
     const temp = document.createElement("div");
-    temp.innerHTML = htmlString;
+    temp.innerHTML = html;
     const el = temp.firstElementChild;
     temp.remove();
     return el;
-  };
+  }
 
-  const warn = message => console.warn(`[Icons] ${message}`);
+  function warn(message) {
+    console.warn(`[Icons] ${message}`);
+  }
 
-  return {
-    mergeAttributes,
-    copyAttributes,
-    buildSvg,
-    createElement,
-    warn
-  };
+  return { copy, buildSvg, createElement, warn };
 })();
 
 const Icons = (() => {
@@ -55,7 +44,7 @@ const Icons = (() => {
     "stroke-linejoin": "round"
   };
 
-  const ICON_DATA = {
+  const DATA = {
     "calendar-clock":
       '<path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/>',
     settings:
@@ -88,52 +77,45 @@ const Icons = (() => {
     "calendar-sync":
       '<path d="M11 10v4h4"/><path d="m11 14 1.535-1.605a5 5 0 0 1 8 1.5"/><path d="M16 2v4"/><path d="m21 18-1.535 1.605a5 5 0 0 1-8-1.5"/><path d="M21 22v-4h-4"/><path d="M21 8.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4.3"/><path d="M3 10h4"/><path d="M8 2v4"/>',
     x: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
-    "check-circle": '<path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/>'
+    "check-circle": '<path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/>',
+    "circle-alert":
+      '<circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>'
   };
 
-  const getIconData = name => {
-    const iconContent = ICON_DATA[name];
-    if (!iconContent) {
+  function create(name, attrs = {}) {
+    const content = DATA[name];
+    if (!content) {
       IconUtils.warn(`Icon "${name}" not found`);
       return null;
     }
-    return iconContent;
-  };
 
-  const createIcon = (iconName, attrs = {}) => {
-    const iconContent = getIconData(iconName);
-    if (!iconContent) return null;
+    const finalAttrs = { ...DEFAULT_ATTRS, ...attrs };
+    return IconUtils.buildSvg(content, finalAttrs);
+  }
 
-    const finalAttrs = IconUtils.mergeAttributes(DEFAULT_ATTRS, attrs);
-    return IconUtils.buildSvg(iconContent, finalAttrs);
-  };
-
-  const getIcon = (iconName, attrs = {}) => {
-    return createIcon(iconName, attrs);
-  };
-
-  const replaceElementWithIcon = el => {
-    const iconName = el.dataset.icon;
-    const attrs = IconUtils.copyAttributes(el, ["id", "class"]);
-    const svg = createIcon(iconName, attrs);
+  function replace(el) {
+    const name = el.dataset.icon;
+    const attrs = IconUtils.copy(el, ["id", "class"]);
+    const svg = create(name, attrs);
 
     if (svg) {
-      const svgElement = IconUtils.createElement(svg);
-      el.parentNode.replaceChild(svgElement, el);
+      const svgEl = IconUtils.createElement(svg);
+      el.parentNode.replaceChild(svgEl, el);
     }
-  };
+  }
 
-  const createIcons = (container = document) => {
-    const iconElements = container.querySelectorAll("[data-icon]");
-    iconElements.forEach(replaceElementWithIcon);
-  };
+  function render(container = document) {
+    const elements = container.querySelectorAll("[data-icon]");
+    elements.forEach(replace);
+  }
 
-  const init = () => {
-    createIcons();
-  };
+  function getIcon(name, attrs = {}) {
+    return create(name, attrs);
+  }
 
-  return {
-    getIcon,
-    init
-  };
+  function init() {
+    render();
+  }
+
+  return { getIcon, init };
 })();
