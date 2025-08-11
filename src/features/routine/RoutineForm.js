@@ -151,6 +151,11 @@ const RoutineForm = (() => {
   function handleEdit(data) {
     const id = RoutineModal.getState("routineToEdit");
     RoutineService.update(id, data);
+
+    const updatedRoutine = RoutineService.getById(id);
+    RoutineRenderer.update(id, updatedRoutine);
+    RoutineRenderer.updateNext();
+
     Toast.show("success", "toast_routine_updated");
   }
 
@@ -162,6 +167,7 @@ const RoutineForm = (() => {
     };
 
     RoutineService.add(routine);
+    RoutineRenderer.updateAll();
     Toast.show("success", "toast_routine_created");
   }
 
@@ -180,7 +186,6 @@ const RoutineForm = (() => {
       handleCreate(data);
     }
 
-    RoutineRenderer.updateAll();
     RoutineModal.close();
   }
 
@@ -200,8 +205,9 @@ const RoutineForm = (() => {
 
   function toggleDay(e) {
     const day = parseInt(e.target.dataset.day);
+    if (isNaN(day)) return;
+    
     e.target.classList.toggle("selected");
-
     const selected = e.target.classList.contains("selected");
     updateDays(day, selected);
   }

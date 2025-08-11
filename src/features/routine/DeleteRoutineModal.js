@@ -10,7 +10,9 @@ const DeleteRoutineModal = (() => {
 
   function handleConfirm() {
     RoutineService.remove(routineId);
-    RoutineRenderer.updateAll();
+    RoutineRenderer.remove(routineId);
+    RoutineRenderer.updateCount();
+    RoutineRenderer.updateNext();
     close();
     Toast.show("success", "toast_routine_deleted");
   }

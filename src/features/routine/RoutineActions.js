@@ -13,10 +13,12 @@ const RoutineActions = (() => {
   function handleToggle(id) {
     const routine = RoutineService.getById(id);
     const active = !routine.active;
+    const updatedRoutine = { ...routine, active };
+
     RoutineService.update(id, { active });
-
-    RoutineRenderer.updateAll();
-
+    RoutineRenderer.update(id, updatedRoutine);
+    RoutineRenderer.updateNext();
+    
     const key = active
       ? "toast_routine_activated"
       : "toast_routine_deactivated";

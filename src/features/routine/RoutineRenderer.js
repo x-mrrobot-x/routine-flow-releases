@@ -173,7 +173,8 @@ const RoutineRenderer = (() => {
     emptyText: DOM.$("#empty-state p"),
     emptyBtn: DOM.$("#empty-state button"),
     nextContainer: DOM.$("#next-routine"),
-    nextText: DOM.$("#next-routine-text")
+    nextText: DOM.$("#next-routine-text"),
+    scrollContainer: DOM.$("#app-container")
   };
 
   function createCard(routine) {
@@ -192,7 +193,14 @@ const RoutineRenderer = (() => {
   function renderCards(routines, isFilter) {
     if (routines.length > 0) {
       RoutineRenderUtils.hideEmpty(elements);
-      appendCards(routines);
+
+      const routinesPager = PaginationManager.create({
+        scrollElement: elements.scrollContainer,
+        pageSize: 8,
+        thresholdPx: 200,
+        renderAppend: appendCards
+      });
+      routinesPager.init(routines);
     } else {
       RoutineRenderUtils.showEmpty(isFilter, elements);
     }
@@ -204,6 +212,7 @@ const RoutineRenderer = (() => {
     const isFilter = RoutineFilter.isAnyActive();
 
     RoutineRenderUtils.clearGrid(elements);
+
     renderCards(filtered, isFilter);
   }
 
@@ -230,13 +239,36 @@ const RoutineRenderer = (() => {
     renderRoutines();
   }
 
+  function remove(id) {
+    const card = DOM.$(`[data-id="${id}"]`);
+    if (card) {
+      card.remove();
+    }
+
+    if (elements.grid.children.length === 0) {
+      const isFilter = RoutineFilter.isAnyActive();
+      RoutineRenderUtils.showEmpty(isFilter, elements);
+    }
+  }
+
+  function update(id, routine) {
+    const card = DOM.$(`[data-id="${id}"]`);
+    if (!card) return;
+
+    card.className = RoutineRenderUtils.getCardClass(routine);
+    card.innerHTML = RoutineRenderUtils.createCardHTML(routine);
+  }
+
   function init() {
     updateAll();
   }
 
   return {
     init,
+    remove,
+    update,
     updateNext,
+    updateCount,
     renderRoutines,
     updateAll
   };
