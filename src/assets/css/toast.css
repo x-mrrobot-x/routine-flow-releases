@@ -14,15 +14,14 @@
   align-items: center;
   gap: var(--space-xs);
   color: var(--text-primary);
-  min-width: 30rem;
-  max-width: 40rem;
+  max-width: 60rem;
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-md);
   background-color: var(--bg-secondary);
-  box-shadow: 0 0.4rem 1.2rem rgba(var(--black-rgb), 0.15);
-  animation:
-    slideUp 0.3s ease,
-    fadeOut 0.5s ease 2.5s forwards;
+  box-shadow: 
+    0 0.4rem 1.2rem rgba(var(--black-rgb), 0.15),
+    0 0.2rem 0.4rem rgba(var(--black-rgb), 0.1);
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .toast-success {
@@ -31,6 +30,11 @@
 
 .toast-error {
   border-left: 0.4rem solid var(--danger-dark);
+}
+
+.toast span {
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
 
 .toast svg {
