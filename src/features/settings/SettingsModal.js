@@ -1,5 +1,6 @@
 const SettingsModal = (() => {
   const elements = {
+    btn: DOM.$("#settings-btn"),
     modal: DOM.$("#settings-modal"),
     overlay: DOM.$("#settings-modal .modal-overlay"),
     voiceToggle: DOM.$("#voice-toggle"),
@@ -19,8 +20,8 @@ const SettingsModal = (() => {
     Modal.show(elements.modal);
   }
 
-  function close(goBack = false) {
-    Modal.hide(elements.modal, goBack);
+  function close() {
+    Modal.hide(elements.modal);
   }
 
   function handleChange() {
@@ -28,31 +29,29 @@ const SettingsModal = (() => {
     SettingsService.save(settings);
   }
 
-  function handleOverlay() {
-    close(true);
-  }
+  const handlers = {
+    change: handleChange,
+    button: open,
+    overlay: close
+  };
 
   function bindEvents() {
-    const eventBindings = [
-      [elements.modal, "change", handleChange],
-      [elements.overlay, "click", handleOverlay]
+    const bindings = [
+      [elements.btn, "click", handlers.button],
+      [elements.modal, "change", handlers.change],
+      [elements.overlay, "click", handlers.overlay]
     ];
 
-    eventBindings.forEach(([el, event, handler]) =>
+    bindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
   }
 
-  function applyToDOM(settings) {
+  function render() {
+    const settings = SettingsService.load();
     elements.voiceToggle.checked = settings.voice;
     elements.toastToggle.checked = settings.toast;
     elements.vibrateToggle.checked = settings.vibrate;
-    
-  }
-
-  function render() {
-    const settings = SettingsService.load();
-    applyToDOM(settings);
   }
 
   function init() {

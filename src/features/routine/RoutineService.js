@@ -1,4 +1,4 @@
-const RoutineService = (env => {
+const RoutineService = (() => {
   let routines = [];
 
   function getById(id) {
@@ -31,13 +31,13 @@ const RoutineService = (env => {
   }
 
   function load() {
-    const stored = env.getRoutines();
+    const stored = ENV.getRoutines();
     routines = stored ? JSON.parse(stored) : DEFAULT_ROUTINES;
   }
 
   function save() {
     const data = JSON.stringify(routines, null, 2);
-    env.saveRoutines(data);
+    ENV.saveRoutines(data);
   }
 
   function findNextTimestamp() {
@@ -101,4 +101,4 @@ const RoutineService = (env => {
     getById,
     findNextTimestamp
   };
-})(currentEnvironment);
+})();

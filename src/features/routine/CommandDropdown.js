@@ -27,8 +27,7 @@ const CommandUtils = (() => {
   }
 
   function createCard({ command, description, icon }) {
-    return `
-      <div class="suggestion-item" data-command="${command}">
+    return `<div class="suggestion-item" data-command="${command}">
         ${Icons.getIcon(icon)}
         <div class="suggestion-content">
           <div class="suggestion-command">${command}</div>
@@ -41,10 +40,13 @@ const CommandUtils = (() => {
     return SUGGESTIONS.map(createCard).join("");
   }
 
-  return { getCommands, createItems };
+  return {
+    getCommands,
+    createItems
+  };
 })();
 
-const CommandDropdown = (env => {
+const CommandDropdown = (() => {
   let visible = false;
 
   const elements = {
@@ -55,6 +57,16 @@ const CommandDropdown = (env => {
     return visible;
   }
 
+  function open() {
+    visible = true;
+    Modal.show(elements.dropdown);
+  }
+
+  function close() {
+    visible = false;
+    Modal.hide(elements.dropdown);
+  }
+
   function handleSuggestion(e) {
     const item = e.target.closest(".suggestion-item");
     if (!item) return;
@@ -62,15 +74,7 @@ const CommandDropdown = (env => {
     const { command } = item.dataset;
 
     if (command === "/open") {
-      env.navigate("/routines/form/apps", {
-        actions: [
-          {
-            module: "AppPickerModal",
-            method: "open",
-            params: []
-          }
-        ]
-      });
+      AppPickerModal.open();
       close();
       return;
     }
@@ -85,23 +89,18 @@ const CommandDropdown = (env => {
     }
   }
 
-  function open() {
-    visible = true;
-    Modal.show(elements.dropdown);
-  }
-
-  function close() {
-    visible = false;
-    Modal.hide(elements.dropdown);
-  }
+  const handlers = {
+    suggestion: handleSuggestion,
+    outside: handleOutside
+  };
 
   function bindEvents() {
-    const eventBindings = [
-      [elements.dropdown, "click", handleSuggestion],
-      [document, "click", handleOutside]
+    const bindings = [
+      [elements.dropdown, "click", handlers.suggestion],
+      [document, "click", handlers.outside]
     ];
 
-    eventBindings.forEach(([el, event, handler]) =>
+    bindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
   }
@@ -121,4 +120,4 @@ const CommandDropdown = (env => {
     close,
     getVisibleDropdown
   };
-})(currentEnvironment);
+})();

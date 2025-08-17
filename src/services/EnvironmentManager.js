@@ -4,6 +4,7 @@ const EnvironmentManager = (() => {
     const WORK_DIR = ".";
     const LANG_CODE = "pt-BR";
     const ICON_PATH = "/src/assets/icons/";
+
     const STORAGE_KEYS = {
       routines: "@routine-flow:routines",
       settings: "@routine-flow:settings"
@@ -34,17 +35,6 @@ const EnvironmentManager = (() => {
       localStorage.setItem(STORAGE_KEYS.settings, settings);
     }
 
-    function navigate(destination, options) {
-      console.log(`Navegando para: ${destination}`);
-
-      if (options && options.actions) {
-        options.actions.forEach(action => {
-          const module = window[action.module];
-          module[action.method](...action.params);
-        });
-      }
-    }
-
     function exit() {
       alert("Fechando aplicação...");
     }
@@ -60,7 +50,6 @@ const EnvironmentManager = (() => {
       saveRoutines,
       getSettings,
       saveSettings,
-      navigate,
       exit
     };
   })();
@@ -72,4 +61,4 @@ const EnvironmentManager = (() => {
   return { detect };
 })();
 
-const currentEnvironment = EnvironmentManager.detect();
+const ENV = EnvironmentManager.detect();

@@ -1,17 +1,8 @@
-const RoutineRenderUtils = (env => {
+const RoutineRenderUtils = (() => {
   const PRIORITY_CONFIG = {
-    low: {
-      className: "priority-low",
-      icon: "💡"
-    },
-    medium: {
-      className: "priority-medium",
-      icon: "⚡"
-    },
-    high: {
-      className: "priority-high",
-      icon: "🔥"
-    }
+    low: { className: "priority-low", icon: "💡" },
+    medium: { className: "priority-medium", icon: "⚡" },
+    high: { className: "priority-high", icon: "🔥" }
   };
 
   function getPriorityConfig(priority) {
@@ -19,8 +10,7 @@ const RoutineRenderUtils = (env => {
   }
 
   function createActionBtn(action, iconName, className) {
-    return `
-      <button class="button ${className}" data-action="${action}">
+    return `<button class="button ${className}" data-action="${action}">
         ${Icons.getIcon(iconName)}
       </button>`;
   }
@@ -34,8 +24,7 @@ const RoutineRenderUtils = (env => {
 
   function createCommand(command) {
     return command
-      ? `
-      <div class="card-command">
+      ? `<div class="card-command">
         ${Icons.getIcon("terminal")}
         <span>${command}</span>
       </div>`
@@ -46,8 +35,7 @@ const RoutineRenderUtils = (env => {
     const { className, icon } = getPriorityConfig(routine.priority);
     const label = I18n.get(className.replace("-", "_"));
 
-    return `
-      <div class="card-header">
+    return `<div class="card-header">
         <h3 class="card-title">${routine.title}</h3>
         <span class="priority-badge ${className}">${icon} ${label}</span>
       </div>
@@ -108,17 +96,7 @@ const RoutineRenderUtils = (env => {
     elements.emptyBtn.innerHTML += I18n.get("create_routine_button");
 
     elements.emptyBtn = removeListeners(elements.emptyBtn);
-    elements.emptyBtn.addEventListener("click", () => {
-      env.navigate("/routines/form", {
-        actions: [
-          {
-            module: "RoutineModal",
-            method: "openCreate",
-            params: []
-          }
-        ]
-      });
-    });
+    elements.emptyBtn.addEventListener("click", RoutineModal.openCreate);
   }
 
   function showEmpty(isFilter, elements) {
@@ -137,13 +115,13 @@ const RoutineRenderUtils = (env => {
   function formatDateTime(timestamp) {
     const date = new Date(timestamp * 1000);
 
-    const time = date.toLocaleTimeString(env.langCode, {
+    const time = date.toLocaleTimeString(ENV.langCode, {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false
     });
 
-    const dateStr = date.toLocaleDateString(env.langCode, {
+    const dateStr = date.toLocaleDateString(ENV.langCode, {
       weekday: "long",
       day: "2-digit",
       month: "2-digit"
@@ -173,9 +151,12 @@ const RoutineRenderUtils = (env => {
     showNext,
     hideNext
   };
-})(currentEnvironment);
+})();
 
 const RoutineRenderer = (() => {
+  const PAGE_SIZE = 8;
+  const THRESHOLD_PX = 200;
+
   const elements = {
     grid: DOM.$("#routines-grid"),
     count: DOM.$("#routines-count"),
@@ -204,13 +185,13 @@ const RoutineRenderer = (() => {
     if (routines.length > 0) {
       RoutineRenderUtils.hideEmpty(elements);
 
-      const routinesPager = PaginationManager.create({
+      const pager = PaginationManager.create({
         scrollElement: elements.scrollContainer,
-        pageSize: 8,
-        thresholdPx: 200,
+        pageSize: PAGE_SIZE,
+        thresholdPx: THRESHOLD_PX,
         renderAppend: appendCards
       });
-      routinesPager.init(routines);
+      pager.init(routines);
     } else {
       RoutineRenderUtils.showEmpty(isFilter, elements);
     }
@@ -222,7 +203,6 @@ const RoutineRenderer = (() => {
     const isFilter = RoutineFilter.isAnyActive();
 
     RoutineRenderUtils.clearGrid(elements);
-
     renderCards(filtered, isFilter);
   }
 
@@ -251,9 +231,7 @@ const RoutineRenderer = (() => {
 
   function remove(id) {
     const card = DOM.$(`[data-id="${id}"]`);
-    if (card) {
-      card.remove();
-    }
+    if (card) card.remove();
 
     if (elements.grid.children.length === 0) {
       const isFilter = RoutineFilter.isAnyActive();
@@ -266,7 +244,6 @@ const RoutineRenderer = (() => {
     if (!card) return;
 
     const routine = RoutineService.getById(id);
-
     card.className = RoutineRenderUtils.getCardClass(routine);
     card.innerHTML = RoutineRenderUtils.createCardHTML(routine);
   }

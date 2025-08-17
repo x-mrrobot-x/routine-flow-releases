@@ -1,4 +1,4 @@
-const I18n = (function (env) {
+const I18n = (function () {
   const DEFAULT_LANG = "en";
   const APP_LANG = "pt";
   let data = {};
@@ -33,19 +33,19 @@ const I18n = (function (env) {
 
   async function loadData(lang) {
     try {
-      data = await env.loadLang(extractBase(lang));
+      data = await ENV.loadLang(extractBase(lang));
     } catch (error) {
       console.error("Error loading language data:", error);
-      data = await env.loadLang(DEFAULT_LANG);
+      data = await ENV.loadLang(DEFAULT_LANG);
     }
   }
 
   function shouldTranslate() {
-    return !env.langCode.includes(APP_LANG);
+    return !ENV.langCode.includes(APP_LANG);
   }
 
   async function init() {
-    await loadData(env.langCode);
+    await loadData(ENV.langCode);
 
     if (shouldTranslate()) {
       translateUI();
@@ -55,4 +55,4 @@ const I18n = (function (env) {
   }
 
   return { init, get };
-})(currentEnvironment);
+})();

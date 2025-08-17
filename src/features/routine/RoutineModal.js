@@ -28,7 +28,7 @@ const RoutineModalUtils = (() => {
   };
 })();
 
-const RoutineModal = (env => {
+const RoutineModal = (() => {
   const CONTENT_KEYS = {
     create: {
       title: "create_routine_title",
@@ -89,11 +89,6 @@ const RoutineModal = (env => {
     RoutineForm.setupEdit(routine);
   }
 
-  function openEdit(routine) {
-    setupEdit(routine);
-    Modal.show(elements.modal);
-  }
-
   function setupCreate() {
     RoutineModalUtils.setCreateState();
     const { title, subtitle, submitButton } = getContent(false);
@@ -101,30 +96,33 @@ const RoutineModal = (env => {
     RoutineForm.reset();
   }
 
+  function openEdit(routineId) {
+    const routine = RoutineService.getById(routineId);
+    setupEdit(routine);
+    Modal.show(elements.modal);
+  }
+
   function openCreate() {
     setupCreate();
     Modal.show(elements.modal);
   }
 
-  function close(goBack = false) {
-    Modal.hide(elements.modal, goBack);
+  function close() {
+    Modal.hide(elements.modal);
   }
 
-  function handleOverlay() {
-    close(true);
-  }
-
-  function handleCancel() {
-    close(true);
-  }
+  const handlers = {
+    cancel: close,
+    overlay: close
+  };
 
   function bindEvents() {
-    const eventBindings = [
-      [elements.cancelBtn, "click", handleCancel],
-      [elements.overlay, "click", handleOverlay]
+    const bindings = [
+      [elements.cancelBtn, "click", handlers.cancel],
+      [elements.overlay, "click", handlers.overlay]
     ];
 
-    eventBindings.forEach(([el, event, handler]) =>
+    bindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
   }
@@ -142,4 +140,4 @@ const RoutineModal = (env => {
     getState,
     setState
   };
-})(currentEnvironment);
+})();

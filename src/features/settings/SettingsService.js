@@ -1,4 +1,4 @@
-const SettingsService = (env => {
+const SettingsService = (() => {
   const DEFAULT_SETTINGS = {
     voice: true,
     toast: true,
@@ -6,11 +6,11 @@ const SettingsService = (env => {
   };
 
   function save(settings) {
-    env.saveSettings(JSON.stringify(settings, null, 2));
+    ENV.saveSettings(JSON.stringify(settings, null, 2));
   }
 
   function load() {
-    const stored = env.getSettings();
+    const stored = ENV.getSettings();
 
     if (!stored) {
       save(DEFAULT_SETTINGS);
@@ -24,4 +24,4 @@ const SettingsService = (env => {
     load,
     save
   };
-})(currentEnvironment);
+})();

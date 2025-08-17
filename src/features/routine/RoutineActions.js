@@ -1,17 +1,21 @@
-const RoutineActions = (env => {
+const RoutineActions = (() => {
   const elements = {
     grid: DOM.$("#routines-grid"),
-    settingsBtn: DOM.$("#settings-btn"),
     addBtn: DOM.$("#add-routine-btn")
+  };
+
+  const ACTION_MAP = {
+    toggle: toggleRoutine,
+    edit: editRoutine,
+    delete: deleteRoutine
   };
 
   function toggleRoutine(routineId) {
     const routine = RoutineService.getById(routineId);
     const active = !routine.active;
-    const updated = { ...routine, active };
 
     RoutineService.update(routineId, { active });
-    RoutineRenderer.update(routineId, updated);
+    RoutineRenderer.update(routineId, { ...routine, active });
     RoutineRenderer.updateNext();
 
     const key = active
@@ -21,39 +25,15 @@ const RoutineActions = (env => {
   }
 
   function editRoutine(routineId) {
-    const routine = RoutineService.getById(routineId);
-
-    env.navigate("/routines/form", {
-      actions: [
-        {
-          module: "RoutineModal",
-          method: "openEdit",
-          params: [routine]
-        }
-      ]
-    });
+    RoutineModal.openEdit(routineId);
   }
 
   function deleteRoutine(routineId) {
-    env.navigate("/routines/delete", {
-      actions: [
-        {
-          module: "DeleteRoutineModal",
-          method: "open",
-          params: [routineId]
-        }
-      ]
-    });
+    DeleteRoutineModal.open(routineId);
   }
 
   function executeAction(action, id) {
-    const actionMap = {
-      toggle: toggleRoutine,
-      edit: editRoutine,
-      delete: deleteRoutine
-    };
-
-    const handler = actionMap[action];
+    const handler = ACTION_MAP[action];
     if (handler) handler(id);
   }
 
@@ -71,38 +51,22 @@ const RoutineActions = (env => {
     executeAction(action, id);
   }
 
-  function handleSettings() {
-    env.navigate("/settings", {
-      actions: [
-        {
-          module: "SettingsModal",
-          method: "open",
-          params: []
-        }
-      ]
-    });
+  function handleAdd() {
+    RoutineModal.openCreate();
   }
 
-  function handleAdd() {
-    env.navigate("/routines/form", {
-      actions: [
-        {
-          module: "RoutineModal",
-          method: "openCreate",
-          params: []
-        }
-      ]
-    });
-  }
+  const handlers = {
+    card: handleCard,
+    add: handleAdd
+  };
 
   function bindEvents() {
-    const eventBindings = [
-      [elements.grid, "click", handleCard],
-      [elements.settingsBtn, "click", handleSettings],
-      [elements.addBtn, "click", handleAdd]
+    const bindings = [
+      [elements.grid, "click", handlers.card],
+      [elements.addBtn, "click", handlers.add]
     ];
 
-    eventBindings.forEach(([el, event, handler]) =>
+    bindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
   }
@@ -111,5 +75,7 @@ const RoutineActions = (env => {
     bindEvents();
   }
 
-  return { init };
-})(currentEnvironment);
+  return {
+    init
+  };
+})();

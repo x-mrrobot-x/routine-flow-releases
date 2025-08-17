@@ -1,22 +1,21 @@
-const AppPickerModal = (env => {
-  const PAGE_SIZE = 20;
+const AppPickerModal = (() => {
+  const PAGE_SIZE = 15;
   const THRESHOLD_PX = 200;
 
   const elements = {
     modal: DOM.$("#app-picker-modal"),
     overlay: DOM.$("#app-picker-modal .modal-overlay"),
-    cancelBtn: DOM.$("#cancel-app-picker"),
+    btn: DOM.$("#cancel-app-picker"),
     grid: DOM.$("#apps-grid")
   };
 
   function createCard({ name, pkg }) {
     const iconSrc =
-      env.name === "web"
-        ? `${env.iconPath}${pkg}.png`
-        : `${env.iconPath}${pkg}`;
+      ENV.name === "web"
+        ? `${ENV.iconPath}${pkg}.png`
+        : `${ENV.iconPath}${pkg}`;
 
-    return `
-    <div class="app-card" data-app="${name}">
+    return `<div class="app-card" data-app="${name}">
       <img src="${iconSrc}" class="app-icon" />
       <p class="app-name">${name}</p>
     </div>`;
@@ -30,43 +29,32 @@ const AppPickerModal = (env => {
     Modal.show(elements.modal);
   }
 
-  function close(goBack = false) {
-    Modal.hide(elements.modal, goBack);
+  function close() {
+    Modal.hide(elements.modal);
   }
 
   function handleAppSelect(e) {
     const card = e.target.closest(".app-card");
     if (!card) return;
 
-    env.navigate(-1, {
-      actions: [
-        {
-          module: "RoutineForm",
-          method: "setCommandInput",
-          params: [`/open ${card.dataset.app}`]
-        }
-      ]
-    });
-
+    RoutineForm.setCommandInput(`/open ${card.dataset.app}`);
     close();
   }
 
-  function handleCancel() {
-    close(true);
-  }
-
-  function handleOverlay() {
-    close(true);
-  }
+  const handlers = {
+    appSelect: handleAppSelect,
+    cancel: close,
+    overlay: close
+  };
 
   function bindEvents() {
-    const eventBindings = [
-      [elements.cancelBtn, "click", handleCancel],
-      [elements.overlay, "click", handleOverlay],
-      [elements.grid, "click", handleAppSelect]
+    const bindings = [
+      [elements.btn, "click", handlers.cancel],
+      [elements.overlay, "click", handlers.overlay],
+      [elements.grid, "click", handlers.appSelect]
     ];
 
-    eventBindings.forEach(([el, event, handler]) =>
+    bindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
   }
@@ -76,7 +64,7 @@ const AppPickerModal = (env => {
   }
 
   function render(data) {
-    const apps = data || env.loadApps();
+    const apps = data || ENV.loadApps();
     elements.grid.innerHTML = "";
 
     const pager = PaginationManager.create({
@@ -100,4 +88,4 @@ const AppPickerModal = (env => {
     close,
     render
   };
-})(currentEnvironment);
+})();
