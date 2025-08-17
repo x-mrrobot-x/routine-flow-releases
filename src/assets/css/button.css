@@ -11,34 +11,6 @@
   height: 1.6rem;
 }
 
-.btn-gradient-glass {
-  border: 1px solid rgba(var(--gradient-start-rgb), 0.3);
-  background: linear-gradient(
-    135deg,
-    rgba(var(--gradient-start-rgb), 0.2),
-    rgba(var(--gradient-end-rgb), 0.1)
-  );
-}
-
-.button-primary {
-  color: var(--text-primary);
-  background-color: rgba(var(--gradient-start-rgb), 0.7);
-}
-
-.button-primary:active {
-  background-color: rgba(var(--gradient-start-rgb), 0.9);
-}
-
-.button-outline {
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  background-color: transparent;
-}
-
-.button-outline:active {
-  background-color: var(--bg-button-hover);
-}
-
 .tech-button {
   color: var(--text-primary);
   background: linear-gradient(
@@ -56,6 +28,15 @@
   box-shadow:
     0 0.6rem 1.6rem rgba(var(--gradient-end-rgb), 0.4),
     0 0 0 0.2rem rgba(var(--gradient-start-rgb), 0.2);
+}
+
+.delete-btn {
+  color: var(--danger-medium);
+  background-color: rgba(var(--danger-dark-rgb), 0.2);
+}
+
+.delete-btn:active {
+  background-color: rgba(var(--danger-dark-rgb), 0.3);
 }
 
 .routine-add-button {

@@ -44,12 +44,16 @@ const CommandUtils = (() => {
   return { getCommands, createItems };
 })();
 
-const CommandDropdown = (() => {
+const CommandDropdown = (env => {
   let visible = false;
 
   const elements = {
     dropdown: DOM.$("#command-dropdown")
   };
+
+  function getVisibleDropdown() {
+    return visible;
+  }
 
   function handleSuggestion(e) {
     const item = e.target.closest(".suggestion-item");
@@ -58,8 +62,16 @@ const CommandDropdown = (() => {
     const { command } = item.dataset;
 
     if (command === "/open") {
+      env.navigate("/routines/form/apps", {
+        actions: [
+          {
+            module: "AppPickerModal",
+            method: "open",
+            params: []
+          }
+        ]
+      });
       close();
-      AppSelectorModal.open();
       return;
     }
 
@@ -73,11 +85,6 @@ const CommandDropdown = (() => {
     }
   }
 
-  function handleCommandInput(e) {
-    const { value } = e.target;
-    value === "/" ? open() : visible && close();
-  }
-
   function open() {
     visible = true;
     Modal.show(elements.dropdown);
@@ -88,18 +95,13 @@ const CommandDropdown = (() => {
     Modal.hide(elements.dropdown);
   }
 
-  const handlers = {
-    suggestion: handleSuggestion,
-    outside: handleOutside
-  };
-
   function bindEvents() {
-    const events = [
-      [elements.dropdown, "click", handlers.suggestion],
-      [document, "click", handlers.outside]
+    const eventBindings = [
+      [elements.dropdown, "click", handleSuggestion],
+      [document, "click", handleOutside]
     ];
 
-    events.forEach(([el, event, handler]) =>
+    eventBindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
   }
@@ -115,6 +117,8 @@ const CommandDropdown = (() => {
 
   return {
     init,
-    handleCommandInput
+    open,
+    close,
+    getVisibleDropdown
   };
-})();
+})(currentEnvironment);

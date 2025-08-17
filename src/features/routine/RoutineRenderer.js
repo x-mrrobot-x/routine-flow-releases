@@ -74,7 +74,7 @@ const RoutineRenderUtils = (env => {
             "routine-toggle-btn"
           )}
           ${createActionBtn("edit", "edit", "routine-edit-btn")}
-          ${createActionBtn("delete", "trash2", "routine-delete-btn")}
+          ${createActionBtn("delete", "trash2", "delete-btn")}
         </div>
       </div>`;
   }
@@ -108,7 +108,17 @@ const RoutineRenderUtils = (env => {
     elements.emptyBtn.innerHTML += I18n.get("create_routine_button");
 
     elements.emptyBtn = removeListeners(elements.emptyBtn);
-    elements.emptyBtn.addEventListener("click", RoutineModal.openCreate);
+    elements.emptyBtn.addEventListener("click", () => {
+      env.navigate("/routines/form", {
+        actions: [
+          {
+            module: "RoutineModal",
+            method: "openCreate",
+            params: []
+          }
+        ]
+      });
+    });
   }
 
   function showEmpty(isFilter, elements) {
@@ -251,9 +261,11 @@ const RoutineRenderer = (() => {
     }
   }
 
-  function update(id, routine) {
+  function update(id) {
     const card = DOM.$(`[data-id="${id}"]`);
     if (!card) return;
+
+    const routine = RoutineService.getById(id);
 
     card.className = RoutineRenderUtils.getCardClass(routine);
     card.innerHTML = RoutineRenderUtils.createCardHTML(routine);

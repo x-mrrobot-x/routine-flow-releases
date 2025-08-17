@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Routine Flow - Routine Form Modal</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/src/assets/css/base.css" />
+    <link rel="stylesheet" href="/src/assets/css/modal.css" />
+    <link rel="stylesheet" href="/src/assets/css/form.css" />
+    <link rel="stylesheet" href="/src/assets/css/button.css" />
+    <link rel="stylesheet" href="/src/assets/css/commands.css" />
+
+    <!-- Scripts -->
+    <script src="/src/services/EnvironmentManager.js" defer></script>
+    <script src="/src/services/Icons.js" defer></script>
+    <script src="/src/services/I18n.js" defer></script>
+    <script src="/src/utils/DOM.js" defer></script>
+    <script src="/src/utils/Utils.js" defer></script>
+    <script src="/src/components/Modal.js" defer></script>
+    <script src="/src/features/routine/RoutineForm.js" defer></script>
+    <script src="/src/features/routine/CommandDropdown.js" defer></script>
+    <script src="/src/features/routine/RoutineService.js" defer></script>
+    <script src="/src/features/routine/RoutineModal.js" defer></script>
+
+    <script>
+      const App = (() => {
+        async function init() {
+          Icons.init();
+          await I18n.init();
+          RoutineService.init();
+          RoutineModal.init();
+          RoutineModal.openCreate();
+        }
+
+        function close() {
+          RoutineModal.close(true);
+        }
+
+        return {
+          init,
+          close
+        };
+      })();
+
+      document.addEventListener("DOMContentLoaded", App.init);
+    </script>
+  </head>
+  <body>
+    <div id="routine-modal" class="modal">
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title text-gradient">Nova Rotina</h3>
+          <p class="modal-description">
+            Crie uma nova rotina para seu dia a dia.
+          </p>
+        </div>
+
+        <form id="routine-form" class="form">
+          <div class="form-content">
+            <div class="form-group">
+              <label for="title" class="form-label" data-i18n="form_label_name"
+                >Título</label
+              >
+              <input
+                id="title"
+                name="title"
+                type="text"
+                class="form-input"
+                placeholder="Ex: Exercícios matinais"
+                data-i18n="form_placeholder_title"
+              />
+              <div class="form-error" id="title-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label
+                for="description"
+                class="form-label"
+                data-i18n="form_label_description"
+                >Descrição</label
+              >
+              <textarea
+                id="description"
+                name="description"
+                class="form-textarea"
+                placeholder="Ex: 30 minutos de exercícios para começar o dia com energia"
+                data-i18n="form_placeholder_description"
+              ></textarea>
+              <div class="form-error" id="description-error"></div>
+            </div>
+
+            <div class="form-group">
+              <div id="command-dropdown" class="command-dropdown"></div>
+              <label
+                for="command"
+                class="form-label"
+                data-i18n="form_label_command"
+                >Comando (opcional)</label
+              >
+              <input
+                id="command"
+                name="command"
+                type="text"
+                class="form-input"
+                placeholder="Ex: open_app"
+                data-i18n="form_placeholder_command"
+              />
+              <div class="form-error" id="command-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label
+                for="priority"
+                class="form-label"
+                data-i18n="form_label_priority"
+                >Prioridade</label
+              >
+              <select id="priority" name="priority" class="form-select">
+                <option value="low" data-i18n="priority_low">Baixa</option>
+                <option value="medium" selected data-i18n="priority_medium">
+                  Média
+                </option>
+                <option value="high" data-i18n="priority_high">Alta</option>
+              </select>
+              <div class="form-error" id="priority-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="time" class="form-label" data-i18n="form_label_time"
+                >Horário</label
+              >
+              <input id="time" name="time" type="time" class="form-input" />
+              <div class="form-error" id="time-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" data-i18n="form_label_days"
+                >Dias da semana</label
+              >
+              <div class="days-container" id="days-container">
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="0"
+                  data-i18n="day_sun"
+                >
+                  Dom
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="1"
+                  data-i18n="day_mon"
+                >
+                  Seg
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="2"
+                  data-i18n="day_tue"
+                >
+                  Ter
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="3"
+                  data-i18n="day_wed"
+                >
+                  Qua
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="4"
+                  data-i18n="day_thu"
+                >
+                  Qui
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="5"
+                  data-i18n="day_fri"
+                >
+                  Sex
+                </button>
+                <button
+                  type="button"
+                  class="day-button"
+                  data-day="6"
+                  data-i18n="day_sat"
+                >
+                  Sáb
+                </button>
+              </div>
+              <div class="form-error" id="days-error"></div>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button
+              type="button"
+              id="cancel-routine"
+              class="button button-outline"
+            >
+              <i data-icon="x"></i>
+              <span data-i18n="cancel_button">Cancelar</span>
+            </button>
+            <button type="submit" class="button button-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

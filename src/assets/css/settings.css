@@ -1,3 +1,7 @@
+#settings-modal .modal-header {
+  margin-bottom: 0;
+}
+
 .setting-item {
   display: flex;
   justify-content: space-between;
@@ -10,10 +14,6 @@
 }
 
 /* Switch toggle */
-
-.settings-list {
-  margin-bottom: var(--space-sm);
-}
 
 .setting-item input {
   --toggle-padding: 0.3rem;

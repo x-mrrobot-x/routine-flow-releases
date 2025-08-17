@@ -223,15 +223,6 @@
   background-color: var(--text-muted);
 }
 
-.routine-delete-btn {
-  color: var(--danger-medium);
-  background-color: rgba(var(--danger-dark-rgb), 0.2);
-}
-
-.routine-delete-btn:active {
-  background-color: rgba(var(--danger-dark-rgb), 0.3);
-}
-
 /* Empty state */
 
 .empty-state {
@@ -269,4 +260,27 @@
   margin-right: var(--space-sm);
   width: var(--icon-md);
   height: var(--icon-md);
+}
+
+@media (min-width: 102.4rem) {
+  .main {
+    max-width: 120rem;
+    margin: 0 auto;
+  }
+
+  .routines-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 128rem) {
+  .routines-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 60rem) {
+  .routines-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

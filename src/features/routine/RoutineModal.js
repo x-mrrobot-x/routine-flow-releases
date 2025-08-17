@@ -7,11 +7,11 @@ const RoutineModalUtils = (() => {
     });
   }
 
-  function setEditState(id, routine) {
+  function setEditState(routine) {
     RoutineModal.setState({
       selectedDays: [...routine.frequency],
       isEditMode: true,
-      routineToEdit: id
+      routineToEdit: routine.id
     });
   }
 
@@ -28,16 +28,7 @@ const RoutineModalUtils = (() => {
   };
 })();
 
-const RoutineModal = (() => {
-  const elements = {
-    modal: DOM.$("#routine-modal"),
-    overlay: DOM.$("#routine-modal .modal-overlay"),
-    title: DOM.$("#routine-modal .modal-title"),
-    description: DOM.$("#routine-modal .modal-description"),
-    cancelBtn: DOM.$("#cancel-routine"),
-    submitBtn: DOM.$('button[type="submit"]')
-  };
-
+const RoutineModal = (env => {
   const CONTENT_KEYS = {
     create: {
       title: "create_routine_title",
@@ -51,6 +42,15 @@ const RoutineModal = (() => {
       button: "update_button",
       icon: "calendar-sync"
     }
+  };
+
+  const elements = {
+    modal: DOM.$("#routine-modal"),
+    overlay: DOM.$("#routine-modal .modal-overlay"),
+    title: DOM.$("#routine-modal .modal-title"),
+    description: DOM.$("#routine-modal .modal-description"),
+    cancelBtn: DOM.$("#cancel-routine"),
+    submitBtn: DOM.$('button[type="submit"]')
   };
 
   let state = {
@@ -82,16 +82,15 @@ const RoutineModal = (() => {
     };
   }
 
-  function setupEdit(routine, id) {
-    RoutineModalUtils.setEditState(id, routine);
+  function setupEdit(routine) {
+    RoutineModalUtils.setEditState(routine);
     const { title, subtitle, submitButton } = getContent(true);
     RoutineModalUtils.updateTexts(title, subtitle, submitButton, elements);
     RoutineForm.setupEdit(routine);
   }
 
-  function openEdit(id) {
-    const routine = RoutineService.getById(id);
-    setupEdit(routine, id);
+  function openEdit(routine) {
+    setupEdit(routine);
     Modal.show(elements.modal);
   }
 
@@ -107,22 +106,25 @@ const RoutineModal = (() => {
     Modal.show(elements.modal);
   }
 
-  function close() {
-    Modal.hide(elements.modal);
+  function close(goBack = false) {
+    Modal.hide(elements.modal, goBack);
   }
 
-  const handlers = {
-    overlay: close,
-    cancel: close
-  };
+  function handleOverlay() {
+    close(true);
+  }
+
+  function handleCancel() {
+    close(true);
+  }
 
   function bindEvents() {
-    const events = [
-      [elements.overlay, "click", handlers.overlay],
-      [elements.cancelBtn, "click", handlers.cancel]
+    const eventBindings = [
+      [elements.cancelBtn, "click", handleCancel],
+      [elements.overlay, "click", handleOverlay]
     ];
 
-    events.forEach(([el, event, handler]) =>
+    eventBindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
   }
@@ -140,4 +142,4 @@ const RoutineModal = (() => {
     getState,
     setState
   };
-})();
+})(currentEnvironment);

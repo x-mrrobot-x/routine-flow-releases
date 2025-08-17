@@ -1,4 +1,4 @@
-const DeleteRoutineModal = (() => {
+const DeleteRoutineModal = (env => {
   let routineId = null;
 
   const elements = {
@@ -9,12 +9,29 @@ const DeleteRoutineModal = (() => {
   };
 
   function handleConfirm() {
-    RoutineService.remove(routineId);
-    RoutineRenderer.remove(routineId);
-    RoutineRenderer.updateCount();
-    RoutineRenderer.updateNext();
+    env.navigate(-1, {
+      actions: [
+        { module: "RoutineService", method: "remove", params: [routineId] },
+        { module: "RoutineRenderer", method: "remove", params: [routineId] },
+        { module: "RoutineRenderer", method: "updateCount", params: [] },
+        { module: "RoutineRenderer", method: "updateNext", params: [] },
+        {
+          module: "Toast",
+          method: "show",
+          params: ["success", "toast_routine_deleted"]
+        }
+      ]
+    });
+
     close();
-    Toast.show("success", "toast_routine_deleted");
+  }
+
+  function handleCancel() {
+    close(true);
+  }
+
+  function handleOverlay() {
+    close(true);
   }
 
   function open(id) {
@@ -22,25 +39,19 @@ const DeleteRoutineModal = (() => {
     Modal.show(elements.modal);
   }
 
-  function close() {
+  function close(goBack = false) {
     routineId = null;
-    Modal.hide(elements.modal);
+    Modal.hide(elements.modal, goBack);
   }
 
-  const handlers = {
-    cancel: close,
-    overlay: close,
-    confirm: handleConfirm
-  };
-
   function bindEvents() {
-    const events = [
-      [elements.cancelBtn, "click", handlers.cancel],
-      [elements.overlay, "click", handlers.overlay],
-      [elements.confirmBtn, "click", handlers.confirm]
+    const eventBindings = [
+      [elements.cancelBtn, "click", handleCancel],
+      [elements.overlay, "click", handleOverlay],
+      [elements.confirmBtn, "click", handleConfirm]
     ];
 
-    events.forEach(([el, event, handler]) =>
+    eventBindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
   }
@@ -49,5 +60,9 @@ const DeleteRoutineModal = (() => {
     bindEvents();
   }
 
-  return { init, open };
-})();
+  return {
+    init,
+    open,
+    close
+  };
+})(currentEnvironment);

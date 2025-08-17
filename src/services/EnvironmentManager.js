@@ -1,43 +1,72 @@
 const EnvironmentManager = (() => {
-  const WEB_ENV = {
-    name: "web",
-    langCode: "pt-BR",
-    workDir: ".",
-    iconPath: "/src/assets/icons/",
+  const WebEnvironment = (() => {
+    const NAME = "web";
+    const WORK_DIR = ".";
+    const LANG_CODE = "pt-BR";
+    const ICON_PATH = "/src/assets/icons/";
+    const STORAGE_KEYS = {
+      routines: "@routine-flow:routines",
+      settings: "@routine-flow:settings"
+    };
 
-    async loadLang(code) {
-      const response = await fetch(`${this.workDir}/src/lang/${code}.json`);
+    async function loadLang(code) {
+      const response = await fetch(`${WORK_DIR}/src/lang/${code}.json`);
       return await response.json();
-    },
+    }
 
-    loadApps() {
+    function loadApps() {
       return DEFAULT_APPS_DATA;
-    },
+    }
 
-    getRoutines() {
-      return localStorage.getItem("@routine-flow:routines");
-    },
+    function getRoutines() {
+      return localStorage.getItem(STORAGE_KEYS.routines);
+    }
 
-    saveRoutines(data) {
-      localStorage.setItem("@routine-flow:routines", data);
-    },
+    function saveRoutines(data) {
+      localStorage.setItem(STORAGE_KEYS.routines, data);
+    }
 
-    getSettings() {
-      return localStorage.getItem("@routine-flow:settings");
-    },
+    function getSettings() {
+      return localStorage.getItem(STORAGE_KEYS.settings);
+    }
 
-    saveSettings(settings) {
-      localStorage.setItem("@routine-flow:settings", settings);
-    },
+    function saveSettings(settings) {
+      localStorage.setItem(STORAGE_KEYS.settings, settings);
+    }
 
-    exit() {
+    function navigate(destination, options) {
+      console.log(`Navegando para: ${destination}`);
+
+      if (options && options.actions) {
+        options.actions.forEach(action => {
+          const module = window[action.module];
+          module[action.method](...action.params);
+        });
+      }
+    }
+
+    function exit() {
       alert("Fechando aplicação...");
     }
-  };
+
+    return {
+      name: NAME,
+      langCode: LANG_CODE,
+      workDir: WORK_DIR,
+      iconPath: ICON_PATH,
+      loadLang,
+      loadApps,
+      getRoutines,
+      saveRoutines,
+      getSettings,
+      saveSettings,
+      navigate,
+      exit
+    };
+  })();
 
   function detect() {
-    const isWeb = typeof tk === "undefined";
-    return isWeb ? WEB_ENV : TaskerEnvironment;
+    return typeof tk === "undefined" ? WebEnvironment : TaskerEnvironment;
   }
 
   return { detect };

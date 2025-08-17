@@ -101,8 +101,7 @@ const RoutineFormUtils = (() => {
 
   function updateBtn(btn, frequency) {
     const day = parseInt(btn.dataset.day);
-    const selected = frequency.includes(day);
-    btn.classList.toggle("selected", selected);
+    btn.classList.toggle("selected", frequency.includes(day));
   }
 
   function updateDays(frequency, btns) {
@@ -136,7 +135,7 @@ const RoutineFormUtils = (() => {
   };
 })();
 
-const RoutineForm = (() => {
+const RoutineForm = (env => {
   const elements = {
     form: DOM.$("#routine-form"),
     titleInput: DOM.$("#title"),
@@ -150,13 +149,19 @@ const RoutineForm = (() => {
 
   function handleEdit(data) {
     const id = RoutineModal.getState("routineToEdit");
-    RoutineService.update(id, data);
 
-    const updatedRoutine = RoutineService.getById(id);
-    RoutineRenderer.update(id, updatedRoutine);
-    RoutineRenderer.updateNext();
-
-    Toast.show("success", "toast_routine_updated");
+    env.navigate(-1, {
+      actions: [
+        { module: "RoutineService", method: "update", params: [id, data] },
+        { module: "RoutineRenderer", method: "update", params: [id] },
+        { module: "RoutineRenderer", method: "updateNext", params: [] },
+        {
+          module: "Toast",
+          method: "show",
+          params: ["success", "toast_routine_updated"]
+        }
+      ]
+    });
   }
 
   function handleCreate(data) {
@@ -166,9 +171,17 @@ const RoutineForm = (() => {
       active: true
     };
 
-    RoutineService.add(routine);
-    RoutineRenderer.updateAll();
-    Toast.show("success", "toast_routine_created");
+    env.navigate(-1, {
+      actions: [
+        { module: "RoutineService", method: "add", params: [routine] },
+        { module: "RoutineRenderer", method: "updateAll", params: [] },
+        {
+          module: "Toast",
+          method: "show",
+          params: ["success", "toast_routine_created"]
+        }
+      ]
+    });
   }
 
   function handleSubmit(e) {
@@ -185,7 +198,6 @@ const RoutineForm = (() => {
     } else {
       handleCreate(data);
     }
-
     RoutineModal.close();
   }
 
@@ -206,7 +218,7 @@ const RoutineForm = (() => {
   function toggleDay(e) {
     const day = parseInt(e.target.dataset.day);
     if (isNaN(day)) return;
-    
+
     e.target.classList.toggle("selected");
     const selected = e.target.classList.contains("selected");
     updateDays(day, selected);
@@ -224,25 +236,32 @@ const RoutineForm = (() => {
     elements.commandInput.focus();
   }
 
-  const handlers = {
-    submit: handleSubmit,
-    command: CommandDropdown.handleCommandInput,
-    dayToggle: toggleDay
-  };
+  function handleCommandInput(event) {
+    const { value } = event.target;
+    const visibleDropdown = CommandDropdown.getVisibleDropdown();
+
+    if (value === "/") {
+      CommandDropdown.open();
+      return;
+    }
+
+    if (visibleDropdown) CommandDropdown.close();
+  }
 
   function bindEvents() {
-    const events = [
-      [elements.form, "submit", handlers.submit],
-      [elements.commandInput, "input", handlers.command],
-      [elements.daysContainer, "click", handlers.dayToggle]
+    const eventBindings = [
+      [elements.form, "submit", handleSubmit],
+      [elements.commandInput, "input", handleCommandInput],
+      [elements.daysContainer, "click", toggleDay]
     ];
 
-    events.forEach(([el, event, handler]) =>
+    eventBindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
   }
 
   function init() {
+    CommandDropdown.init();
     bindEvents();
   }
 
@@ -252,4 +271,4 @@ const RoutineForm = (() => {
     reset,
     setCommandInput
   };
-})();
+})(currentEnvironment);

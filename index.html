@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Routine Flow - Agendador de Rotinas</title>
+    <title>Routine Flow - Gerenciador de Rotinas</title>
 
     <!-- Styles -->
     <link rel="stylesheet" href="/src/assets/css/animations.css" />
@@ -13,11 +13,10 @@
     <link rel="stylesheet" href="/src/assets/css/form.css" />
     <link rel="stylesheet" href="/src/assets/css/header.css" />
     <link rel="stylesheet" href="/src/assets/css/main.css" />
-    <link rel="stylesheet" href="/src/assets/css/media-queries.css" />
     <link rel="stylesheet" href="/src/assets/css/modal.css" />
     <link rel="stylesheet" href="/src/assets/css/routines.css" />
     <link rel="stylesheet" href="/src/assets/css/commands.css" />
-    <link rel="stylesheet" href="/src/assets/css/app-selector.css" />
+    <link rel="stylesheet" href="/src/assets/css/app-picker.css" />
     <link rel="stylesheet" href="/src/assets/css/settings.css" />
     <link rel="stylesheet" href="/src/assets/css/toast.css" />
     <link
@@ -33,27 +32,29 @@
 
     <!-- Scripts -->
     <script src="/src/services/EnvironmentManager.js" defer></script>
-    <script src="/src/services/I18n.js" defer></script>
-    <script src="/src/services/Icons.js" defer></script>
     <script src="/src/utils/Utils.js" defer></script>
     <script src="/src/utils/DOM.js" defer></script>
-    <script src="/src/features/routine/routineData.js" defer></script>
+    <script src="/src/services/I18n.js" defer></script>
+    <script src="/src/services/Icons.js" defer></script>
+    <script src="/src/services/TimeService.js" defer></script>
     <script src="/src/services/PaginationManager.js" defer></script>
-    <script src="/src/features/routine/RoutineRenderer.js" defer></script>
+    <script src="/src/components/Modal.js" defer></script>
+    <script src="/src/components/Toast.js" defer></script>
+    <script src="/src/features/routine/routineData.js" defer></script>
     <script src="/src/features/routine/appsData.js" defer></script>
     <script src="/src/features/routine/RoutineService.js" defer></script>
+    <script src="/src/features/routine/RoutineRenderer.js" defer></script>
     <script src="/src/features/routine/RoutineFilter.js" defer></script>
-    <script src="/src/components/Modal.js" defer></script>
     <script src="/src/features/routine/CommandDropdown.js" defer></script>
+    <script src="/src/features/routine/RoutineActions.js" defer></script>
+
+    <!-- Modal Scripts -->
     <script src="/src/features/routine/RoutineForm.js" defer></script>
     <script src="/src/features/routine/RoutineModal.js" defer></script>
     <script src="/src/features/routine/DeleteRoutineModal.js" defer></script>
-    <script src="/src/features/routine/RoutineActions.js" defer></script>
-    <script src="/src/features/routine/AppSelectorModal.js" defer></script>
+    <script src="/src/features/routine/AppPickerModal.js" defer></script>
     <script src="/src/features/settings/SettingsService.js" defer></script>
     <script src="/src/features/settings/SettingsModal.js" defer></script>
-    <script src="/src/services/TimeService.js" defer></script>
-    <script src="/src/components/Toast.js" defer></script>
     <script src="/src/App.js" defer></script>
   </head>
 
@@ -185,7 +186,7 @@
     </div>
 
     <!-- App Selector Modal -->
-    <div id="app-selector-modal" class="modal">
+    <div id="app-picker-modal" class="modal">
       <div class="modal-overlay"></div>
       <div class="modal-content">
         <div class="modal-header">
@@ -209,7 +210,7 @@
           <button
             type="button"
             class="button button-outline"
-            id="cancel-app-selector"
+            id="cancel-app-picker"
           >
             <i data-icon="x"></i>
             <span>Cancelar</span>
@@ -411,11 +412,7 @@
             <i data-icon="x"></i>
             <span data-i18n="cancel_button">Cancelar</span>
           </button>
-          <button
-            type="button"
-            class="button routine-delete-btn"
-            id="confirm-delete"
-          >
+          <button type="button" class="button delete-btn" id="confirm-delete">
             <i data-icon="trash2"></i>
             <span data-i18n="delete_button">Excluir</span>
           </button>

@@ -88,7 +88,6 @@ const RoutineService = (env => {
 
   function init() {
     load();
-    RoutineRenderer.init();
   }
 
   return {

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Routine Flow - Routine List Modal</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/src/assets/css/animations.css" />
+    <link rel="stylesheet" href="/src/assets/css/base.css" />
+    <link rel="stylesheet" href="/src/assets/css/button.css" />
+    <link rel="stylesheet" href="/src/assets/css/filters.css" />
+    <link rel="stylesheet" href="/src/assets/css/header.css" />
+    <link rel="stylesheet" href="/src/assets/css/main.css" />
+    <link rel="stylesheet" href="/src/assets/css/media-queries.css" />
+    <link rel="stylesheet" href="/src/assets/css/routines.css" />
+    <link rel="stylesheet" href="/src/assets/css/toast.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Scripts -->
+    <script src="/src/services/EnvironmentManager.js" defer></script>
+    <script src="/src/utils/Utils.js" defer></script>
+    <script src="/src/utils/DOM.js" defer></script>
+    <script src="/src/services/I18n.js" defer></script>
+    <script src="/src/services/Icons.js" defer></script>
+    <script src="/src/services/TimeService.js" defer></script>
+    <script src="/src/services/PaginationManager.js" defer></script>
+    <script src="/src/components/Modal.js" defer></script>
+    <script src="/src/components/Toast.js" defer></script>
+    <script src="/src/features/routine/routineData.js" defer></script>
+    <script src="/src/features/routine/RoutineService.js" defer></script>
+    <script src="/src/features/routine/RoutineRenderer.js" defer></script>
+    <script src="/src/features/routine/RoutineFilter.js" defer></script>
+    <script src="/src/features/routine/RoutineActions.js" defer></script>
+
+    <script>
+      const App = (() => {
+        async function init() {
+          Icons.init();
+          await I18n.init();
+          RoutineService.init();
+          RoutineRenderer.init();
+          TimeService.init();
+          RoutineFilter.init();
+          RoutineActions.init();
+        }
+
+        function close() {
+          Modal.hide(document.body, true);
+        }
+
+        return {
+          init,
+          close
+        };
+      })();
+
+      document.addEventListener("DOMContentLoaded", App.init);
+    </script>
+  </head>
+
+  <body class="loading">
+    <div class="app-container" id="app-container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-title">
+          <i data-icon="calendar-clock" class="logo-icon"></i>
+          <h1 class="logo-text text-gradient">Routine Flow</h1>
+        </div>
+        <button id="settings-btn" class="settings-button">
+          <i data-icon="settings-2"></i>
+        </button>
+      </header>
+
+      <!-- Main -->
+      <main class="main">
+        <!-- Filters -->
+        <div class="filters-bar" id="filters-bar">
+          <div class="filters-header">
+            <button id="toggle-filters-btn" class="toggle-filters-btn">
+              <i data-icon="filter"></i>
+              <span data-i18n="filters_title">Filtros</span>
+              <i class="filter-chevron" data-icon="chevron-down"></i>
+            </button>
+          </div>
+
+          <div class="search-wrapper">
+            <i data-icon="search"></i>
+            <input
+              type="text"
+              id="search-filter"
+              placeholder="Buscar rotinas..."
+              class="input-search"
+              data-i18n="search_placeholder"
+            />
+          </div>
+
+          <div class="advanced-filters">
+            <div class="filter-group">
+              <label for="status-filter" data-i18n="status_filter_label"
+                >Status</label
+              >
+              <div class="select-wrapper">
+                <select id="status-filter" class="select">
+                  <option value="all" data-i18n="status_all">Todas</option>
+                  <option value="active" data-i18n="status_active">
+                    Ativas
+                  </option>
+                  <option value="inactive" data-i18n="status_inactive">
+                    Inativas
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label for="priority-filter" data-i18n="priority_filter_label"
+                >Prioridade</label
+              >
+              <div class="select-wrapper">
+                <select id="priority-filter" class="select">
+                  <option value="all" data-i18n="priority_all">Todas</option>
+                  <option value="high" data-i18n="priority_high">Alta</option>
+                  <option value="medium" data-i18n="priority_medium">
+                    Média
+                  </option>
+                  <option value="low" data-i18n="priority_low">Baixa</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label for="day-filter" data-i18n="day_filter_label"
+                >Dia da semana</label
+              >
+              <div class="select-wrapper">
+                <select id="day-filter" class="select">
+                  <option value="all" data-i18n="day_all">Todos</option>
+                  <option value="0" data-i18n="day_sunday">Domingo</option>
+                  <option value="1" data-i18n="day_monday">Segunda</option>
+                  <option value="2" data-i18n="day_tuesday">Terça</option>
+                  <option value="3" data-i18n="day_wednesday">Quarta</option>
+                  <option value="4" data-i18n="day_thursday">Quinta</option>
+                  <option value="5" data-i18n="day_friday">Sexta</option>
+                  <option value="6" data-i18n="day_saturday">Sábado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="next-routine" id="next-routine">
+          <p class="next-routine-title" data-i18n="next_routine_title">
+            Próxima Rotina
+          </p>
+          <div class="next-routine-info">
+            <i data-icon="clock"></i>
+            <span id="next-routine-text"></span>
+          </div>
+        </div>
+
+        <div class="main-title">
+          <h2 class="text-gradient" data-i18n="routines_title">
+            Minhas Rotinas
+          </h2>
+          <span class="badge" id="routines-count">0</span>
+        </div>
+
+        <div class="routines-grid" id="routines-grid"></div>
+
+        <div class="empty-state" id="empty-state">
+          <i data-icon="calendar"></i>
+          <p class="empty-text"></p>
+          <button class="button tech-button">
+            <i></i>
+            <span></span>
+          </button>
+        </div>
+
+        <button
+          id="add-routine-btn"
+          class="button tech-button routine-add-button"
+        >
+          <i data-icon="calendar-plus"></i>
+        </button>
+      </main>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toast-container"></div>
+  </body>
+</html>

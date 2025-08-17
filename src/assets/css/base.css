@@ -74,10 +74,10 @@ body {
   font-family: "Inter", sans-serif;
   color: var(--text-primary);
   line-height: 1.5;
-  background-color: var(--bg-primary);
 }
 
 .app-container {
+  background-color: var(--bg-primary);
   overflow-y: auto;
 }
 
