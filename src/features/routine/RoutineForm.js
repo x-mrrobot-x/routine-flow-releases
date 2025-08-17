@@ -156,15 +156,29 @@ const RoutineForm = (() => {
   }
 
   function handleCreate(data) {
-    const routine = {
-      id: Date.now().toString(),
-      ...data,
-      active: true
-    };
+    const routine = { id: Date.now().toString(), ...data, active: true };
 
     RoutineService.add(routine);
     RoutineRenderer.updateAll();
     Toast.show("success", "toast_routine_created");
+  }
+
+  function handleCommandInput(event) {
+    const { value } = event.target;
+    const visibleDropdown = CommandDropdown.getVisibleDropdown();
+
+    if (value.startsWith("/")) {
+      const filteredSuggestions = CommandUtils.filterSuggestions(value);
+
+      if (filteredSuggestions.length > 0) {
+        CommandDropdown.open(filteredSuggestions);
+      } else {
+        CommandDropdown.close();
+      }
+      return;
+    }
+
+    if (visibleDropdown) CommandDropdown.close();
   }
 
   function setupEdit(routine) {
@@ -187,11 +201,6 @@ const RoutineForm = (() => {
     RoutineFormUtils.focusTitle(elements.titleInput);
   }
 
-  function setCommandInput(command) {
-    elements.commandInput.value = command;
-    elements.commandInput.focus();
-  }
-
   function handleSubmit(e) {
     e.preventDefault();
     RoutineFormUtils.clearErrors();
@@ -209,16 +218,9 @@ const RoutineForm = (() => {
     RoutineModal.close();
   }
 
-  function handleCommandInput(event) {
-    const { value } = event.target;
-    const visibleDropdown = CommandDropdown.getVisibleDropdown();
-
-    if (value === "/") {
-      CommandDropdown.open();
-      return;
-    }
-
-    if (visibleDropdown) CommandDropdown.close();
+  function setCommandInput(command) {
+    elements.commandInput.value = command;
+    elements.commandInput.focus();
   }
 
   function toggleDay(e) {
@@ -253,5 +255,10 @@ const RoutineForm = (() => {
     bindEvents();
   }
 
-  return { init, setupEdit, reset, setCommandInput };
+  return {
+    init,
+    setupEdit,
+    reset,
+    setCommandInput
+  };
 })();

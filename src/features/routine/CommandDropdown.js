@@ -1,48 +1,81 @@
 const CommandUtils = (() => {
   const SUGGESTIONS = [
     {
-      command: "/open",
-      description: "Abrir um aplicativo quando a rotina for acionada",
-      icon: "settings"
+      cmd: "/launch [app]",
+      desc: "command_launch_description",
+      icon: "rocket"
     },
     {
-      command: "/kill",
-      description: "Encerrar um aplicativo quando a rotina for acionada",
+      cmd: "/kill [app]",
+      desc: "command_kill_description",
       icon: "circle-stop"
     },
     {
-      command: "/execute",
-      description: "Executar um comando personalizado",
-      icon: "terminal"
+      cmd: "/lockscreen",
+      desc: "command_lockscreen_description",
+      icon: "lock-screen"
     },
     {
-      command: "/timer",
-      description: "Iniciar um temporizador específico",
-      icon: "clock"
-    }
+      cmd: "/bluetooth [on/off]",
+      desc: "command_bluetooth_description",
+      icon: "bluetooth"
+    },
+    {
+      cmd: "/airplane [on/off]",
+      desc: "command_airplane_description",
+      icon: "plane"
+    },
+    { cmd: "/wifi [on/off]", desc: "command_wifi_description", icon: "wifi" },
+    {
+      cmd: "/mobile [on/off]",
+      desc: "command_mobile_description",
+      icon: "signal"
+    },
+    { cmd: "/run_task [task]", desc: "command_task_description", icon: "play" }
   ];
 
   function getCommands() {
-    return SUGGESTIONS.map(s => s.command);
+    return SUGGESTIONS.map(s => s.cmd.split(" ")[0]);
   }
 
-  function createCard({ command, description, icon }) {
-    return `<div class="suggestion-item" data-command="${command}">
+  function createSuggestionCommand(command) {
+    return command.replace(
+      /\[([^\]]+)\]/g,
+      '<span class="suggestion-command-value">[$1]</span>'
+    );
+  }
+
+  function createCard({ cmd, desc, icon }) {
+    const description = I18n.get(desc);
+
+    return `<div class="suggestion-item" data-command="${cmd}">
         ${Icons.getIcon(icon)}
         <div class="suggestion-content">
-          <div class="suggestion-command">${command}</div>
+          <div class="suggestion-command">
+           ${createSuggestionCommand(cmd)}
+          </div>
           <div class="suggestion-description">${description}</div>
         </div>
       </div>`;
   }
 
-  function createItems() {
-    return SUGGESTIONS.map(createCard).join("");
+  function createItems(filteredSuggestions = SUGGESTIONS) {
+    return filteredSuggestions.map(createCard).join("");
+  }
+
+  function filterSuggestions(input) {
+    if (!input) return SUGGESTIONS;
+
+    const searchTerm = input.toLowerCase();
+    return SUGGESTIONS.filter(suggestion =>
+      suggestion.cmd.toLowerCase().includes(searchTerm.substring(1))
+    );
   }
 
   return {
     getCommands,
-    createItems
+    createItems,
+    filterSuggestions
   };
 })();
 
@@ -57,8 +90,9 @@ const CommandDropdown = (() => {
     return visible;
   }
 
-  function open() {
+  function open(filteredSuggestions) {
     visible = true;
+    render(filteredSuggestions);
     Modal.show(elements.dropdown);
   }
 
@@ -72,14 +106,15 @@ const CommandDropdown = (() => {
     if (!item) return;
 
     const { command } = item.dataset;
+    const baseCommand = command.split(" ")[0];
 
-    if (command === "/open") {
-      AppPickerModal.open();
+    if (baseCommand === "/launch" || baseCommand === "/kill") {
+      AppPickerModal.open(baseCommand);
       close();
       return;
     }
 
-    RoutineForm.setCommandInput(command);
+    RoutineForm.setCommandInput(baseCommand);
     close();
   }
 
@@ -105,8 +140,8 @@ const CommandDropdown = (() => {
     );
   }
 
-  function render() {
-    elements.dropdown.innerHTML = CommandUtils.createItems();
+  function render(filteredSuggestions) {
+    elements.dropdown.innerHTML = CommandUtils.createItems(filteredSuggestions);
   }
 
   function init() {

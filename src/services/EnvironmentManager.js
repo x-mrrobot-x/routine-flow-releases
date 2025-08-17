@@ -58,7 +58,9 @@ const EnvironmentManager = (() => {
     return typeof tk === "undefined" ? WebEnvironment : TaskerEnvironment;
   }
 
-  return { detect };
+  return {
+    detect
+  };
 })();
 
 const ENV = EnvironmentManager.detect();

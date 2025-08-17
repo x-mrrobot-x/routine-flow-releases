@@ -2,10 +2,12 @@ const AppPickerModal = (() => {
   const PAGE_SIZE = 15;
   const THRESHOLD_PX = 200;
 
+  let selectedCommand = "/launch";
+
   const elements = {
     modal: DOM.$("#app-picker-modal"),
     overlay: DOM.$("#app-picker-modal .modal-overlay"),
-    btn: DOM.$("#cancel-app-picker"),
+    cancelBtn: DOM.$("#cancel-app-picker"),
     grid: DOM.$("#apps-grid")
   };
 
@@ -25,20 +27,25 @@ const AppPickerModal = (() => {
     return apps.map(createCard).join("");
   }
 
-  function open() {
-    Modal.show(elements.modal);
-  }
-
-  function close() {
-    Modal.hide(elements.modal);
+  function appendApps(apps) {
+    elements.grid.insertAdjacentHTML("beforeend", createItems(apps));
   }
 
   function handleAppSelect(e) {
     const card = e.target.closest(".app-card");
     if (!card) return;
 
-    RoutineForm.setCommandInput(`/open ${card.dataset.app}`);
+    RoutineForm.setCommandInput(`${selectedCommand} ${card.dataset.app}`);
     close();
+  }
+
+  function open(command) {
+    selectedCommand = command || "/launch";
+    Modal.show(elements.modal);
+  }
+
+  function close() {
+    Modal.hide(elements.modal);
   }
 
   const handlers = {
@@ -49,7 +56,7 @@ const AppPickerModal = (() => {
 
   function bindEvents() {
     const bindings = [
-      [elements.btn, "click", handlers.cancel],
+      [elements.cancelBtn, "click", handlers.cancel],
       [elements.overlay, "click", handlers.overlay],
       [elements.grid, "click", handlers.appSelect]
     ];
@@ -57,10 +64,6 @@ const AppPickerModal = (() => {
     bindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
-  }
-
-  function appendApps(apps) {
-    elements.grid.insertAdjacentHTML("beforeend", createItems(apps));
   }
 
   function render(data) {

@@ -46,10 +46,17 @@
 }
 
 .suggestion-command {
+  display: flex;
+  align-items: center;
   font-weight: 600;
   color: var(--text-primary);
   font-size: var(--font-sm);
   margin-bottom: 0.2rem;
+}
+
+.suggestion-command-value {
+  margin-left: var(--space-xxs);
+  color: var(--text-secondary);
 }
 
 .suggestion-description {
