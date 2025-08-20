@@ -2,7 +2,7 @@ const AppPickerModal = (() => {
   const PAGE_SIZE = 15;
   const THRESHOLD_PX = 200;
 
-  let selectedCommand = "/launch";
+  let selectedCommand = "/open";
 
   const elements = {
     modal: DOM.$("#app-picker-modal"),
@@ -40,7 +40,7 @@ const AppPickerModal = (() => {
   }
 
   function open(command) {
-    selectedCommand = command || "/launch";
+    selectedCommand = command || "/open";
     Modal.show(elements.modal);
   }
 

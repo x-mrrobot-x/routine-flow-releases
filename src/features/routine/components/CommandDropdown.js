@@ -1,13 +1,13 @@
 const CommandUtils = (() => {
   const SUGGESTIONS = [
     {
-      cmd: "/launch [app]",
-      desc: "command_launch_description",
+      cmd: "/open [app]",
+      desc: "command_open_description",
       icon: "rocket"
     },
     {
-      cmd: "/kill [app]",
-      desc: "command_kill_description",
+      cmd: "/close [app]",
+      desc: "command_close_description",
       icon: "circle-stop"
     },
     {
@@ -108,7 +108,7 @@ const CommandDropdown = (() => {
     const { command } = item.dataset;
     const baseCommand = command.split(" ")[0];
 
-    if (baseCommand === "/launch" || baseCommand === "/kill") {
+    if (baseCommand === "/open" || baseCommand === "/close") {
       AppPickerModal.open(baseCommand);
       close();
       return;

@@ -83,8 +83,8 @@ O Routine Flow utiliza um conjunto de comandos padronizados. Sempre que uma roti
 
 | Comando               | Descrição                      | Exemplo            |
 | --------------------- | ------------------------------ | ------------------ |
-| `/launch [app]`       | Abrir aplicativo específico    | `/launch Telegram` |
-| `/kill [app]`         | Fechar aplicativo específico   | `/kill Youtube`    |
+| `/open [app]`       | Abrir aplicativo específico    | `/open Telegram` |
+| `/close [app]`         | Fechar aplicativo específico   | `/close Youtube`    |
 | `/lockscreen`         | Bloquear a tela do dispositivo | `/lockscreen`      |
 | `/bluetooth [on/off]` | Ligar/desligar Bluetooth       | `/bluetooth on`    |
 | `/airplane [on/off]`  | Controlar modo avião           | `/airplane off`    |
@@ -129,7 +129,7 @@ As rotinas são armazenadas no formato JSON:
   "id": 1234567890,
   "title": "Exercícios matinais",
   "description": "30 minutos de exercícios para começar o dia",
-  "command": "/launch FitnessApp",
+  "command": "/open FitnessApp",
   "priority": "high",
   "time": 21600, // segundos desde 00:00 (6:00 AM)
   "frequency": [1, 3, 5], // Seg, Qua, Sex (0-6 = Dom-Sáb)
