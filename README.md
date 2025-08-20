@@ -142,25 +142,47 @@ As rotinas são armazenadas no formato JSON:
 ```
 routine-flow/
 ├── index.html
-├── src/
-│   ├── App.js
-│   ├── assets/
-│   │   ├── css/
-│   │   └── icons/
-│   ├── components/
-│   │   ├── Modal.js
-│   │   └── Toast.js
-│   ├── features/
-│   │   ├── routine/
-│   │   └── settings/
-│   ├── lang/
-│   │   ├── en.json
-│   │   ├── es.json
-│   │   └── pt.json
-│   ├── services/
-│   │   └── EnvironmentManager.js
-│   └── utils/
-└── README.md
+├── README.md
+└── src/
+    ├── App.js
+    ├── assets/
+    │   ├── icons/
+    │   └── styles/
+    ├── components/
+    │   ├── Modal.js
+    │   └── Toast.js
+    ├── features/
+    │   ├── routine/
+    │   │   ├── components/
+    │   │   │   ├── AppPickerModal.js
+    │   │   │   ├── CommandDropdown.js
+    │   │   │   ├── DeleteRoutineModal.js
+    │   │   │   ├── RoutineForm.js
+    │   │   │   ├── RoutineModal.js
+    │   │   │   └── RoutineRenderer.js
+    │   │   ├── data/
+    │   │   │   ├── apps.js
+    │   │   │   └── routines.js
+    │   │   └── services/
+    │   │       ├── RoutineActions.js
+    │   │       ├── RoutineFilter.js
+    │   │       └── RoutineService.js
+    │   └── settings/
+    │       ├── SettingsModal.js
+    │       └── SettingsService.js
+    ├── locales/
+    │   ├── en.json
+    │   ├── es.json
+    │   └── pt.json
+    ├── services/
+    │   ├── EnvironmentManager.js
+    │   ├── I18n.js
+    │   ├── Icons.js
+    │   ├── PaginationManager.js
+    │   └── TimeService.js
+    └── shared/
+        ├── DOM.js
+        └── Utils.js
 ```
 
 ## Integração com Tasker
