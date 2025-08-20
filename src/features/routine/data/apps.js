@@ -1,4 +1,4 @@
-const DEFAULT_APPS_DATA = [
+const DEFAULT_APPS = [
   { name: "Câmera", pkg: "com.android.camera" },
   { name: "Chrome", pkg: "com.android.chrome" },
   { name: "Relógio", pkg: "com.android.deskclock" },

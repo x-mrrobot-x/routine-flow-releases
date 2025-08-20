@@ -6,19 +6,20 @@
     <title>Routine Flow - Gerenciador de Rotinas</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="/src/assets/css/animations.css" />
-    <link rel="stylesheet" href="/src/assets/css/base.css" />
-    <link rel="stylesheet" href="/src/assets/css/button.css" />
-    <link rel="stylesheet" href="/src/assets/css/filters.css" />
-    <link rel="stylesheet" href="/src/assets/css/form.css" />
-    <link rel="stylesheet" href="/src/assets/css/header.css" />
-    <link rel="stylesheet" href="/src/assets/css/main.css" />
-    <link rel="stylesheet" href="/src/assets/css/modal.css" />
-    <link rel="stylesheet" href="/src/assets/css/routines.css" />
-    <link rel="stylesheet" href="/src/assets/css/commands.css" />
-    <link rel="stylesheet" href="/src/assets/css/app-picker.css" />
-    <link rel="stylesheet" href="/src/assets/css/settings.css" />
-    <link rel="stylesheet" href="/src/assets/css/toast.css" />
+    <link rel="stylesheet" href="/src/assets/styles/variables.css" />
+    <link rel="stylesheet" href="/src/assets/styles/reset.css" />
+    <link rel="stylesheet" href="/src/assets/styles/base.css" />
+    <link rel="stylesheet" href="/src/assets/styles/button.css" />
+    <link rel="stylesheet" href="/src/assets/styles/header.css" />
+    <link rel="stylesheet" href="/src/assets/styles/filters.css" />
+    <link rel="stylesheet" href="/src/assets/styles/form.css" />
+    <link rel="stylesheet" href="/src/assets/styles/main.css" />
+    <link rel="stylesheet" href="/src/assets/styles/modal.css" />
+    <link rel="stylesheet" href="/src/assets/styles/routines.css" />
+    <link rel="stylesheet" href="/src/assets/styles/commands.css" />
+    <link rel="stylesheet" href="/src/assets/styles/app-picker.css" />
+    <link rel="stylesheet" href="/src/assets/styles/settings.css" />
+    <link rel="stylesheet" href="/src/assets/styles/toast.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -31,30 +32,30 @@
     </script>
 
     <!-- Scripts -->
-    <script src="/src/services/EnvironmentManager.js" defer></script>
-    <script src="/src/utils/Utils.js" defer></script>
-    <script src="/src/utils/DOM.js" defer></script>
+     <script src="/src/services/EnvironmentManager.js" defer></script>
+    <script src="/src/shared/Utils.js" defer></script>
+    <script src="/src/shared/DOM.js" defer></script>
     <script src="/src/services/I18n.js" defer></script>
     <script src="/src/services/Icons.js" defer></script>
     <script src="/src/services/TimeService.js" defer></script>
     <script src="/src/services/PaginationManager.js" defer></script>
     <script src="/src/components/Modal.js" defer></script>
     <script src="/src/components/Toast.js" defer></script>
-    <script src="/src/features/routine/routineData.js" defer></script>
-    <script src="/src/features/routine/appsData.js" defer></script>
-    <script src="/src/features/routine/RoutineService.js" defer></script>
-    <script src="/src/features/routine/RoutineRenderer.js" defer></script>
-    <script src="/src/features/routine/RoutineFilter.js" defer></script>
-    <script src="/src/features/routine/CommandDropdown.js" defer></script>
-    <script src="/src/features/routine/RoutineActions.js" defer></script>
+    <script src="/src/features/routine/data/routines.js" defer></script>
+    <script src="/src/features/routine/data/apps.js" defer></script>
+    <script src="/src/features/routine/services/RoutineService.js" defer></script>
+    <script src="/src/features/routine/components/RoutineRenderer.js" defer></script>
+    <script src="/src/features/routine/services/RoutineFilter.js" defer></script>
+    <script src="/src/features/routine/components/CommandDropdown.js" defer></script>
+    <script src="/src/features/routine/services/RoutineActions.js" defer></script>
 
-    <!-- Modal Scripts -->
-    <script src="/src/features/routine/RoutineForm.js" defer></script>
-    <script src="/src/features/routine/RoutineModal.js" defer></script>
-    <script src="/src/features/routine/DeleteRoutineModal.js" defer></script>
-    <script src="/src/features/routine/AppPickerModal.js" defer></script>
+    <script src="/src/features/routine/components/RoutineForm.js" defer></script>
+    <script src="/src/features/routine/components/RoutineModal.js" defer></script>
+    <script src="/src/features/routine/components/DeleteRoutineModal.js" defer></script>
+    <script src="/src/features/routine/components/AppPickerModal.js" defer></script>
     <script src="/src/features/settings/SettingsService.js" defer></script>
     <script src="/src/features/settings/SettingsModal.js" defer></script>
+    
     <script src="/src/App.js" defer></script>
   </head>
 
@@ -196,10 +197,7 @@
           >
             Selecionar Aplicativo
           </h3>
-          <p
-            class="modal-description"
-            data-i18n="app_picker_modal_description"
-          >
+          <p class="modal-description" data-i18n="app_picker_modal_description">
             Escolha o aplicativo para o comando.
           </p>
         </div>

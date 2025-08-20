@@ -18,10 +18,10 @@
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-md);
   background-color: var(--bg-secondary);
-  box-shadow: 
+  box-shadow:
     0 0.4rem 1.2rem rgba(var(--black-rgb), 0.15),
     0 0.2rem 0.4rem rgba(var(--black-rgb), 0.1);
-  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slide-up 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .toast-success {
@@ -56,4 +56,15 @@
   background: transparent;
   border: none;
   margin-left: auto;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(2rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

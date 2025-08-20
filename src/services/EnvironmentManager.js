@@ -11,12 +11,12 @@ const EnvironmentManager = (() => {
     };
 
     async function loadLang(code) {
-      const response = await fetch(`${WORK_DIR}/src/lang/${code}.json`);
+      const response = await fetch(`${WORK_DIR}/src/locales/${code}.json`);
       return await response.json();
     }
 
     function loadApps() {
-      return DEFAULT_APPS_DATA;
+      return DEFAULT_APPS;
     }
 
     function getRoutines() {
