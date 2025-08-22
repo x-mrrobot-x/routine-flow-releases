@@ -32,7 +32,13 @@ const RoutineService = (() => {
 
   function load() {
     const stored = ENV.getRoutines();
-    routines = stored ? JSON.parse(stored) : DEFAULT_ROUTINES;
+
+    if (!stored) {
+      routines = DEFAULT_ROUTINES;
+      save();
+      return;
+    }
+    routines = JSON.parse(stored);
   }
 
   function save() {

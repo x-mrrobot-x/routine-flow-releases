@@ -35,7 +35,7 @@ const DEFAULT_ROUTINES = [
     description: "Turns on Bluetooth for automatic car connection",
     command: "/bluetooth on",
     priority: "medium",
-    time: 27060, // 7:31
+    time: 27120, // 7:32
     frequency: [1, 2, 3, 4, 5],
     active: true
   },
@@ -45,7 +45,7 @@ const DEFAULT_ROUTINES = [
     description: "Abre Spotify para playlists motivacionais",
     command: "/open Spotify",
     priority: "low",
-    time: 27120, // 7:32
+    time: 27180, // 7:33
     frequency: [1, 2, 3, 4, 5],
     active: true
   },
