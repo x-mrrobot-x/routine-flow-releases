@@ -165,8 +165,10 @@ const RoutineRenderer = (() => {
     emptyBtn: DOM.$("#empty-state button"),
     nextContainer: DOM.$("#next-routine"),
     nextText: DOM.$("#next-routine-text"),
-    scrollContainer: DOM.$("#app-container")
+    appContainer: DOM.$("#app-container")
   };
+
+  let paginationManager = null;
 
   function createCard(routine) {
     const card = document.createElement("div");
@@ -184,14 +186,7 @@ const RoutineRenderer = (() => {
   function renderCards(routines, isFilter) {
     if (routines.length > 0) {
       RoutineRenderUtils.hideEmpty(elements);
-
-      const pager = PaginationManager.create({
-        scrollElement: elements.scrollContainer,
-        pageSize: PAGE_SIZE,
-        thresholdPx: THRESHOLD_PX,
-        renderAppend: appendCards
-      });
-      pager.init(routines);
+      paginationManager.load(routines);
     } else {
       RoutineRenderUtils.showEmpty(isFilter, elements);
     }
@@ -248,7 +243,17 @@ const RoutineRenderer = (() => {
     card.innerHTML = RoutineRenderUtils.createCardHTML(routine);
   }
 
+  function createPagination() {
+    paginationManager = PaginationManager.create({
+      scrollElement: elements.appContainer,
+      pageSize: PAGE_SIZE,
+      thresholdPx: THRESHOLD_PX,
+      renderAppend: appendCards
+    });
+  }
+
   function init() {
+    createPagination();
     updateAll();
   }
 

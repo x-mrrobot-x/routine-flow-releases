@@ -2,6 +2,7 @@ const AppPickerModal = (() => {
   const PAGE_SIZE = 15;
   const THRESHOLD_PX = 200;
 
+  let paginationManager = null;
   let selectedCommand = "/open";
 
   const elements = {
@@ -70,17 +71,20 @@ const AppPickerModal = (() => {
     const apps = data || ENV.loadApps();
     elements.grid.innerHTML = "";
 
-    const pager = PaginationManager.create({
+    paginationManager.load(apps);
+  }
+
+  function createPagination() {
+    paginationManager = PaginationManager.create({
       scrollElement: elements.grid,
       pageSize: PAGE_SIZE,
       thresholdPx: THRESHOLD_PX,
       renderAppend: appendApps
     });
-
-    pager.init(apps);
   }
 
   function init() {
+    createPagination();
     render();
     bindEvents();
   }

@@ -61,7 +61,7 @@ const PaginationManager = (() => {
       }
     }
 
-    function init(newItems) {
+    function load(newItems) {
       state.items = Array.isArray(newItems) ? newItems : [];
       state.pageIndex = 0;
       loadNext();
@@ -71,7 +71,7 @@ const PaginationManager = (() => {
     attach();
 
     return {
-      init
+      load
     };
   }
 
