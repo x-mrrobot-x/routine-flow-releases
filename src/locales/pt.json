@@ -44,6 +44,8 @@
   "day_thursday": "Quinta",
   "day_friday": "Sexta",
   "day_saturday": "Sábado",
+  "command_filter_label": "Comando",
+  "command_all": "Todos",
   "empty_state_text": "Nenhuma rotina encontrada para os filtros selecionados.",
   "clear_filters_button": "Limpar filtros",
   "empty_routines_text": "Nenhuma rotina criada ainda. Crie uma agora!",

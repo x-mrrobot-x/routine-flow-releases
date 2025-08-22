@@ -153,6 +153,7 @@ const CommandDropdown = (() => {
     init,
     open,
     close,
-    getVisibleDropdown
+    getVisibleDropdown,
+    utils: CommandUtils
   };
 })();

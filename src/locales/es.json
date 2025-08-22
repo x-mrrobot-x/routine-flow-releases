@@ -44,6 +44,8 @@
   "day_thursday": "Jueves",
   "day_friday": "Viernes",
   "day_saturday": "Sábado",
+  "command_filter_label": "Comando",
+  "command_all": "Todos",
   "empty_state_text": "No se encontraron rutinas para los filtros seleccionados.",
   "clear_filters_button": "Limpiar filtros",
   "toast_routine_created": "¡Rutina creada!",

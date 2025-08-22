@@ -15,6 +15,10 @@ const RoutineFilterUtils = (() => {
     day: {
       stateKey: "currentDayFilter",
       processor: v => v
+    },
+    command: {
+      stateKey: "currentCommandFilter",
+      processor: v => v
     }
   };
 
@@ -22,7 +26,8 @@ const RoutineFilterUtils = (() => {
     statusFilter: "all",
     priorityFilter: "all",
     dayFilter: "all",
-    searchFilter: ""
+    searchFilter: "",
+    commandFilter: "all"
   };
 
   const STATUS_MAP = {
@@ -43,7 +48,8 @@ const RoutineFilterUtils = (() => {
       if (!term) return true;
       const text = `${routine.title.toLowerCase()} ${routine.description.toLowerCase()}`;
       return text.includes(term);
-    }
+    },
+    command: (routine, v) => v === "all" || routine.command.startsWith(v)
   };
 
   function resetStates() {
@@ -51,7 +57,8 @@ const RoutineFilterUtils = (() => {
       currentFilter: "all",
       currentPriorityFilter: "all",
       currentDayFilter: "all",
-      currentSearchFilter: ""
+      currentSearchFilter: "",
+      currentCommandFilter: "all"
     });
   }
 
@@ -103,7 +110,8 @@ const RoutineFilterUtils = (() => {
       status: state.currentFilter,
       priority: state.currentPriorityFilter,
       day: state.currentDayFilter,
-      search: state.currentSearchFilter
+      search: state.currentSearchFilter,
+      command: state.currentCommandFilter
     };
   }
 
@@ -115,6 +123,21 @@ const RoutineFilterUtils = (() => {
     );
   }
 
+  function createOption(command) {
+    const element = document.createElement("option");
+    element.value = command;
+    element.textContent = command;
+    return element;
+  }
+
+  function populateCommandFilter(elements) {
+    const commands = CommandDropdown.utils.getCommands();
+    commands.forEach(command => {
+      const option = createOption(command);
+      elements.commandFilter.appendChild(option);
+    });
+  }
+
   return {
     resetStates,
     createHandler,
@@ -123,7 +146,8 @@ const RoutineFilterUtils = (() => {
     resetDOM,
     sortByTime,
     getValues,
-    applyFilters
+    applyFilters,
+    populateCommandFilter
   };
 })();
 
@@ -134,7 +158,8 @@ const RoutineFilter = (() => {
     searchFilter: DOM.$("#search-filter"),
     statusFilter: DOM.$("#status-filter"),
     priorityFilter: DOM.$("#priority-filter"),
-    dayFilter: DOM.$("#day-filter")
+    dayFilter: DOM.$("#day-filter"),
+    commandFilter: DOM.$("#command-filter")
   };
 
   let state = {
@@ -142,7 +167,8 @@ const RoutineFilter = (() => {
     currentFilter: "all",
     currentPriorityFilter: "all",
     currentDayFilter: "all",
-    currentSearchFilter: ""
+    currentSearchFilter: "",
+    currentCommandFilter: "all"
   };
 
   function getState(key) {
@@ -197,6 +223,7 @@ const RoutineFilter = (() => {
     search: RoutineFilterUtils.createHandler("search"),
     status: RoutineFilterUtils.createHandler("status"),
     priority: RoutineFilterUtils.createHandler("priority"),
+    command: RoutineFilterUtils.createHandler("command"),
     day: RoutineFilterUtils.createHandler("day"),
     toggle: handleToggle,
     outside: handleOutside,
@@ -210,6 +237,7 @@ const RoutineFilter = (() => {
       [elements.priorityFilter, "change", handlers.priority],
       [elements.dayFilter, "change", handlers.day],
       [elements.searchFilter, "input", handlers.search],
+      [elements.commandFilter, "change", handlers.command],
       [document, "click", handlers.outside]
     ];
 
@@ -219,6 +247,7 @@ const RoutineFilter = (() => {
   }
 
   function init() {
+    RoutineFilterUtils.populateCommandFilter(elements);
     bindEvents();
   }
 

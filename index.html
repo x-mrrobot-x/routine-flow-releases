@@ -2,7 +2,10 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Routine Flow - Gerenciador de Rotinas</title>
 
     <!-- Styles -->
@@ -32,7 +35,7 @@
     </script>
 
     <!-- Scripts -->
-     <script src="/src/services/EnvironmentManager.js" defer></script>
+    <script src="/src/services/EnvironmentManager.js" defer></script>
     <script src="/src/shared/Utils.js" defer></script>
     <script src="/src/shared/DOM.js" defer></script>
     <script src="/src/services/I18n.js" defer></script>
@@ -43,19 +46,46 @@
     <script src="/src/components/Toast.js" defer></script>
     <script src="/src/features/routine/data/routines.js" defer></script>
     <script src="/src/features/routine/data/apps.js" defer></script>
-    <script src="/src/features/routine/services/RoutineService.js" defer></script>
-    <script src="/src/features/routine/components/RoutineRenderer.js" defer></script>
-    <script src="/src/features/routine/services/RoutineFilter.js" defer></script>
-    <script src="/src/features/routine/components/CommandDropdown.js" defer></script>
-    <script src="/src/features/routine/services/RoutineActions.js" defer></script>
+    <script
+      src="/src/features/routine/services/RoutineService.js"
+      defer
+    ></script>
+    <script
+      src="/src/features/routine/components/RoutineRenderer.js"
+      defer
+    ></script>
+    <script
+      src="/src/features/routine/services/RoutineFilter.js"
+      defer
+    ></script>
+    <script
+      src="/src/features/routine/components/CommandDropdown.js"
+      defer
+    ></script>
+    <script
+      src="/src/features/routine/services/RoutineActions.js"
+      defer
+    ></script>
 
-    <script src="/src/features/routine/components/RoutineForm.js" defer></script>
-    <script src="/src/features/routine/components/RoutineModal.js" defer></script>
-    <script src="/src/features/routine/components/DeleteRoutineModal.js" defer></script>
-    <script src="/src/features/routine/components/AppPickerModal.js" defer></script>
+    <script
+      src="/src/features/routine/components/RoutineForm.js"
+      defer
+    ></script>
+    <script
+      src="/src/features/routine/components/RoutineModal.js"
+      defer
+    ></script>
+    <script
+      src="/src/features/routine/components/DeleteRoutineModal.js"
+      defer
+    ></script>
+    <script
+      src="/src/features/routine/components/AppPickerModal.js"
+      defer
+    ></script>
     <script src="/src/features/settings/SettingsService.js" defer></script>
     <script src="/src/features/settings/SettingsModal.js" defer></script>
-    
+
     <script src="/src/App.js" defer></script>
   </head>
 
@@ -143,6 +173,17 @@
                   <option value="4" data-i18n="day_thursday">Quinta</option>
                   <option value="5" data-i18n="day_friday">Sexta</option>
                   <option value="6" data-i18n="day_saturday">Sábado</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label for="command-filter" data-i18n="command_filter_label"
+                >Comando</label
+              >
+              <div class="select-wrapper">
+                <select id="command-filter" class="select">
+                  <option value="all" data-i18n="command_all">Todos</option>
                 </select>
               </div>
             </div>

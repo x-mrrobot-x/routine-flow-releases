@@ -76,14 +76,13 @@
 
 .advanced-filters {
   display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
 }
 
 .filters-bar.extended .advanced-filters {
-  display: block;
-}
-
-.filter-group {
-  margin-top: var(--space-sm);
+  display: grid;
 }
 
 .advanced-filters label {
