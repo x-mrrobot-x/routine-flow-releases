@@ -8,7 +8,7 @@ const AppPickerModal = (() => {
   const elements = {
     modal: DOM.$("#app-picker-modal"),
     overlay: DOM.$("#app-picker-modal .modal-overlay"),
-    cancelBtn: DOM.$("#cancel-app-picker"),
+    closeBtn: DOM.$("#apps-modal-close"),
     grid: DOM.$("#apps-grid")
   };
 
@@ -51,13 +51,13 @@ const AppPickerModal = (() => {
 
   const handlers = {
     appSelect: handleAppSelect,
-    cancel: close,
+    close: close,
     overlay: close
   };
 
   function bindEvents() {
     const bindings = [
-      [elements.cancelBtn, "click", handlers.cancel],
+      [elements.closeBtn, "click", handlers.close],
       [elements.overlay, "click", handlers.overlay],
       [elements.grid, "click", handlers.appSelect]
     ];

@@ -50,7 +50,7 @@ const RoutineModal = (() => {
     title: DOM.$("#routine-modal .modal-title"),
     description: DOM.$("#routine-modal .modal-description"),
     cancelBtn: DOM.$("#cancel-routine"),
-    submitBtn: DOM.$('button[type="submit"]')
+    submitBtn: DOM.$("#create-routine-btn")
   };
 
   let state = {
@@ -93,17 +93,16 @@ const RoutineModal = (() => {
     RoutineModalUtils.setCreateState();
     const { title, subtitle, submitButton } = getContent(false);
     RoutineModalUtils.updateTexts(title, subtitle, submitButton, elements);
-    RoutineForm.reset();
+    RoutineForm.setupCreate();
   }
 
-  function openEdit(routineId) {
-    const routine = RoutineService.getById(routineId);
-    setupEdit(routine);
-    Modal.show(elements.modal);
-  }
+  function open(routine) {
+    if (routine) {
+      setupEdit(routine);
+    } else {
+      setupCreate();
+    }
 
-  function openCreate() {
-    setupCreate();
     Modal.show(elements.modal);
   }
 
@@ -134,8 +133,7 @@ const RoutineModal = (() => {
 
   return {
     init,
-    openCreate,
-    openEdit,
+    open,
     close,
     getState,
     setState

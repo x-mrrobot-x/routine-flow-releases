@@ -26,7 +26,7 @@ const RoutineRenderUtils = (() => {
     return command
       ? `<div class="card-command">
         ${Icons.getIcon("terminal")}
-        <span>${command}</span>
+        <code>${command}</code>
       </div>`
       : "";
   }
@@ -35,17 +35,18 @@ const RoutineRenderUtils = (() => {
     const { className, icon } = getPriorityConfig(routine.priority);
     const label = I18n.get(className.replace("-", "_"));
 
-    return `<div class="card-header">
+    return `<header class="card-header">
         <h3 class="card-title">${routine.title}</h3>
         <span class="priority-badge ${className}">${icon} ${label}</span>
-      </div>
+      </header>
+      
       <div class="card-body">
         <p class="card-description">${routine.description}</p>
         
-        <div class="card-time">
+        <time class="card-time">
           ${Icons.getIcon("clock")}
           <span>${Utils.secondsToTime(routine.time)}</span>
-        </div>
+        </time>
         
         ${createCommand(routine.command)}
         
@@ -54,7 +55,8 @@ const RoutineRenderUtils = (() => {
           ${createDayTags(routine.frequency)}
         </div>
       </div>
-      <div class="card-footer">
+      
+      <footer class="card-footer">
         <div class="card-actions">
           ${createActionBtn(
             "toggle",
@@ -64,7 +66,7 @@ const RoutineRenderUtils = (() => {
           ${createActionBtn("edit", "edit", "routine-edit-btn")}
           ${createActionBtn("delete", "trash2", "delete-btn")}
         </div>
-      </div>`;
+      </footer>`;
   }
 
   function getCardClass(routine) {
@@ -96,7 +98,7 @@ const RoutineRenderUtils = (() => {
     elements.emptyBtn.innerHTML += I18n.get("create_routine_button");
 
     elements.emptyBtn = removeListeners(elements.emptyBtn);
-    elements.emptyBtn.addEventListener("click", RoutineModal.openCreate);
+    elements.emptyBtn.addEventListener("click", () => RoutineModal.open());
   }
 
   function showEmpty(isFilter, elements) {
@@ -105,11 +107,11 @@ const RoutineRenderUtils = (() => {
     } else {
       setupRoutinesEmpty(elements);
     }
-    elements.emptyState.style.display = "flex";
+    elements.emptyState.classList.add("show");
   }
 
   function hideEmpty(elements) {
-    elements.emptyState.style.display = "none";
+    elements.emptyState.classList.remove("show");
   }
 
   function formatDateTime(timestamp) {
@@ -159,7 +161,6 @@ const RoutineRenderer = (() => {
 
   const elements = {
     grid: DOM.$("#routines-grid"),
-    count: DOM.$("#routines-count"),
     emptyState: DOM.$("#empty-state"),
     emptyText: DOM.$("#empty-state p"),
     emptyBtn: DOM.$("#empty-state button"),
@@ -171,7 +172,7 @@ const RoutineRenderer = (() => {
   let paginationManager = null;
 
   function createCard(routine) {
-    const card = document.createElement("div");
+    const card = document.createElement("article");
     card.className = RoutineRenderUtils.getCardClass(routine);
     card.dataset.id = routine.id;
     card.innerHTML = RoutineRenderUtils.createCardHTML(routine);
@@ -213,13 +214,7 @@ const RoutineRenderer = (() => {
     }
   }
 
-  function updateCount() {
-    const count = RoutineService.getAll().length;
-    elements.count.textContent = count;
-  }
-
   function updateAll() {
-    updateCount();
     updateNext();
     renderRoutines();
   }
@@ -262,7 +257,6 @@ const RoutineRenderer = (() => {
     remove,
     update,
     updateNext,
-    updateCount,
     renderRoutines,
     updateAll
   };

@@ -7,7 +7,8 @@ const EnvironmentManager = (() => {
 
     const STORAGE_KEYS = {
       routines: "@routine-flow:routines",
-      settings: "@routine-flow:settings"
+      settings: "@routine-flow:settings",
+      categories: "@routine-flow:categories"
     };
 
     async function loadLang(code) {
@@ -17,6 +18,14 @@ const EnvironmentManager = (() => {
 
     function loadApps() {
       return DEFAULT_APPS;
+    }
+
+    function getCategories() {
+      return localStorage.getItem(STORAGE_KEYS.categories);
+    }
+
+    function saveCategories(data) {
+      localStorage.setItem(STORAGE_KEYS.categories, data);
     }
 
     function getRoutines() {
@@ -46,6 +55,8 @@ const EnvironmentManager = (() => {
       iconPath: ICON_PATH,
       loadLang,
       loadApps,
+      getCategories,
+      saveCategories,
       getRoutines,
       saveRoutines,
       getSettings,

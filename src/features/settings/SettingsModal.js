@@ -2,6 +2,7 @@ const SettingsModal = (() => {
   const elements = {
     btn: DOM.$("#settings-btn"),
     modal: DOM.$("#settings-modal"),
+    closeBtn: DOM.$("#settings-modal-close"),
     overlay: DOM.$("#settings-modal .modal-overlay"),
     voiceToggle: DOM.$("#voice-toggle"),
     toastToggle: DOM.$("#toast-toggle"),
@@ -31,6 +32,7 @@ const SettingsModal = (() => {
 
   const handlers = {
     change: handleChange,
+    close: close,
     button: open,
     overlay: close
   };
@@ -38,6 +40,7 @@ const SettingsModal = (() => {
   function bindEvents() {
     const bindings = [
       [elements.btn, "click", handlers.button],
+      [elements.closeBtn, "click", handlers.close],
       [elements.modal, "change", handlers.change],
       [elements.overlay, "click", handlers.overlay]
     ];

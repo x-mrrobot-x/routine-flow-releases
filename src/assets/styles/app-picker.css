@@ -1,5 +1,5 @@
 #app-picker-modal {
-  z-index: 400;
+  z-index: 1000;
 }
 
 .apps-grid {

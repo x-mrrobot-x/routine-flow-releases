@@ -1,5 +1,5 @@
 const RoutineFormUtils = (() => {
-  const ERROR_ELEMENTS = [
+  const ERROR_IDS = [
     "title-error",
     "description-error",
     "priority-error",
@@ -18,20 +18,15 @@ const RoutineFormUtils = (() => {
     return el.value.trim();
   }
 
-  function getFormData({
-    titleInput,
-    descriptionInput,
-    prioritySelect,
-    timeInput,
-    commandInput
-  }) {
+  function getFormData(elements) {
     return {
-      title: getValue(titleInput),
-      description: getValue(descriptionInput),
-      priority: getValue(prioritySelect),
-      time: Utils.timeToSeconds(getValue(timeInput)),
+      title: getValue(elements.titleInput),
+      description: getValue(elements.descriptionInput),
+      priority: getValue(elements.prioritySelect),
+      time: Utils.timeToSeconds(getValue(elements.timeInput)),
       selectedDays: RoutineModal.getState("selectedDays"),
-      command: getValue(commandInput)
+      command: getValue(elements.commandInput),
+      categoryId: getValue(elements.categorySelect)
     };
   }
 
@@ -50,8 +45,8 @@ const RoutineFormUtils = (() => {
   function validateCommand(command, errors) {
     if (!command) return;
 
-    const validCommands = CommandUtils.getCommands();
-    const isValid = validCommands.some(cmd => command.startsWith(cmd));
+    const commands = CommandUtils.getCommands();
+    const isValid = commands.some(cmd => command.startsWith(cmd));
 
     if (!isValid) {
       showError("command-error", I18n.get("form_error_command_invalid"));
@@ -79,14 +74,15 @@ const RoutineFormUtils = (() => {
   }
 
   function createData(data) {
-    const frequency = data.selectedDays.sort();
+    const frequency = [...data.selectedDays.sort()];
     return {
       title: data.title,
       description: data.description,
       command: data.command,
       priority: data.priority,
       time: data.time,
-      frequency: [...frequency]
+      frequency,
+      categoryId: data.categoryId
     };
   }
 
@@ -94,21 +90,20 @@ const RoutineFormUtils = (() => {
     elements.titleInput.value = routine.title;
     elements.descriptionInput.value = routine.description;
     elements.commandInput.value = routine.command;
+    elements.categorySelect.value = routine.categoryId;
     elements.prioritySelect.value = routine.priority;
     elements.timeInput.value = Utils.secondsToTime(routine.time);
   }
 
-  function updateBtn(btn, frequency) {
-    const day = parseInt(btn.dataset.day);
-    btn.classList.toggle("selected", frequency.includes(day));
-  }
-
   function updateDays(frequency, btns) {
-    btns.forEach(btn => updateBtn(btn, frequency));
+    btns.forEach(btn => {
+      const day = parseInt(btn.dataset.day);
+      btn.classList.toggle("selected", frequency.includes(day));
+    });
   }
 
   function clearErrors() {
-    ERROR_ELEMENTS.forEach(id => {
+    ERROR_IDS.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.textContent = "";
     });
@@ -143,42 +138,53 @@ const RoutineForm = (() => {
     prioritySelect: DOM.$("#priority"),
     timeInput: DOM.$("#time"),
     daysContainer: DOM.$("#days-container"),
-    dayBtns: DOM.$$(".day-button")
+    dayBtns: DOM.$$(".day-button"),
+    categorySelect: DOM.$("#category-select")
   };
 
   function handleEdit(data) {
     const id = RoutineModal.getState("routineToEdit");
+    const original = RoutineService.getById(id);
+    const oldCategoryId = original.categoryId;
+    const newCategoryId = data.categoryId;
 
     RoutineService.update(id, data);
     RoutineRenderer.update(id);
     RoutineRenderer.updateNext();
+    CategoryRenderer.render();
+
+    const currentFilter = RoutineFilter.getState("currentCategoryFilter");
+    if (
+      currentFilter !== "all" &&
+      (currentFilter === oldCategoryId || currentFilter === newCategoryId)
+    ) {
+      RoutineRenderer.renderRoutines();
+    }
+
     Toast.show("success", "toast_routine_updated");
   }
 
   function handleCreate(data) {
     const routine = { id: Date.now().toString(), ...data, active: true };
-
     RoutineService.add(routine);
     RoutineRenderer.updateAll();
+    CategoryRenderer.render();
     Toast.show("success", "toast_routine_created");
   }
 
   function handleCommandInput(event) {
     const { value } = event.target;
-    const visibleDropdown = CommandDropdown.getVisibleDropdown();
+    const visible = CommandDropdown.getVisibleDropdown();
 
     if (value.startsWith("/")) {
-      const filteredSuggestions = CommandUtils.filterSuggestions(value);
-
-      if (filteredSuggestions.length > 0) {
-        CommandDropdown.open(filteredSuggestions);
-      } else {
-        CommandDropdown.close();
-      }
+      const suggestions = CommandUtils.filterSuggestions(value);
+      suggestions.length > 0
+        ? CommandDropdown.open(suggestions)
+        : CommandDropdown.close();
       return;
     }
 
-    if (visibleDropdown) CommandDropdown.close();
+    if (visible) CommandDropdown.close();
   }
 
   function setupEdit(routine) {
@@ -194,10 +200,16 @@ const RoutineForm = (() => {
     RoutineModal.setState("selectedDays", newDays);
   }
 
-  function reset() {
+  function setupCreate() {
     elements.form.reset();
     RoutineFormUtils.clearErrors();
     RoutineFormUtils.resetDays(elements.dayBtns);
+
+    const selected = RoutineFilter.getState("currentCategoryFilter");
+    if (selected !== "all") {
+      elements.categorySelect.value = selected;
+    }
+
     RoutineFormUtils.focusTitle(elements.titleInput);
   }
 
@@ -209,7 +221,6 @@ const RoutineForm = (() => {
     if (!RoutineFormUtils.validateForm(formData)) return;
 
     const data = RoutineFormUtils.createData(formData);
-
     if (RoutineModal.getState("isEditMode")) {
       handleEdit(data);
     } else {
@@ -228,21 +239,34 @@ const RoutineForm = (() => {
     if (isNaN(day)) return;
 
     e.target.classList.toggle("selected");
-    const selected = e.target.classList.contains("selected");
-    updateDays(day, selected);
+    updateDays(day, e.target.classList.contains("selected"));
+  }
+
+  function populateCategorySelect() {
+    const categories = CategoryService.getAll();
+    elements.categorySelect.innerHTML = "";
+
+    categories.forEach(category => {
+      if (category.isVirtual) return;
+
+      const option = document.createElement("option");
+      option.value = category.id;
+      option.textContent = I18n.get(category.name);
+      elements.categorySelect.appendChild(option);
+    });
   }
 
   const handlers = {
     submit: handleSubmit,
-    commandInput: handleCommandInput,
-    dayToggle: toggleDay
+    input: handleCommandInput,
+    toggle: toggleDay
   };
 
   function bindEvents() {
     const bindings = [
       [elements.form, "submit", handlers.submit],
-      [elements.commandInput, "input", handlers.commandInput],
-      [elements.daysContainer, "click", handlers.dayToggle]
+      [elements.commandInput, "input", handlers.input],
+      [elements.daysContainer, "click", handlers.toggle]
     ];
 
     bindings.forEach(([el, event, handler]) =>
@@ -252,13 +276,15 @@ const RoutineForm = (() => {
 
   function init() {
     CommandDropdown.init();
+    populateCategorySelect();
     bindEvents();
   }
 
   return {
     init,
     setupEdit,
-    reset,
-    setCommandInput
+    setupCreate,
+    setCommandInput,
+    populateCategorySelect
   };
 })();

@@ -19,10 +19,10 @@ const DeleteRoutineModal = (() => {
   }
 
   function handleConfirm() {
-    RoutineService.remove(routineId);
+    RoutineService.remove("id", routineId);
     RoutineRenderer.remove(routineId);
-    RoutineRenderer.updateCount();
     RoutineRenderer.updateNext();
+    CategoryRenderer.render();
     Toast.show("success", "toast_routine_deleted");
     close();
   }

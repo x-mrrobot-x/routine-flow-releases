@@ -25,33 +25,3 @@ body.loading {
   background-color: var(--bg-primary);
   overflow-y: auto;
 }
-
-input:focus,
-textarea:focus,
-select:focus,
-.search-wrapper:focus-within {
-  outline: none;
-  border-color: var(--ring);
-  box-shadow: 0 0 0 0.2rem rgba(var(--gradient-start-rgb), 0.3);
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--text-muted);
-}
-
-svg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.text-gradient {
-  background: linear-gradient(
-    to right,
-    rgb(var(--gradient-start-rgb)),
-    rgb(var(--gradient-end-rgb))
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}

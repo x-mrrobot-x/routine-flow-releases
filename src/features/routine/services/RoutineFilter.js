@@ -49,7 +49,8 @@ const RoutineFilterUtils = (() => {
       const text = `${routine.title.toLowerCase()} ${routine.description.toLowerCase()}`;
       return text.includes(term);
     },
-    command: (routine, v) => v === "all" || routine.command.startsWith(v)
+    command: (routine, v) => v === "all" || routine.command.startsWith(v),
+    category: (routine, v) => v === "all" || routine.categoryId === v
   };
 
   function resetStates() {
@@ -111,7 +112,8 @@ const RoutineFilterUtils = (() => {
       priority: state.currentPriorityFilter,
       day: state.currentDayFilter,
       search: state.currentSearchFilter,
-      command: state.currentCommandFilter
+      command: state.currentCommandFilter,
+      category: state.currentCategoryFilter
     };
   }
 
@@ -168,7 +170,8 @@ const RoutineFilter = (() => {
     currentPriorityFilter: "all",
     currentDayFilter: "all",
     currentSearchFilter: "",
-    currentCommandFilter: "all"
+    currentCommandFilter: "all",
+    currentCategoryFilter: "all"
   };
 
   function getState(key) {

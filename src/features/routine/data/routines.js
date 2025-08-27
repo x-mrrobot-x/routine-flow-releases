@@ -5,9 +5,10 @@ const DEFAULT_ROUTINES = [
     description: "30 minutes of exercise to start the day with energy",
     command: "/open FitnessApp",
     priority: "high",
-    time: 23400, // 6:30
+    time: 23400,
     frequency: [1, 3, 5],
-    active: true
+    active: true,
+    categoryId: "health"
   },
   {
     id: 1002,
@@ -15,9 +16,10 @@ const DEFAULT_ROUTINES = [
     description: "Desliga o Wi-Fi ao sair para economizar bateria",
     command: "/wifi off",
     priority: "medium",
-    time: 27000, // 7:30
+    time: 27000,
     frequency: [1, 2, 3, 4, 5],
-    active: true
+    active: true,
+    categoryId: "work"
   },
   {
     id: 1004,
@@ -25,9 +27,10 @@ const DEFAULT_ROUTINES = [
     description: "Activa datos móviles para conectividad externa",
     command: "/mobile on",
     priority: "medium",
-    time: 27060, // 7:31
+    time: 27060,
     frequency: [1, 2, 3, 4, 5],
-    active: true
+    active: true,
+    categoryId: "work"
   },
   {
     id: 1005,
@@ -35,9 +38,10 @@ const DEFAULT_ROUTINES = [
     description: "Turns on Bluetooth for automatic car connection",
     command: "/bluetooth on",
     priority: "medium",
-    time: 27120, // 7:32
+    time: 27120,
     frequency: [1, 2, 3, 4, 5],
-    active: true
+    active: true,
+    categoryId: "work"
   },
   {
     id: 1008,
@@ -45,9 +49,10 @@ const DEFAULT_ROUTINES = [
     description: "Abre Spotify para playlists motivacionais",
     command: "/open Spotify",
     priority: "low",
-    time: 27180, // 7:33
+    time: 27180,
     frequency: [1, 2, 3, 4, 5],
-    active: true
+    active: true,
+    categoryId: "work"
   },
   {
     id: 1006,
@@ -55,9 +60,10 @@ const DEFAULT_ROUTINES = [
     description: "Activa modo avión para máxima productividad",
     command: "/airplane on",
     priority: "high",
-    time: 28800, // 8:00
+    time: 28800,
     frequency: [1, 2, 3, 4, 5],
-    active: true
+    active: true,
+    categoryId: "work"
   },
   {
     id: 1009,
@@ -65,9 +71,10 @@ const DEFAULT_ROUTINES = [
     description: "Opens YouTube to relax during lunch break",
     command: "/open YouTube",
     priority: "medium",
-    time: 43200, // 12:00
+    time: 43200,
     frequency: [1, 2, 3, 4, 5],
-    active: true
+    active: true,
+    categoryId: "work"
   },
   {
     id: 1014,
@@ -75,9 +82,10 @@ const DEFAULT_ROUTINES = [
     description: "Liga Wi-Fi ao chegar em casa",
     command: "/wifi on",
     priority: "medium",
-    time: 64800, // 18:00
+    time: 64800,
     frequency: [1, 2, 3, 4, 5],
-    active: true
+    active: true,
+    categoryId: "home"
   },
   {
     id: 1019,
@@ -85,9 +93,10 @@ const DEFAULT_ROUTINES = [
     description: "Revisar metas y organizar agenda de la semana",
     command: "/open Calendar",
     priority: "high",
-    time: 66600, // 18:30
+    time: 66600,
     frequency: [0],
-    active: true
+    active: true,
+    categoryId: "general"
   },
   {
     id: 1015,
@@ -95,9 +104,10 @@ const DEFAULT_ROUTINES = [
     description: "Time to develop technical skills",
     command: "/open ChatGPT",
     priority: "high",
-    time: 68400, // 19:00
+    time: 68400,
     frequency: [1, 2, 3, 4, 5],
-    active: true
+    active: true,
+    categoryId: "study"
   },
   {
     id: 1016,
@@ -105,9 +115,10 @@ const DEFAULT_ROUTINES = [
     description: "Fecha Instagram para manter foco nos estudos",
     command: "/close Instagram",
     priority: "high",
-    time: 68460, // 19:01
+    time: 68460,
     frequency: [1, 2, 3, 4, 5],
-    active: true
+    active: true,
+    categoryId: "study"
   },
   {
     id: 1017,
@@ -115,9 +126,10 @@ const DEFAULT_ROUTINES = [
     description: "Bloquea pantalla para mejor calidad del sueño",
     command: "/lockscreen",
     priority: "high",
-    time: 82800, // 23:00
+    time: 82800,
     frequency: [0, 1, 2, 3, 4, 5, 6],
-    active: true
+    active: true,
+    categoryId: "general"
   },
   {
     id: 1013,
@@ -125,8 +137,9 @@ const DEFAULT_ROUTINES = [
     description: "Executes system cleaning and optimization",
     command: "/run_task PhoneCleanup",
     priority: "medium",
-    time: 86340, // 23:59
+    time: 86340,
     frequency: [6],
-    active: true
+    active: true,
+    categoryId: "general"
   }
 ];

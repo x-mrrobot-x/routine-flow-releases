@@ -25,7 +25,8 @@ const RoutineActions = (() => {
   }
 
   function editRoutine(routineId) {
-    RoutineModal.openEdit(routineId);
+    const routine = RoutineService.getById(routineId);
+    RoutineModal.open(routine);
   }
 
   function deleteRoutine(routineId) {
@@ -52,7 +53,7 @@ const RoutineActions = (() => {
   }
 
   function handleAdd() {
-    RoutineModal.openCreate();
+    RoutineModal.open();
   }
 
   const handlers = {

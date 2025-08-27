@@ -3,31 +3,3 @@
   flex-direction: column;
   padding: var(--space-lg);
 }
-
-.main-title {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  margin-top: var(--space-lg);
-}
-
-.main-title h2 {
-  font-size: var(--font-lg);
-  font-weight: 600;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 80%;
-  color: rgb(var(--gradient-start-rgb));
-  padding: var(--space-xxs);
-  font-weight: 500;
-  aspect-ratio: 1 / 1;
-  min-width: 2rem;
-  min-height: 2rem;
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(var(--gradient-start-rgb), 0.3);
-  background-color: rgba(var(--gradient-start-rgb), 0.2);
-}

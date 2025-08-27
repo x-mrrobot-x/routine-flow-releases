@@ -25,8 +25,8 @@ const RoutineService = (() => {
     save();
   }
 
-  function remove(id) {
-    routines = routines.filter(r => r.id !== id);
+  function remove(key, value) {
+    routines = routines.filter(r => r[key] !== value);
     save();
   }
 
