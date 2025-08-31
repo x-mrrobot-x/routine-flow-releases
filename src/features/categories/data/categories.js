@@ -5,11 +5,6 @@ const DEFAULT_CATEGORIES = [
     color: "#3b82f6"
   },
   {
-    id: "health",
-    name: "category_health",
-    color: "#10b981"
-  },
-  {
     id: "work",
     name: "category_work",
     color: "#4f46e5"
@@ -18,6 +13,11 @@ const DEFAULT_CATEGORIES = [
     id: "study",
     name: "category_study",
     color: "#8b5cf6"
+  },
+  {
+    id: "health",
+    name: "category_health",
+    color: "#10b981"
   },
   {
     id: "home",

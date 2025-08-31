@@ -11,9 +11,14 @@ const CommandUtils = (() => {
       icon: "circle-stop"
     },
     {
-      cmd: "/lockscreen",
-      desc: "command_lockscreen_description",
-      icon: "lock-screen"
+      cmd: "/wifi [on/off]",
+      desc: "command_wifi_description",
+      icon: "wifi"
+    },
+    {
+      cmd: "/mobile_data [on/off]",
+      desc: "command_mobile_description",
+      icon: "signal"
     },
     {
       cmd: "/bluetooth [on/off]",
@@ -25,11 +30,10 @@ const CommandUtils = (() => {
       desc: "command_airplane_description",
       icon: "plane"
     },
-    { cmd: "/wifi [on/off]", desc: "command_wifi_description", icon: "wifi" },
     {
-      cmd: "/mobile [on/off]",
-      desc: "command_mobile_description",
-      icon: "signal"
+      cmd: "/lockscreen",
+      desc: "command_lockscreen_description",
+      icon: "lock-screen"
     },
     { cmd: "/run_task [task]", desc: "command_task_description", icon: "play" }
   ];
@@ -114,7 +118,7 @@ const CommandDropdown = (() => {
       return;
     }
 
-    RoutineForm.setCommandInput(baseCommand);
+    RoutineForm.setCommandInput(`${baseCommand} `);
     close();
   }
 
