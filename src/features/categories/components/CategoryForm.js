@@ -16,13 +16,6 @@ const CategoryFormUtils = (() => {
       CategoryService.add(data);
       Toast.show("success", I18n.get("category_added"));
     }
-    updateComponents();
-  }
-
-  function updateComponents() {
-    CategoryModal.updateAll();
-    CategoryRenderer.render();
-    RoutineForm.populateCategorySelect();
   }
 
   function selectColor(color, state, elements) {
@@ -38,7 +31,6 @@ const CategoryFormUtils = (() => {
   return {
     validateName,
     processCategory,
-    updateComponents,
     selectColor
   };
 })();
@@ -124,7 +116,7 @@ const CategoryForm = (() => {
 
     const data = { name, color: state.selectedColor };
     CategoryFormUtils.processCategory(data, state);
-    setupCreate()
+    setupCreate();
   }
 
   function handleSelectColor(e) {

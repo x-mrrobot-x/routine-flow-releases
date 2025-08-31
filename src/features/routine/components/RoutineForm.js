@@ -272,6 +272,8 @@ const RoutineForm = (() => {
     bindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
+
+    EventBus.on("data:category:changed", populateCategorySelect);
   }
 
   function init() {
@@ -284,7 +286,6 @@ const RoutineForm = (() => {
     init,
     setupEdit,
     setupCreate,
-    setCommandInput,
-    populateCategorySelect
+    setCommandInput
   };
 })();

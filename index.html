@@ -105,6 +105,7 @@
     <script src="/src/features/settings/SettingsService.js" defer></script>
     <script src="/src/features/settings/SettingsModal.js" defer></script>
 
+    <script src="/src/services/EventBus.js" defer></script>
     <script src="/src/App.js" defer></script>
   </head>
 
@@ -554,8 +555,12 @@
                 <i data-icon="x"></i>
                 <span data-i18n="cancel_button">Cancelar</span>
               </button>
-              
-              <button type="submit" id="create-routine-btn" class="button button-primary">
+
+              <button
+                type="submit"
+                id="create-routine-btn"
+                class="button button-primary"
+              >
                 Criar
               </button>
             </footer>

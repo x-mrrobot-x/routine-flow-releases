@@ -38,8 +38,6 @@ const CategoryModalUtils = (() => {
   function deleteCategory(id) {
     CategoryService.remove(id);
     RoutineService.remove("categoryId", id);
-    CategoryModal.updateAll();
-    CategoryRenderer.render();
 
     const currentCategoryFilter = RoutineFilter.getState(
       "currentCategoryFilter"
@@ -111,7 +109,6 @@ const CategoryModal = (() => {
     } else {
       handleDelete(id);
     }
-    RoutineForm.populateCategorySelect();
   }
 
   function render() {
@@ -143,6 +140,8 @@ const CategoryModal = (() => {
     bindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
+
+    EventBus.on("data:category:changed", updateAll);
   }
 
   function init() {
@@ -154,7 +153,6 @@ const CategoryModal = (() => {
   return {
     init,
     open,
-    close,
-    updateAll
+    close
   };
 })();

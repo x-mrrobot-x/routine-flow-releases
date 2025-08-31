@@ -16,6 +16,7 @@ const CategoryService = (() => {
     };
     categories.push(newCategory);
     save();
+    EventBus.emit("data:category:changed");
   }
 
   function update(id, data) {
@@ -24,11 +25,13 @@ const CategoryService = (() => {
 
     categories[index] = { ...categories[index], ...data };
     save();
+    EventBus.emit("data:category:changed");
   }
 
   function remove(id) {
     categories = categories.filter(c => c.id !== id);
     save();
+    EventBus.emit("data:category:changed");
   }
 
   function load() {

@@ -74,6 +74,8 @@ const CategoryRenderer = (() => {
     bindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
+    
+    EventBus.on("data:category:changed", render);
   }
 
   function render() {
@@ -92,8 +94,6 @@ const CategoryRenderer = (() => {
 
   return {
     init,
-    render,
     getSelected,
-    updateActive
   };
 })();
