@@ -8,11 +8,11 @@ const EventBus = (() => {
     events[event].push(listener);
   }
 
-  function emit(event, data) {
+  function emit(event, ...args) {
     if (!events[event]) {
       return;
     }
-    events[event].forEach(listener => listener(data));
+    events[event].forEach(listener => listener(...args));
   }
 
   return {

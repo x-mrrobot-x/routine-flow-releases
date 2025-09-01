@@ -214,14 +214,11 @@ const RoutineRenderer = (() => {
     }
   }
 
-  function updateAll() {
-    updateNext();
-    renderRoutines();
-  }
-
-  function remove(id) {
-    const card = DOM.$(`[data-id="${id}"]`);
-    if (card) card.remove();
+  function remove(ids) {
+    ids.forEach(id => {
+      const card = DOM.$(`[data-id="${id}"]`);
+      if (card) card.remove();
+    });
 
     if (elements.grid.children.length === 0) {
       const isFilter = RoutineFilter.isAnyActive();
@@ -229,11 +226,10 @@ const RoutineRenderer = (() => {
     }
   }
 
-  function update(id) {
+  function update(id, routine) {
     const card = DOM.$(`[data-id="${id}"]`);
     if (!card) return;
 
-    const routine = RoutineService.getById(id);
     card.className = RoutineRenderUtils.getCardClass(routine);
     card.innerHTML = RoutineRenderUtils.createCardHTML(routine);
   }
@@ -247,17 +243,26 @@ const RoutineRenderer = (() => {
     });
   }
 
+  function bindEvents() {
+    EventBus.on("routine:updated", update);
+    EventBus.on("routine:deleted", remove);
+
+    ["routine:added", "filter:changed"].forEach(event =>
+      EventBus.on(event, renderRoutines)
+    );
+    ["routine:added", "routine:updated", "routine:deleted"].forEach(event =>
+      EventBus.on(event, updateNext)
+    );
+  }
+
   function init() {
     createPagination();
-    updateAll();
+    updateNext();
+    renderRoutines();
+    bindEvents();
   }
 
   return {
-    init,
-    remove,
-    update,
-    updateNext,
-    renderRoutines,
-    updateAll
+    init
   };
 })();

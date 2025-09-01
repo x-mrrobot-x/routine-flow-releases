@@ -49,7 +49,6 @@ const CategoryRenderer = (() => {
     selectedId = btn.dataset.id;
     updateActive(selectedId);
     RoutineFilter.setState("currentCategoryFilter", selectedId);
-    RoutineRenderer.renderRoutines();
   }
 
   function handleCreate() {
@@ -70,12 +69,17 @@ const CategoryRenderer = (() => {
       [elements.btns, "click", handlers.click],
       [elements.addBtn, "click", handlers.create]
     ];
-
     bindings.forEach(([el, event, handler]) =>
       el.addEventListener(event, handler)
     );
-    
-    EventBus.on("data:category:changed", render);
+
+    const eventNames = [
+      "data:category:changed",
+      "routine:deleted",
+      "routine:updated",
+      "routine:added"
+    ];
+    eventNames.forEach(event => EventBus.on(event, render));
   }
 
   function render() {
@@ -95,5 +99,6 @@ const CategoryRenderer = (() => {
   return {
     init,
     getSelected,
+    updateActive
   };
 })();

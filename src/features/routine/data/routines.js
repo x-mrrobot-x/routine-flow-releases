@@ -25,7 +25,7 @@ const DEFAULT_ROUTINES = [
     id: 1004,
     title: "Activar Internet Móvil para el Trayecto",
     description: "Activar datos móviles para conectividad externa",
-    command: "/mobile on",
+    command: "/mobile_data on",
     priority: "medium",
     time: 27060,
     frequency: [1, 2, 3, 4, 5],

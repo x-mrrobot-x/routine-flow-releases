@@ -2,23 +2,23 @@ const RoutineFilterUtils = (() => {
   const FILTER_CONFIG = {
     search: {
       stateKey: "currentSearchFilter",
-      processor: v => v.toLowerCase().trim()
+      processor: value => value.toLowerCase().trim()
     },
     status: {
-      stateKey: "currentFilter",
-      processor: v => v
+      stateKey: "currentStatusFilter",
+      processor: value => value
     },
     priority: {
       stateKey: "currentPriorityFilter",
-      processor: v => v
+      processor: value => value
     },
     day: {
       stateKey: "currentDayFilter",
-      processor: v => v
+      processor: value => value
     },
     command: {
       stateKey: "currentCommandFilter",
-      processor: v => v
+      processor: value => value
     }
   };
 
@@ -37,25 +37,28 @@ const RoutineFilterUtils = (() => {
   };
 
   const FILTER_STRATEGIES = {
-    status: (routine, v) => {
-      if (v === "all") return true;
-      const handler = STATUS_MAP[v];
+    status: (routine, value) => {
+      if (value === "all") return true;
+      const handler = STATUS_MAP[value];
       return handler ? handler(routine) : false;
     },
-    priority: (routine, v) => v === "all" || routine.priority === v,
-    day: (routine, v) => v === "all" || routine.frequency.includes(parseInt(v)),
+    priority: (routine, value) => value === "all" || routine.priority === value,
+    day: (routine, value) =>
+      value === "all" || routine.frequency.includes(parseInt(value)),
     search: (routine, term) => {
       if (!term) return true;
       const text = `${routine.title.toLowerCase()} ${routine.description.toLowerCase()}`;
       return text.includes(term);
     },
-    command: (routine, v) => v === "all" || routine.command.startsWith(v),
-    category: (routine, v) => v === "all" || routine.categoryId === v
+    command: (routine, value) =>
+      value === "all" || routine.command.startsWith(value),
+    category: (routine, value) =>
+      value === "all" || routine.categoryId === value
   };
 
   function resetStates() {
     RoutineFilter.setState({
-      currentFilter: "all",
+      currentStatusFilter: "all",
       currentPriorityFilter: "all",
       currentDayFilter: "all",
       currentSearchFilter: "",
@@ -70,7 +73,6 @@ const RoutineFilterUtils = (() => {
 
   function updateState(key, value) {
     RoutineFilter.setState(key, value);
-    RoutineRenderer.renderRoutines();
   }
 
   function handleChange(type, value) {
@@ -108,7 +110,7 @@ const RoutineFilterUtils = (() => {
 
   function getValues(state) {
     return {
-      status: state.currentFilter,
+      status: state.currentStatusFilter,
       priority: state.currentPriorityFilter,
       day: state.currentDayFilter,
       search: state.currentSearchFilter,
@@ -166,7 +168,7 @@ const RoutineFilter = (() => {
 
   let state = {
     showAdvancedFilters: false,
-    currentFilter: "all",
+    currentStatusFilter: "all",
     currentPriorityFilter: "all",
     currentDayFilter: "all",
     currentSearchFilter: "",
@@ -181,9 +183,13 @@ const RoutineFilter = (() => {
   function setState(key, value) {
     if (typeof key === "object") {
       state = { ...state, ...key };
-      return;
+    } else {
+      state[key] = value;
     }
-    state[key] = value;
+
+    if (key !== "showAdvancedFilters") {
+      EventBus.emit("filter:changed");
+    }
   }
 
   function handleToggle() {
@@ -200,7 +206,6 @@ const RoutineFilter = (() => {
   function resetFilters() {
     RoutineFilterUtils.resetDOM(elements);
     RoutineFilterUtils.resetStates();
-    RoutineRenderer.renderRoutines();
   }
 
   function filterRoutines(routines) {

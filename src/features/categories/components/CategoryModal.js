@@ -37,14 +37,13 @@ const CategoryModalUtils = (() => {
 
   function deleteCategory(id) {
     CategoryService.remove(id);
-    RoutineService.remove("categoryId", id);
+    RoutineService.removeByCategory(id);
 
     const currentCategoryFilter = RoutineFilter.getState(
       "currentCategoryFilter"
     );
     if (currentCategoryFilter === id) {
       RoutineFilter.setState("currentCategoryFilter", "all");
-      RoutineRenderer.renderRoutines();
       CategoryRenderer.updateActive("all");
     }
 

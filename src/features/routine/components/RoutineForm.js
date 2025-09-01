@@ -87,12 +87,16 @@ const RoutineFormUtils = (() => {
   }
 
   function populateFields(routine, elements) {
-    elements.titleInput.value = routine.title;
-    elements.descriptionInput.value = routine.description;
-    elements.commandInput.value = routine.command;
-    elements.categorySelect.value = routine.categoryId;
-    elements.prioritySelect.value = routine.priority;
-    elements.timeInput.value = Utils.secondsToTime(routine.time);
+    const fieldMappings = [
+      [elements.titleInput, routine.title],
+      [elements.descriptionInput, routine.description],
+      [elements.commandInput, routine.command],
+      [elements.categorySelect, routine.categoryId],
+      [elements.prioritySelect, routine.priority],
+      [elements.timeInput, Utils.secondsToTime(routine.time)]
+    ];
+
+    fieldMappings.forEach(([field, value]) => (field.value = value));
   }
 
   function updateDays(frequency, btns) {
@@ -149,26 +153,22 @@ const RoutineForm = (() => {
     const newCategoryId = data.categoryId;
 
     RoutineService.update(id, data);
-    RoutineRenderer.update(id);
-    RoutineRenderer.updateNext();
-    CategoryRenderer.render();
 
     const currentFilter = RoutineFilter.getState("currentCategoryFilter");
-    if (
-      currentFilter !== "all" &&
-      (currentFilter === oldCategoryId || currentFilter === newCategoryId)
-    ) {
-      RoutineRenderer.renderRoutines();
+    if (currentFilter !== "all" && newCategoryId !== oldCategoryId) {
+      EventBus.emit("routine:deleted", [id]);
     }
 
     Toast.show("success", "toast_routine_updated");
   }
 
   function handleCreate(data) {
-    const routine = { id: Date.now().toString(), ...data, active: true };
+    const routine = {
+      id: Date.now().toString(),
+      ...data,
+      active: true
+    };
     RoutineService.add(routine);
-    RoutineRenderer.updateAll();
-    CategoryRenderer.render();
     Toast.show("success", "toast_routine_created");
   }
 

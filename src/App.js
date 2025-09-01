@@ -17,7 +17,14 @@ const App = (() => {
     AppPickerModal.init();
   }
 
-  return { init };
+  function goBack() {
+    return Modal.goBack();
+  }
+
+  return {
+    init,
+    goBack
+  };
 })();
 
 App.init();

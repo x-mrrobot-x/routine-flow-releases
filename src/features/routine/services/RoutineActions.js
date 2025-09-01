@@ -15,8 +15,6 @@ const RoutineActions = (() => {
     const active = !routine.active;
 
     RoutineService.update(routineId, { active });
-    RoutineRenderer.update(routineId, { ...routine, active });
-    RoutineRenderer.updateNext();
 
     const key = active
       ? "toast_routine_activated"
