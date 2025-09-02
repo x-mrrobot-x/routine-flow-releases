@@ -48,8 +48,8 @@
   align-items: center;
   padding: var(--space-sm);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background-color: var(--bg-primary);
+  border-radius: var(--radius-md);
+  background-color: rgba(var(--bg-primary-rgb), 0.6);
   transition: border 0.3s ease;
 }
 
@@ -118,8 +118,8 @@
   color: var(--text-secondary);
   border: 1px solid var(--border);
   padding: var(--space-sm);
-  border-radius: var(--radius-sm);
-  background-color: var(--bg-primary);
+  border-radius: var(--radius-md);
+  background-color: rgba(var(--bg-primary-rgb), 0.6);
 }
 
 @media (min-width: 60rem) {

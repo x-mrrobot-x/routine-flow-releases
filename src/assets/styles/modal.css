@@ -37,7 +37,7 @@
   max-height: 90%;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: var(--space-lg);
+  padding: var(--space-lg) 0;
   background: linear-gradient(
     145deg,
     rgba(var(--bg-secondary-rgb), 0.85),
@@ -58,6 +58,7 @@
 
 .modal-header {
   position: relative;
+  margin: 0 var(--space-lg);
   margin-bottom: var(--space-lg);
 }
 
@@ -104,6 +105,7 @@
 .modal-body {
   display: flex;
   flex-direction: column;
+  padding: 0 var(--space-lg);
   overflow-y: auto;
 }
 
@@ -113,6 +115,7 @@
   display: flex;
   justify-content: flex-end;
   gap: var(--space-sm);
+  padding: 0 var(--space-lg);
   margin-top: var(--space-sm);
 }
 

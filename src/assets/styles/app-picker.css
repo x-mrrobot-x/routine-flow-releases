@@ -2,10 +2,14 @@
   z-index: 1000;
 }
 
+#app-picker-modal .modal-content {
+  height: 90%;
+}
+
 .apps-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
   gap: var(--space-sm);
   overflow-y: auto;
 }
@@ -13,11 +17,12 @@
 .app-card {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  text-align: center;
   padding: var(--space-sm);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  text-align: center;
   background: var(--bg-secondary);
   transition: transform 0.2s ease;
 }

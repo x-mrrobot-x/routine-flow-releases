@@ -20,6 +20,10 @@ const EnvironmentManager = (() => {
       return DEFAULT_APPS;
     }
 
+    function loadTasks() {
+      return DEFAULT_TASKS;
+    }
+
     function getCategories() {
       return localStorage.getItem(STORAGE_KEYS.categories);
     }
@@ -55,6 +59,7 @@ const EnvironmentManager = (() => {
       iconPath: ICON_PATH,
       loadLang,
       loadApps,
+      loadTasks,
       getCategories,
       saveCategories,
       getRoutines,

@@ -32,13 +32,13 @@ svg {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 80%;
+  font-size: 1rem;
   border: 1px solid rgba(var(--gradient-start-rgb), 0.3);
-  min-width: 1.5rem;
-  min-height: 1.5rem;
+  min-width: 1.8rem;
+  min-height: 1.8rem;
   color: rgba(var(--gradient-start-rgb), 1);
-  font-weight: 500;
-  padding: 0.6rem;
+  font-weight: 600;
+  padding: 0.4rem;
   border-radius: var(--radius-full);
   aspect-ratio: 1 / 1;
   background: rgba(var(--gradient-start-rgb), 0.3);

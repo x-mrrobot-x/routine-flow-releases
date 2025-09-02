@@ -118,6 +118,12 @@ const CommandDropdown = (() => {
       return;
     }
 
+    if (baseCommand === "/run_task") {
+      TaskPickerModal.open(baseCommand);
+      close();
+      return;
+    }
+
     RoutineForm.setCommandInput(`${baseCommand} `);
     close();
   }

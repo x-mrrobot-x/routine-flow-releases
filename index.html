@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="/src/assets/styles/routines.css" />
     <link rel="stylesheet" href="/src/assets/styles/commands.css" />
     <link rel="stylesheet" href="/src/assets/styles/app-picker.css" />
+    <link rel="stylesheet" href="/src/assets/styles/task-picker.css" />
     <link rel="stylesheet" href="/src/assets/styles/settings.css" />
     <link rel="stylesheet" href="/src/assets/styles/toast.css" />
     <link
@@ -49,6 +50,7 @@
     <script src="/src/features/categories/data/categories.js" defer></script>
     <script src="/src/features/routine/data/routines.js" defer></script>
     <script src="/src/features/routine/data/apps.js" defer></script>
+    <script src="/src/features/routine/data/tasks.js" defer></script>
     <script
       src="/src/features/routine/services/RoutineService.js"
       defer
@@ -100,6 +102,10 @@
     ></script>
     <script
       src="/src/features/routine/components/AppPickerModal.js"
+      defer
+    ></script>
+    <script
+      src="/src/features/routine/components/TaskPickerModal.js"
       defer
     ></script>
     <script src="/src/features/settings/SettingsService.js" defer></script>
@@ -221,7 +227,7 @@
           </div>
         </aside>
 
-        <!-- Categories Container -->
+        <!-- Categories Nav -->
         <nav class="categories-nav">
           <div class="category-buttons" id="category-buttons"></div>
 
@@ -367,6 +373,54 @@
 
         <div class="modal-body">
           <div id="apps-grid" class="apps-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Picker Modal -->
+    <div id="task-picker-modal" class="modal">
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <header class="modal-header">
+          <h2
+            class="modal-title text-gradient"
+            data-i18n="task_picker_modal_title"
+          >
+            Selecionar Tarefa
+          </h2>
+
+          <p
+            class="modal-description"
+            data-i18n="task_picker_modal_description"
+          >
+            Escolha a tarefa para o comando.
+          </p>
+
+          <button type="button" id="tasks-modal-close" class="modal-close">
+            <i data-icon="x"></i>
+          </button>
+        </header>
+
+        <div class="modal-body">
+          <div class="search-wrapper">
+            <i data-icon="search"></i>
+            <input
+              type="search"
+              id="task-search-input"
+              placeholder="Buscar tarefas..."
+              class="input-search"
+              data-i18n="search_task_placeholder"
+            />
+          </div>
+
+          <section class="tasks-section">
+            <header class="tasks-header">
+              <h3 class="text-gradient" data-i18n="my_tasks">Minhas tarefas</h3>
+              <div class="tasks-count badge" id="tasks-count">0</div>
+            </header>
+
+            <div id="tasks-grid" class="tasks-grid"></div>
+          </section>
         </div>
       </div>
     </div>

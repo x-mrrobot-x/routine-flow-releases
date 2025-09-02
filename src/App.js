@@ -14,6 +14,7 @@ const App = (() => {
     CategoryModal.init();
     RoutineModal.init();
     DeleteRoutineModal.init();
+    TaskPickerModal.init();
     AppPickerModal.init();
   }
 
