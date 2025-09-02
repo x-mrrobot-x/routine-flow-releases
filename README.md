@@ -1,100 +1,107 @@
+<table align="right">
+  <tr>
+    <td height="43px">
+      <b>
+        <a href="README.pt.md">Português 🇧🇷</a>
+      </b>
+    </td>
+  </tr>
+</table>
+
 # Routine Flow
 
-![Status](https://img.shields.io/badge/Status-Ativo-brightgreen)
-![Versão](https://img.shields.io/badge/Versão-1.0.0-blue)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen)
+![Version](https://img.shields.io/badge/Version-1.0.0-blue)
 [![Tasker](https://img.shields.io/badge/Tasker-Integration-blue)](https://tasker.joaoapps.com/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Routine Flow é gerenciador de rotinas, que permite criar rotinas automatizadas que executam ações específicas em horários e dias da semana programados - desde abrir aplicativos, alternar wifi, até executar comandos personalizados complexos. Ideal para otimizar produtividade e criar hábitos consistentes através da automação.
+Routine Flow is a routine manager that allows you to create automated routines that perform specific actions at scheduled times and on specific days of the week - from opening apps and toggling Wi-Fi to executing complex custom commands. It's ideal for optimizing productivity and building consistent habits through automation.
 
-## Índice
+<img align="center" width="100%" alt="App preview" src="./.github/preview-en.jpg" />
 
-- [Funcionalidades](#funcionalidades)
-- [Instalação](#instalação)
-  - [Clone do repositório](#1-clone-do-repositório)
-  - [Execução da aplicação](#2-execução-da-aplicação)
-  - [Integração com Tasker](#3-integração-com-tasker)
-- [Comandos Personalizados](#comandos-personalizados)
-  - [Comandos disponíveis](#comandos-disponíveis)
-  - [Adicionar comandos no Tasker](#adicionar-comandos-personalizados-no-tasker)
-- [Configuração](#configuração)
-  - [Notificações](#notificações)
-  - [Idiomas suportados](#idiomas-suportados)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-  - [Estrutura de dados](#estrutura-de-dados)
-  - [Organização de arquivos](#organização-de-arquivos)
-- [Integração com Tasker](#integração-com-tasker-1)
-  - [Sistema de automação](#sistema-de-automação)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Contribuição](#contribuição)
-  - [Processo de contribuição](#processo-de-contribuição)
-  - [Diretrizes](#diretrizes)
-  - [Reportar bugs](#reportar-bugs)
-- [Licença](#licença)
+## Table of Contents
 
-## Funcionalidades
+- [Features](#features)
+- [Installation](#installation)
+  - [1. Clone the repository](#1-clone-the-repository)
+  - [2. Running the application](#2-running-the-application)
+  - [3. Tasker Integration](#3-tasker-integration)
+- [Custom Commands](#custom-commands)
+  - [Available Commands](#available-commands)
+  - [Adding Custom Commands in Tasker](#adding-custom-commands-in-tasker)
+- [Configuration](#configuration)
+  - [Notifications](#notifications)
+  - [Supported Languages](#supported-languages)
+- [Project Structure](#project-structure)
+  - [Data Structure](#data-structure)
+  - [Folder and File Structure](#folder-and-file-structure)
+- [Tasker Integration](#tasker-integration-1)
+  - [Automation System](#automation-system)
+- [Technologies Used](#technologies-used)
 
-- **Gerenciamento de Rotinas**: Crie, edite e exclua rotinas personalizadas
-- **Agendamento Inteligente**: Configure horários e dias da semana para execução
-- **Sistema de Prioridades**: Defina e visualize prioridades (baixa, média, alta) com indicadores visuais
-- **Comandos Personalizados**: Execute ações como abrir apps, bloquear tela, controlar conectividade
-- **Filtros Avançados**: Filtre rotinas por texto, status, prioridade e dia da semana
-- **Ordenação Cronológica**: Visualização organizada por horário de ativação
-- **Próxima Rotina**: Exibição da próxima rotina agendada
-- **Notificações Customizáveis**: Configure anúncios por voz, toast e vibração
-- **Multi-idioma**: Suporte completo a Português, Inglês e Espanhol
+## Features
 
-## Instalação
+- **Routine Management**: Create, edit, and delete custom routines
+- **Smart Scheduling**: Set execution times and days of the week
+- **Organization with Categories**: Group routines into custom categories with customizable colors and names
+- **Priority System**: Define and view priorities (low, medium, high) with visual indicators
+- **Custom Commands**: Execute actions like opening apps, locking the screen, and controlling connectivity
+- **Advanced Filters**: Filter routines by text, status, priority, day of the week, and command
+- **Chronological Sorting**: Organized view by activation time
+- **Next Routine**: Display of the next scheduled routine
+- **Customizable Notifications**: Configure voice announcements, toast notifications, and vibration
+- **Multi-language**: Full support for Portuguese, English, and Spanish
 
-### 1. Clone do repositório
+## Installation
+
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/x-mrrobot/routine-flow.git
 cd routine-flow
 ```
 
-### 2. Execução da aplicação
+### 2. Running the application
 
-**Opção A: Direto no navegador**
+**Option A: Directly in the browser**
 
-- Abra o arquivo `index.html` diretamente no navegador
+- Open the `index.html` file directly in your browser
 
-**Opção B: Servidor local usando live-server**
+**Option B: Local server using live-server**
 
 ```bash
-# Instalar live-server globalmente
+# Install live-server globally
 npm install -g live-server
 
-# Executar na porta 5000
+# Run on port 5000
 live-server --port=5000
 ```
 
-### 3. Integração com Tasker
+### 3. Tasker Integration
 
-- Certifique-se de que o [Tasker](https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm) está instalado
-- Importe este projeto da [TaskerNet](https://taskernet.com/shares/?user=AS35m8k%2FEQCE%2BJiPvkN1cJcjBE7Yh%2B%2Fa8zZeifxINYS7E94XnS26HrYYgsweBVnbf2VB9WJdrS5k&id=Project%3AROUTINE+FLOW)
-- Para executar a maioria dos comandos disponíveis, é necessário ativar o [ADB WiFi](https://tasker.joaoapps.com/userguide/en/help/ah_adb_wifi.html)
+- Make sure [Tasker](https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm) is installed
+- Import this project from [TaskerNet](https://taskernet.com/shares/?user=AS35m8k%2FEQCE%2BJiPvkN1cJcjBE7Yh%2B%2Fa8zZeifxINYS7E94XnS26HrYYgsweBVnbf2VB9WJdrS5k&id=Project%3AROUTINE+FLOW)
+- To run most of the available commands, you need to enable [ADB WiFi](https://tasker.joaoapps.com/userguide/en/help/ah_adb_wifi.html)
 
-## Comandos Personalizados
+## Custom Commands
 
-O Routine Flow utiliza um conjunto de comandos padronizados. Sempre que uma rotina é acionada, o comando será executado no Tasker por meio da tarefa **RF 02 - COMMAND EXECUTOR**.
+Routine Flow supports a set of standardized commands. When a routine is triggered, the command defined in the routine is executed in Tasker through the **RF 02 - COMMAND EXECUTOR** task.
 
-### Comandos Disponíveis
+### Available Commands
 
-| Comando               | Descrição                      | Exemplo            |
-| --------------------- | ------------------------------ | ------------------ |
-| `/open [app]`       | Abrir aplicativo específico    | `/open Telegram` |
-| `/close [app]`         | Fechar aplicativo específico   | `/close Youtube`    |
-| `/lockscreen`         | Bloquear a tela do dispositivo | `/lockscreen`      |
-| `/bluetooth [on/off]` | Ligar/desligar Bluetooth       | `/bluetooth on`    |
-| `/airplane [on/off]`  | Controlar modo avião           | `/airplane off`    |
-| `/wifi [on/off]`      | Ligar/desligar WiFi            | `/wifi on`         |
-| `/mobile [on/off]`    | Controlar dados móveis         | `/mobile off`      |
-| `/run_task [task]`    | Executar tarefa personalizada  | `/run_task MyTask` |
+| Command                 | Description                  | Example            |
+| ----------------------- | ---------------------------- | ------------------ |
+| `/open [app]`           | Open a specific application  | `/open Telegram`   |
+| `/close [app]`          | Close a specific application | `/close Youtube`   |
+| `/wifi [on/off]`        | Turn Wi-Fi on/off            | `/wifi on`         |
+| `/mobile_data [on/off]` | Control mobile data          | `/mobile_data off` |
+| `/bluetooth [on/off]`   | Turn Bluetooth on/off        | `/bluetooth on`    |
+| `/airplane [on/off]`    | Control airplane mode        | `/airplane off`    |
+| `/lockscreen`           | Lock the device screen       | `/lockscreen`      |
+| `/run_task [task]`      | Execute a custom task        | `/run_task MyTask` |
 
-### Adicionar Comandos Personalizados no Tasker
+### Adding Custom Commands in Tasker
 
-Para adicionar novos comandos, edite a tarefa **RF 02 - COMMAND EXECUTOR** adicionando uma nova condicional:
+To add new commands, edit the **RF 02 - COMMAND EXECUTOR** task by adding a new conditional:
 
 ```
 Else If %routine_command ~ "/your_command"
@@ -102,42 +109,53 @@ Else If %routine_command ~ "/your_command"
 End If
 ```
 
-## Configuração
+## Categories
 
-### Notificações
+Routine Flow allows you to organize your routines into custom categories. Each category can have a name and a color, making it easier to view and manage them.
 
-Acesse o botão de configurações no canto superior direito para personalizar:
+- **Create and Manage**: In the main menu, click the "+" button next to the categories to open the manager. You can add, edit, and delete categories.
+- **Filter by Category**: Click on a category to display only the routines associated with it.
+- **Default Category**: There is a default "General" category that cannot be removed.
 
-- **Anunciar com voz do Google**: Ativa anúncios por voz do título das rotinas
-- **Exibir toast na tela**: Mostra notificações flutuantes com títulos das rotinas
-- **Vibrar dispositivo**: Vibração ao executar rotinas
+## Configuration
 
-### Idiomas Suportados
+### Notifications
 
-- **pt.json**: Português (Brasil)
-- **en.json**: English (Estados Unidos)
-- **es.json**: Español
+Access the settings button in the upper right corner to customize:
 
-## Estrutura do Projeto
+- **Announce with Google voice**: Enables voice announcements of routine titles
+- **Show toast on screen**: Displays floating notifications with routine titles
+- **Vibrate device**: Vibrates when routines are executed
 
-### Estrutura de Dados
+### Supported Languages
 
-As rotinas são armazenadas no formato JSON:
+- **pt.json**: Portuguese (Brazil)
+- **en.json**: English (United States)
+- **es.json**: Spanish
+
+## Project Structure
+
+### Data Structure
+
+Routines are stored in JSON format:
 
 ```json
 {
   "id": 1234567890,
-  "title": "Exercícios matinais",
-  "description": "30 minutos de exercícios para começar o dia",
+  "title": "Morning exercises",
+  "description": "30 minutes of exercise to start the day",
   "command": "/open FitnessApp",
   "priority": "high",
-  "time": 21600, // segundos desde 00:00 (6:00 AM)
-  "frequency": [1, 3, 5], // Seg, Qua, Sex (0-6 = Dom-Sáb)
-  "active": true
+  "time": 21600, // seconds since 00:00 (6:00 AM)
+  "frequency": [1, 3, 5], // Mon, Wed, Fri (0-6 = Sun-Sat)
+  "active": true,
+  "categoryId": "health"
 }
 ```
 
-### Organização de Arquivos
+### Folder and File Structure
+
+The project's file structure is organized as follows:
 
 ```
 routine-flow/
@@ -152,6 +170,15 @@ routine-flow/
     │   ├── Modal.js
     │   └── Toast.js
     ├── features/
+    │   ├── categories/
+    │   │   ├── components/
+    │   │   │   ├── CategoryForm.js
+    │   │   │   ├── CategoryModal.js
+    │   │   │   └── CategoryRenderer.js
+    │   │   ├── data/
+    │   │   │   └── categories.js
+    │   │   └── services/
+    │   │       └── CategoryService.js
     │   ├── routine/
     │   │   ├── components/
     │   │   │   ├── AppPickerModal.js
@@ -159,10 +186,12 @@ routine-flow/
     │   │   │   ├── DeleteRoutineModal.js
     │   │   │   ├── RoutineForm.js
     │   │   │   ├── RoutineModal.js
-    │   │   │   └── RoutineRenderer.js
+    │   │   │   ├── RoutineRenderer.js
+    │   │   │   └── TaskPickerModal.js
     │   │   ├── data/
     │   │   │   ├── apps.js
-    │   │   │   └── routines.js
+    │   │   │   ├── routines.js
+    │   │   │   └── tasks.js
     │   │   └── services/
     │   │       ├── RoutineActions.js
     │   │       ├── RoutineFilter.js
@@ -176,6 +205,7 @@ routine-flow/
     │   └── pt.json
     ├── services/
     │   ├── EnvironmentManager.js
+    │   ├── EventBus.js
     │   ├── I18n.js
     │   ├── Icons.js
     │   ├── PaginationManager.js
@@ -185,45 +215,22 @@ routine-flow/
         └── Utils.js
 ```
 
-## Integração com Tasker
+## Tasker Integration
 
-### Sistema de Automação
+### Automation System
 
-O Routine Flow foi desenvolvido especificamente para o Tasker, utilizando:
+Routine Flow was specifically developed to run on Tasker, using:
 
-1. **Execução Automática**: O Tasker monitora os horários, dias da semana e executa rotinas programadas
-2. **Sistema de Comandos**: Comandos são processados pela tarefa **RF 02 - COMMAND EXECUTOR**, através da variável `%routine_command` que recebe o comando da rotina
-3. **Notificações Integradas**: Sistema de avisos conforme configurações do usuário
+1.  **Automatic Execution**: Tasker monitors the times, days of the week, and executes scheduled routines
+2.  **Command System**: Commands are processed by the **RF 02 - COMMAND EXECUTOR** task, through the `%routine_command` variable which receives the routine's command
+3.  **Integrated Notifications**: Notification system according to user settings
 
-## Tecnologias Utilizadas
+## Technologies Used
 
-- **Frontend**: HTML5, CSS3, JavaScript (Module Pattern IIFE para melhor compatibilidade entre os WebViews do Tasker)
-- **Armazenamento**: localStorage para persistência de dados
-- **Internacionalização**: Sistema próprio de i18n com arquivos JSON
-- **Ícones**: Conjunto personalizado de ícones SVG
-- **Tasker**: Integração completa (backend)
-
-## Contribuição
-
-Contribuições são bem-vindas! Para contribuir:
-
-### Processo de Contribuição
-
-1. **Fork** o projeto
-2. **Crie** uma branch para sua feature (`git checkout -b feature/NovaFuncionalidade`)
-3. **Commit** suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
-4. **Push** para a branch (`git push origin feature/NovaFuncionalidade`)
-5. **Abra** um Pull Request
-
-### Diretrizes
-
-- Mantenha o código limpo
-- Siga o padrão de arquitetura já estabelecido
-
-### Reportar Bugs
-
-Use as [Issues do GitHub](https://github.com/x-mrrobot/routine-flow/issues) para reportar bugs ou solicitar funcionalidades.
-
-## Licença
-
-Este projeto está licenciado sob a Licença MIT - consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
+- **Frontend**: HTML5, CSS3, JavaScript (Module Pattern IIFE for better compatibility across Tasker's WebViews)
+- **Storage**: localStorage for data persistence
+- **Internationalization**: Custom i18n system with JSON files
+- **EnvironmentManager**: Module for environment management (web or Tasker) that abstracts platform-specific functionalities like data storage and loading.
+- **EventBus**: Event publishing/subscribing system for decoupled communication between different application modules.
+- **Icons**: Custom set of SVG icons
+- **Tasker**: Full integration (backend)

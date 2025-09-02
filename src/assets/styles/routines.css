@@ -176,7 +176,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   background: linear-gradient(
-    135deg,
+    180deg,
     rgba(var(--gradient-start-rgb), 0.1),
     rgba(var(--gradient-end-rgb), 0.02)
   );
@@ -197,7 +197,7 @@
   margin-right: var(--space-xs);
   border-radius: var(--radius-sm);
   background: linear-gradient(
-    135deg,
+    180deg,
     rgba(var(--gradient-start-rgb), 0.1),
     rgba(var(--gradient-end-rgb), 0.02)
   );
