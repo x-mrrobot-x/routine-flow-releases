@@ -134,8 +134,20 @@ const RoutineFilterUtils = (() => {
     return element;
   }
 
+  function getBaseCommands(routines) {
+    return routines.reduce((acc, routine) => {
+      const baseCommand = routine.command.split(" ")[0];
+      if (!acc.includes(baseCommand)) {
+        acc.push(baseCommand);
+      }
+      return acc;
+    }, []);
+  }
+
   function populateCommandFilter(elements) {
-    const commands = CommandDropdown.utils.getCommands();
+    const routines = RoutineService.getAll();
+    const commands = getBaseCommands(routines);
+
     commands.forEach(command => {
       const option = createOption(command);
       elements.commandFilter.appendChild(option);

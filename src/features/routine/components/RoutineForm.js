@@ -45,9 +45,7 @@ const RoutineFormUtils = (() => {
   function validateCommand(command, errors) {
     if (!command) return;
 
-    const commands = CommandUtils.getCommands();
-    const isValid = commands.some(cmd => command.startsWith(cmd));
-
+    const isValid = command.startsWith("/");
     if (!isValid) {
       showError("command-error", I18n.get("form_error_command_invalid"));
       errors.push("command");

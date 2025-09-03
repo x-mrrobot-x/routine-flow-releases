@@ -38,10 +38,6 @@ const CommandUtils = (() => {
     { cmd: "/run_task [task]", desc: "command_task_description", icon: "play" }
   ];
 
-  function getCommands() {
-    return SUGGESTIONS.map(s => s.cmd.split(" ")[0]);
-  }
-
   function createSuggestionCommand(command) {
     return command.replace(
       /\[([^\]]+)\]/g,
@@ -77,7 +73,6 @@ const CommandUtils = (() => {
   }
 
   return {
-    getCommands,
     createItems,
     filterSuggestions
   };
@@ -163,7 +158,6 @@ const CommandDropdown = (() => {
     init,
     open,
     close,
-    getVisibleDropdown,
-    utils: CommandUtils
+    getVisibleDropdown
   };
 })();
