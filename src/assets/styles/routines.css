@@ -170,7 +170,7 @@
 .card-command code {
   color: var(--text-secondary);
   font-size: var(--font-xs);
-  padding: .3rem .6rem;
+  padding: 0.3rem 0.6rem;
   border-radius: var(--radius-sm);
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -308,6 +308,7 @@
 }
 
 #routine-modal .form-content {
+  flex: 1;
   overflow-y: auto;
   padding: 0 var(--space-lg);
 }

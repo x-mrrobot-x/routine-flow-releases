@@ -82,7 +82,7 @@ live-server --port=5000
 
 ## Comandos Personalizados
 
-O Routine Flow suporta um conjunto de comandos padronizados. Quando uma rotina é acionada, o comando definido na rotina é executado no Tasker por meio da tarefa **RF 02 - COMMAND EXECUTOR**.
+O Routine Flow suporta um conjunto de comandos padronizados. Quando uma rotina é acionada, o comando definido na rotina é executado no Tasker por meio da tarefa **RF 04 - COMMAND EXECUTOR**.
 
 ### Comandos Disponíveis
 
@@ -99,7 +99,7 @@ O Routine Flow suporta um conjunto de comandos padronizados. Quando uma rotina �
 
 ### Adicionar Comandos Personalizados no Tasker
 
-Para adicionar novos comandos, edite a tarefa **RF 02 - COMMAND EXECUTOR** adicionando uma nova condicional:
+Para adicionar novos comandos, edite a tarefa **RF 04 - COMMAND EXECUTOR** adicionando uma nova condicional:
 
 ```
 Else If %routine_command ~ "/your_command"
@@ -220,7 +220,7 @@ routine-flow/
 O Routine Flow foi desenvolvido especificamente para rodar no Tasker, utilizando:
 
 1. **Execução Automática**: O Tasker monitora os horários, dias da semana e executa rotinas programadas
-2. **Sistema de Comandos**: Comandos são processados pela tarefa **RF 02 - COMMAND EXECUTOR**, através da variável `%routine_command` que recebe o comando da rotina
+2. **Sistema de Comandos**: Comandos são processados pela tarefa **RF 04 - COMMAND EXECUTOR**, através da variável `%routine_command` que recebe o comando da rotina
 3. **Notificações Integradas**: Sistema de avisos conforme configurações do usuário
 
 ## Tecnologias Utilizadas

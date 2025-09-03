@@ -84,7 +84,7 @@ live-server --port=5000
 
 ## Custom Commands
 
-Routine Flow supports a set of standardized commands. When a routine is triggered, the command defined in the routine is executed in Tasker through the **RF 02 - COMMAND EXECUTOR** task.
+Routine Flow supports a set of standardized commands. When a routine is triggered, the command defined in the routine is executed in Tasker through the **RF 04 - COMMAND EXECUTOR** task.
 
 ### Available Commands
 
@@ -101,7 +101,7 @@ Routine Flow supports a set of standardized commands. When a routine is triggere
 
 ### Adding Custom Commands in Tasker
 
-To add new commands, edit the **RF 02 - COMMAND EXECUTOR** task by adding a new conditional:
+To add new commands, edit the **RF 04 - COMMAND EXECUTOR** task by adding a new conditional:
 
 ```
 Else If %routine_command ~ "/your_command"
@@ -222,7 +222,7 @@ routine-flow/
 Routine Flow was specifically developed to run on Tasker, using:
 
 1.  **Automatic Execution**: Tasker monitors the times, days of the week, and executes scheduled routines
-2.  **Command System**: Commands are processed by the **RF 02 - COMMAND EXECUTOR** task, through the `%routine_command` variable which receives the routine's command
+2.  **Command System**: Commands are processed by the **RF 04 - COMMAND EXECUTOR** task, through the `%routine_command` variable which receives the routine's command
 3.  **Integrated Notifications**: Notification system according to user settings
 
 ## Technologies Used

@@ -60,6 +60,7 @@
 }
 
 #category-modal .form {
+  flex: none;
   border: 1px dashed var(--border);
   padding: var(--space-md);
   border-radius: var(--radius-md);
