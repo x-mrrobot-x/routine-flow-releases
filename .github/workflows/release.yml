@@ -8,13 +8,17 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      actions: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Generate Changelog
-        id: changelog
         run: |
           PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
           if [ -n "$PREVIOUS_TAG" ]; then
@@ -23,49 +27,85 @@ jobs:
             COMMITS=$(git log --pretty=format:"%s")
           fi
 
-          # Separa por categorias
           FEATURES=$(echo "$COMMITS" | grep -E "^feat:" | sed 's/^feat: /- ✨ /' || true)
           FIXES=$(echo "$COMMITS" | grep -E "^fix:" | sed 's/^fix: /- 🐛 /' || true)
           STYLES=$(echo "$COMMITS" | grep -E "^style:" | sed 's/^style: /- 🎨 /' || true)
           DOCS=$(echo "$COMMITS" | grep -E "^docs:" | sed 's/^docs: /- 📚 /' || true)
           OTHERS=$(echo "$COMMITS" | grep -vE "^(feat|fix|style|docs):" | sed 's/^/- 🔧 /' || true)
 
-          # Monta a descrição
-          cat << EOF > release_notes.md
-          ## 📱 Projeto Tasker WebView - ${{ github.ref_name }}
+          cat << 'EOF' > release_notes.md
+          ## 📱 Routine Flow - ${{ github.ref_name }}
 
           ### 🚀 Como Instalar
           1. Baixe o arquivo XML anexado abaixo
           2. Abra o Tasker
-          3. Menu → Data → Restore
-          4. Selecione o arquivo XML
-          5. Importe apenas este projeto
+          3. Faça um clique longo em qualquer projeto existente
+          4. Selecione "Import Project" no menu que aparecer
+          5. selecione o arquivo XML baixado
 
           ### 📋 Changelog
+          EOF
 
-          $([ -n "$FEATURES" ] && echo "#### ✨ Novas Funcionalidades" && echo "$FEATURES" && echo "")
-          $([ -n "$FIXES" ] && echo "#### 🐛 Correções" && echo "$FIXES" && echo "")
-          $([ -n "$STYLES" ] && echo "#### 🎨 Melhorias de Interface" && echo "$STYLES" && echo "")
-          $([ -n "$DOCS" ] && echo "#### 📚 Documentação" && echo "$DOCS" && echo "")
-          $([ -n "$OTHERS" ] && echo "#### 🔧 Outras Alterações" && echo "$OTHERS" && echo "")
+          if [ -n "$FEATURES" ]; then
+            echo "#### ✨ Novas Funcionalidades" >> release_notes.md
+            echo "$FEATURES" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+
+          if [ -n "$FIXES" ]; then
+            echo "#### 🐛 Correções" >> release_notes.md
+            echo "$FIXES" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+
+          if [ -n "$STYLES" ]; then
+            echo "#### 🎨 Melhorias de Interface" >> release_notes.md
+            echo "$STYLES" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+
+          if [ -n "$DOCS" ]; then
+            echo "#### 📚 Documentação" >> release_notes.md
+            echo "$DOCS" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+
+          if [ -n "$OTHERS" ]; then
+            echo "#### 🔧 Outras Alterações" >> release_notes.md
+            echo "$OTHERS" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+
+          cat << 'EOF' >> release_notes.md
 
           ### 🛠️ Requisitos
           - Tasker versão 5.0+
-          - Permissões WebView habilitadas
-          - Android 7.0+ recomendado
+          - ADB Wifi (opcional)
 
           ### 📞 Suporte
           Encontrou algum problema? [Abra uma issue](https://github.com/${{ github.repository }}/issues)
           EOF
 
       - name: Create Release
-        run: |
-          gh release create ${{ github.ref_name }} \
-            --title "Routine Flow ${{ github.ref_name }}" \
-            --notes-file release_notes.md
-
-          xml_file=$(find tasker/ -name "*.xml" -type f | head -n 1)
-          gh release upload ${{ github.ref_name }} "$xml_file" --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ github.ref_name }} \
+            --title "Release ${{ github.ref_name }}" \
+            --notes-file release_notes.md
+
+          # Procurar por arquivos XML
+          xml_files=$(find . -name "*.xml" -type f | head -5)
+
+          if [ -n "$xml_files" ]; then
+            echo "Arquivos XML encontrados:"
+            echo "$xml_files"
+            
+            for xml_file in $xml_files; do
+              echo "Fazendo upload: $xml_file"
+              gh release upload ${{ github.ref_name }} "$xml_file" --clobber
+            done
+          else
+            echo "Nenhum arquivo XML encontrado para upload"
+          fi
 
