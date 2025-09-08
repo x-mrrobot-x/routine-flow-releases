@@ -1,0 +1,71 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          if [ -n "$PREVIOUS_TAG" ]; then
+            COMMITS=$(git log --pretty=format:"%s" $PREVIOUS_TAG..HEAD)
+          else
+            COMMITS=$(git log --pretty=format:"%s")
+          fi
+
+          # Separa por categorias
+          FEATURES=$(echo "$COMMITS" | grep -E "^feat:" | sed 's/^feat: /- ✨ /' || true)
+          FIXES=$(echo "$COMMITS" | grep -E "^fix:" | sed 's/^fix: /- 🐛 /' || true)
+          STYLES=$(echo "$COMMITS" | grep -E "^style:" | sed 's/^style: /- 🎨 /' || true)
+          DOCS=$(echo "$COMMITS" | grep -E "^docs:" | sed 's/^docs: /- 📚 /' || true)
+          OTHERS=$(echo "$COMMITS" | grep -vE "^(feat|fix|style|docs):" | sed 's/^/- 🔧 /' || true)
+
+          # Monta a descrição
+          cat << EOF > release_notes.md
+          ## 📱 Projeto Tasker WebView - ${{ github.ref_name }}
+
+          ### 🚀 Como Instalar
+          1. Baixe o arquivo XML anexado abaixo
+          2. Abra o Tasker
+          3. Menu → Data → Restore
+          4. Selecione o arquivo XML
+          5. Importe apenas este projeto
+
+          ### 📋 Changelog
+
+          $([ -n "$FEATURES" ] && echo "#### ✨ Novas Funcionalidades" && echo "$FEATURES" && echo "")
+          $([ -n "$FIXES" ] && echo "#### 🐛 Correções" && echo "$FIXES" && echo "")
+          $([ -n "$STYLES" ] && echo "#### 🎨 Melhorias de Interface" && echo "$STYLES" && echo "")
+          $([ -n "$DOCS" ] && echo "#### 📚 Documentação" && echo "$DOCS" && echo "")
+          $([ -n "$OTHERS" ] && echo "#### 🔧 Outras Alterações" && echo "$OTHERS" && echo "")
+
+          ### 🛠️ Requisitos
+          - Tasker versão 5.0+
+          - Permissões WebView habilitadas
+          - Android 7.0+ recomendado
+
+          ### 📞 Suporte
+          Encontrou algum problema? [Abra uma issue](https://github.com/${{ github.repository }}/issues)
+          EOF
+
+      - name: Create Release
+        run: |
+          gh release create ${{ github.ref_name }} \
+            --title "Routine Flow ${{ github.ref_name }}" \
+            --notes-file release_notes.md
+
+          xml_file=$(find tasker/ -name "*.xml" -type f | head -n 1)
+          gh release upload ${{ github.ref_name }} "$xml_file" --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
