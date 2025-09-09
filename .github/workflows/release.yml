@@ -26,6 +26,9 @@ jobs:
           # Function to improve commit messages with Gemini
           improve_commit_message() {
             local message="$1"
+            echo "[DEBUG] Original message: $message"
+            echo "[DEBUG] API Key present: $([ -n "$GEMINI_API_KEY" ] && echo "YES" || echo "NO")"
+            
             if [ -n "$GEMINI_API_KEY" ]; then
               response=$(curl -s -X POST \
                 "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}" \
@@ -38,14 +41,21 @@ jobs:
                   }]
                 }")
               
+              echo "[DEBUG] API Response: $response"
+              
               improved=$(echo "$response" | grep -o '"text"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/"text"[[:space:]]*:[[:space:]]*"//g' | sed 's/"$//g' | head -1)
               
+              echo "[DEBUG] Extracted improved message: $improved"
+              
               if [ -n "$improved" ] && [ "$improved" != "null" ]; then
+                echo "[DEBUG] Using improved message"
                 echo "$improved"
               else
+                echo "[DEBUG] Using original message (API failed)"
                 echo "$message"
               fi
             else
+              echo "[DEBUG] Using original message (no API key)"
               echo "$message"
             fi
           }
