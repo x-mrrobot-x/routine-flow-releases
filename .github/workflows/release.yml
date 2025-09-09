@@ -26,9 +26,12 @@ jobs:
           # Function to improve commit messages with Gemini
           improve_commit_message() {
             local message="$1"
+            echo "[DEBUG] Original message: $message"
+            echo "[DEBUG] API Key present: $([ -n "$GEMINI_API_KEY" ] && echo "YES" || echo "NO")"
+            
             if [ -n "$GEMINI_API_KEY" ]; then
               response=$(curl -s -X POST \
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}" \
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
                 -H "Content-Type: application/json" \
                 -d "{
                   \"contents\": [{
@@ -38,14 +41,22 @@ jobs:
                   }]
                 }")
               
-              improved=$(echo "$response" | grep -o '"text"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/"text"[[:space:]]*:[[:space:]]*"//g' | sed 's/"$//g' | head -1)
+              echo "[DEBUG] API Response: $response"
               
-              if [ -n "$improved" ] && [ "$improved" != "null" ]; then
+              # Extract text from the nested JSON structure: candidates[0].content.parts[0].text
+              improved=$(echo "$response" | jq -r '.candidates[0].content.parts[0].text // empty' 2>/dev/null)
+              
+              echo "[DEBUG] Extracted improved message: $improved"
+              
+              if [ -n "$improved" ] && [ "$improved" != "null" ] && [ "$improved" != "" ]; then
+                echo "[DEBUG] Using improved message"
                 echo "$improved"
               else
+                echo "[DEBUG] Using original message (API failed or returned empty)"
                 echo "$message"
               fi
             else
+              echo "[DEBUG] Using original message (no API key)"
               echo "$message"
             fi
           }
