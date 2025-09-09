@@ -26,9 +26,10 @@ jobs:
           # Function to improve commit messages with Gemini
           improve_commit_message() {
             local message="$1"
+            
             if [ -n "$GEMINI_API_KEY" ]; then
               response=$(curl -s -X POST \
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}" \
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
                 -H "Content-Type: application/json" \
                 -d "{
                   \"contents\": [{
@@ -149,12 +150,12 @@ jobs:
 
           if [ -n "$xml_file" ]; then
             if gh release upload "${{ github.ref_name }}" "$xml_file" --clobber; then
-              echo "[SUCCESS] Upload completed: $xml_file"
+              echo "Upload completed: $xml_file"
             else
-              echo "[ERROR] Upload error: $xml_file"
+              echo "Upload error: $xml_file"
               exit 1
             fi
           else
-            echo "[WARNING] No XML file found for upload"
+            echo "No XML file found for upload"
             exit 1
           fi
