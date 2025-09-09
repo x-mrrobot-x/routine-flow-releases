@@ -23,17 +23,19 @@ jobs:
 
       - name: Generate Changelog
         run: |
-          # Function to improve commit messages with Gemini
-          improve_commit_message() {
-            local message="$1"
-            if [ -n "$GEMINI_API_KEY" ]; then
+          # Function to improve commit messages with Gemini (batch processing)
+          improve_commit_messages() {
+            local section_type="$1"
+            local messages="$2"
+            
+            if [ -n "$GEMINI_API_KEY" ] && [ -n "$messages" ]; then
               response=$(curl -s -X POST \
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}" \
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
                 -H "Content-Type: application/json" \
                 -d "{
                   \"contents\": [{
                     \"parts\": [{
-                      \"text\": \"Transform this commit message to past tense and make it more user-friendly for a changelog. Keep it concise and clear. Only return the improved message, nothing else: ${message}\"
+                      \"text\": \"Transform these commit messages for a ${section_type} section in a changelog. Convert to past tense, make them user-friendly, concise and clear. Return only the improved messages, one per line, in the same order:\\n\\n${messages}\"
                     }]
                   }]
                 }")
@@ -43,10 +45,10 @@ jobs:
               if [ -n "$improved" ] && [ "$improved" != "null" ]; then
                 echo "$improved"
               else
-                echo "$message"
+                echo "$messages"
               fi
             else
-              echo "$message"
+              echo "$messages"
             fi
           }
 
@@ -57,37 +59,84 @@ jobs:
             COMMITS=$(git log --pretty=format:"%s")
           fi
 
-          # Process commits and improve messages
+          # Process commits and collect messages by type
+          FEATURES_MSGS=""
+          FIXES_MSGS=""
+          STYLES_MSGS=""
+          DOCS_MSGS=""
+          OTHERS_MSGS=""
+
+          while IFS= read -r commit; do
+            if [ -n "$commit" ]; then
+              if echo "$commit" | grep -qE "^feat(\([^)]*\))?:"; then
+                clean_msg=$(echo "$commit" | sed 's/^feat[^:]*: //')
+                FEATURES_MSGS="${FEATURES_MSGS}${clean_msg}\n"
+              elif echo "$commit" | grep -qE "^fix(\([^)]*\))?:"; then
+                clean_msg=$(echo "$commit" | sed 's/^fix[^:]*: //')
+                FIXES_MSGS="${FIXES_MSGS}${clean_msg}\n"
+              elif echo "$commit" | grep -qE "^style(\([^)]*\))?:"; then
+                clean_msg=$(echo "$commit" | sed 's/^style[^:]*: //')
+                STYLES_MSGS="${STYLES_MSGS}${clean_msg}\n"
+              elif echo "$commit" | grep -qE "^docs(\([^)]*\))?:"; then
+                clean_msg=$(echo "$commit" | sed 's/^docs[^:]*: //')
+                DOCS_MSGS="${DOCS_MSGS}${clean_msg}\n"
+              else
+                OTHERS_MSGS="${OTHERS_MSGS}${commit}\n"
+              fi
+            fi
+          done <<< "$COMMITS"
+
+          # Improve messages in batches
           FEATURES=""
           FIXES=""
           STYLES=""
           DOCS=""
           OTHERS=""
 
-          while IFS= read -r commit; do
-            if [ -n "$commit" ]; then
-              if echo "$commit" | grep -qE "^feat(\([^)]*\))?:"; then
-                clean_msg=$(echo "$commit" | sed 's/^feat[^:]*: //')
-                improved_msg=$(improve_commit_message "$clean_msg")
-                FEATURES="${FEATURES}- ${improved_msg}\n"
-              elif echo "$commit" | grep -qE "^fix(\([^)]*\))?:"; then
-                clean_msg=$(echo "$commit" | sed 's/^fix[^:]*: //')
-                improved_msg=$(improve_commit_message "$clean_msg")
-                FIXES="${FIXES}- ${improved_msg}\n"
-              elif echo "$commit" | grep -qE "^style(\([^)]*\))?:"; then
-                clean_msg=$(echo "$commit" | sed 's/^style[^:]*: //')
-                improved_msg=$(improve_commit_message "$clean_msg")
-                STYLES="${STYLES}- ${improved_msg}\n"
-              elif echo "$commit" | grep -qE "^docs(\([^)]*\))?:"; then
-                clean_msg=$(echo "$commit" | sed 's/^docs[^:]*: //')
-                improved_msg=$(improve_commit_message "$clean_msg")
-                DOCS="${DOCS}- ${improved_msg}\n"
-              else
-                improved_msg=$(improve_commit_message "$commit")
-                OTHERS="${OTHERS}- ${improved_msg}\n"
+          if [ -n "$FEATURES_MSGS" ]; then
+            improved_features=$(improve_commit_messages "features" "$(echo -e "$FEATURES_MSGS" | sed '/^$/d')")
+            while IFS= read -r line; do
+              if [ -n "$line" ]; then
+                FEATURES="${FEATURES}- ${line}\n"
               fi
-            fi
-          done <<< "$COMMITS"
+            done <<< "$improved_features"
+          fi
+
+          if [ -n "$FIXES_MSGS" ]; then
+            improved_fixes=$(improve_commit_messages "bug fixes" "$(echo -e "$FIXES_MSGS" | sed '/^$/d')")
+            while IFS= read -r line; do
+              if [ -n "$line" ]; then
+                FIXES="${FIXES}- ${line}\n"
+              fi
+            done <<< "$improved_fixes"
+          fi
+
+          if [ -n "$STYLES_MSGS" ]; then
+            improved_styles=$(improve_commit_messages "UI improvements" "$(echo -e "$STYLES_MSGS" | sed '/^$/d')")
+            while IFS= read -r line; do
+              if [ -n "$line" ]; then
+                STYLES="${STYLES}- ${line}\n"
+              fi
+            done <<< "$improved_styles"
+          fi
+
+          if [ -n "$DOCS_MSGS" ]; then
+            improved_docs=$(improve_commit_messages "documentation" "$(echo -e "$DOCS_MSGS" | sed '/^$/d')")
+            while IFS= read -r line; do
+              if [ -n "$line" ]; then
+                DOCS="${DOCS}- ${line}\n"
+              fi
+            done <<< "$improved_docs"
+          fi
+
+          if [ -n "$OTHERS_MSGS" ]; then
+            improved_others=$(improve_commit_messages "general changes" "$(echo -e "$OTHERS_MSGS" | sed '/^$/d')")
+            while IFS= read -r line; do
+              if [ -n "$line" ]; then
+                OTHERS="${OTHERS}- ${line}\n"
+              fi
+            done <<< "$improved_others"
+          fi
 
           cat << EOF > release_notes.md
           ## [APP] ${PROJECT_NAME} - ${{ github.ref_name }}
@@ -149,12 +198,12 @@ jobs:
 
           if [ -n "$xml_file" ]; then
             if gh release upload "${{ github.ref_name }}" "$xml_file" --clobber; then
-              echo "[SUCCESS] Upload completed: $xml_file"
+              echo "Upload completed: $xml_file"
             else
-              echo "[ERROR] Upload error: $xml_file"
+              echo "Upload error: $xml_file"
               exit 1
             fi
           else
-            echo "[WARNING] No XML file found for upload"
+            echo "No XML file found for upload"
             exit 1
           fi
