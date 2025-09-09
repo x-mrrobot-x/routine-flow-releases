@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_NAME: "Routine Flow"
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
     permissions:
       contents: write
       issues: write
@@ -22,6 +23,33 @@ jobs:
 
       - name: Generate Changelog
         run: |
+          # Function to improve commit messages with Gemini
+          improve_commit_message() {
+            local message="$1"
+            if [ -n "$GEMINI_API_KEY" ]; then
+              response=$(curl -s -X POST \
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}" \
+                -H "Content-Type: application/json" \
+                -d "{
+                  \"contents\": [{
+                    \"parts\": [{
+                      \"text\": \"Transform this commit message to past tense and make it more user-friendly for a changelog. Keep it concise and clear. Only return the improved message, nothing else: ${message}\"
+                    }]
+                  }]
+                }")
+              
+              improved=$(echo "$response" | grep -o '"text"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/"text"[[:space:]]*:[[:space:]]*"//g' | sed 's/"$//g' | head -1)
+              
+              if [ -n "$improved" ] && [ "$improved" != "null" ]; then
+                echo "$improved"
+              else
+                echo "$message"
+              fi
+            else
+              echo "$message"
+            fi
+          }
+
           PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
           if [ -n "$PREVIOUS_TAG" ]; then
             COMMITS=$(git log --pretty=format:"%s" $PREVIOUS_TAG..HEAD)
@@ -29,59 +57,82 @@ jobs:
             COMMITS=$(git log --pretty=format:"%s")
           fi
 
-          FEATURES=$(echo "$COMMITS" | grep -E "^feat(\([^)]*\))?:" | sed 's/^feat[^:]*: /- [NEW] /' || true)
-          FIXES=$(echo "$COMMITS" | grep -E "^fix(\([^)]*\))?:" | sed 's/^fix[^:]*: /- [FIX] /' || true)
-          STYLES=$(echo "$COMMITS" | grep -E "^style(\([^)]*\))?:" | sed 's/^style[^:]*: /- [STYLE] /' || true)
-          DOCS=$(echo "$COMMITS" | grep -E "^docs(\([^)]*\))?:" | sed 's/^docs[^:]*: /- [DOCS] /' || true)
-          OTHERS=$(echo "$COMMITS" | grep -vE "^(feat|fix|style|docs)(\([^)]*\))?:" | sed 's/^/- [OTHER] /' || true)
+          # Process commits and improve messages
+          FEATURES=""
+          FIXES=""
+          STYLES=""
+          DOCS=""
+          OTHERS=""
+
+          while IFS= read -r commit; do
+            if [ -n "$commit" ]; then
+              if echo "$commit" | grep -qE "^feat(\([^)]*\))?:"; then
+                clean_msg=$(echo "$commit" | sed 's/^feat[^:]*: //')
+                improved_msg=$(improve_commit_message "$clean_msg")
+                FEATURES="${FEATURES}- ${improved_msg}\n"
+              elif echo "$commit" | grep -qE "^fix(\([^)]*\))?:"; then
+                clean_msg=$(echo "$commit" | sed 's/^fix[^:]*: //')
+                improved_msg=$(improve_commit_message "$clean_msg")
+                FIXES="${FIXES}- ${improved_msg}\n"
+              elif echo "$commit" | grep -qE "^style(\([^)]*\))?:"; then
+                clean_msg=$(echo "$commit" | sed 's/^style[^:]*: //')
+                improved_msg=$(improve_commit_message "$clean_msg")
+                STYLES="${STYLES}- ${improved_msg}\n"
+              elif echo "$commit" | grep -qE "^docs(\([^)]*\))?:"; then
+                clean_msg=$(echo "$commit" | sed 's/^docs[^:]*: //')
+                improved_msg=$(improve_commit_message "$clean_msg")
+                DOCS="${DOCS}- ${improved_msg}\n"
+              else
+                improved_msg=$(improve_commit_message "$commit")
+                OTHERS="${OTHERS}- ${improved_msg}\n"
+              fi
+            fi
+          done <<< "$COMMITS"
 
           cat << EOF > release_notes.md
           ## [APP] ${PROJECT_NAME} - ${{ github.ref_name }}
 
-          ### [INSTALL] How to Install
-          1. Download the XML file attached below
-          2. Open Tasker
-          3. Long click on any existing project
-          4. Select "Import Project" from the menu that appears
-          5. Select the downloaded XML file
+          ### 📥 How to Install
+          - Download the XML file attached below
+          - Import the project into Tasker
 
-          ### [CHANGELOG] Changelog
+          ### 📋 Changelog
           EOF
 
           if [ -n "$FEATURES" ]; then
-            echo "#### [NEW] New Features" >> release_notes.md
-            echo "$FEATURES" >> release_notes.md
+            echo "- #### ✨ New Features" >> release_notes.md
+            echo -e "$FEATURES" >> release_notes.md
             echo "" >> release_notes.md
           fi
 
           if [ -n "$FIXES" ]; then
-            echo "#### [FIX] Bug Fixes" >> release_notes.md
-            echo "$FIXES" >> release_notes.md
+            echo "- #### 🐛 Bug Fixes" >> release_notes.md
+            echo -e "$FIXES" >> release_notes.md
             echo "" >> release_notes.md
           fi
 
           if [ -n "$STYLES" ]; then
-            echo "#### [STYLE] UI Improvements" >> release_notes.md
-            echo "$STYLES" >> release_notes.md
+            echo "- #### 🎨 UI Improvements" >> release_notes.md
+            echo -e "$STYLES" >> release_notes.md
             echo "" >> release_notes.md
           fi
 
           if [ -n "$DOCS" ]; then
-            echo "#### [DOCS] Documentation" >> release_notes.md
-            echo "$DOCS" >> release_notes.md
+            echo "- #### 📚 Documentation" >> release_notes.md
+            echo -e "$DOCS" >> release_notes.md
             echo "" >> release_notes.md
           fi
 
           if [ -n "$OTHERS" ]; then
-            echo "#### [OTHER] Other Changes" >> release_notes.md
-            echo "$OTHERS" >> release_notes.md
+            echo "- #### ⚡ Other Changes" >> release_notes.md
+            echo -e "$OTHERS" >> release_notes.md
             echo "" >> release_notes.md
           fi
 
           cat << EOF >> release_notes.md
 
           ### 💡 Note
-          This release includes both the Tasker project XML and the web code needed for the project's webview.
+          - This release includes both the Tasker project XML and the web code needed for the project's webview.
 
           EOF
 
