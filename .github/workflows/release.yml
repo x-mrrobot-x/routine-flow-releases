@@ -28,12 +28,12 @@ jobs:
             local message="$1"
             if [ -n "$GEMINI_API_KEY" ]; then
               response=$(curl -s -X POST \
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}" \
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-latest:generateContent?key=${GEMINI_API_KEY}" \
                 -H "Content-Type: application/json" \
                 -d "{
                   \"contents\": [{
                     \"parts\": [{
-                      \"text\": \"Transform this commit message to past tense and make it more user-friendly for a changelog. Keep it concise and clear. Only return the improved message, nothing else: ${message}\"
+                      \"text\": \"Transform this commit message to past tense and make it more user-friendly for a changelog. Keep it concise and clear and add in the end`[.]`. Only return the improved message, nothing else: ${message}\"
                     }]
                   }]
                 }")
