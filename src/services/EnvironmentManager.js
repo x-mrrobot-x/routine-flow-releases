@@ -51,7 +51,7 @@ const EnvironmentManager = (() => {
     function exit() {
       alert("Fechando aplicação...");
     }
- 
+  
     return {
       name: NAME,
       langCode: LANG_CODE,
