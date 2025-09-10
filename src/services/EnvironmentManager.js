@@ -80,19 +80,39 @@ const EnvironmentManager = (() => {
 
     function loadLang(code) {
       const storedLanguage = tk.shell(
-        `cat "${WORK_DIR}/src/locales/${code}.json" 2>/dev/null`
+        `cat "${WORK_DIR}/src/locales/${code}.json" 2>/dev/null`, false, 2000
       );
       if (!storedLanguage) throw new Error("");
       return JSON.parse(storedLanguage);
     }
 
     function loadApps() {
-      tk.performTask("RF 06 - ACTIONS HANDLER", PRIORITY, "load_apps");
+      tk.performTask(
+        "RF 06 - ACTIONS HANDLER",
+        PRIORITY,
+        "load_apps",
+        "",
+        "",
+        true,
+        true,
+        "",
+        true
+      );
       return [];
     }
 
     function loadTasks() {
-      tk.performTask("RF 06 - ACTIONS HANDLER", PRIORITY, "load_tasks");
+      tk.performTask(
+        "RF 06 - ACTIONS HANDLER",
+        PRIORITY,
+        "load_tasks",
+        "",
+        "",
+        true,
+        true,
+        "",
+        true
+      );
       return [];
     }
 
@@ -107,7 +127,12 @@ const EnvironmentManager = (() => {
         "RF 06 - ACTIONS HANDLER",
         PRIORITY,
         "update_categories",
-        data
+        data,
+        "",
+        true,
+        true,
+        "",
+        true
       );
     }
 
@@ -122,7 +147,12 @@ const EnvironmentManager = (() => {
         "RF 06 - ACTIONS HANDLER",
         PRIORITY,
         "update_routines",
-        data
+        data,
+        "",
+        true,
+        true,
+        "",
+        true
       );
     }
 
@@ -147,8 +177,7 @@ const EnvironmentManager = (() => {
       getRoutines,
       saveRoutines,
       getSettings,
-      saveSettings,
-      exit
+      saveSettings
     };
   })();
 
