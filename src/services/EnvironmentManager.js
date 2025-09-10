@@ -1,10 +1,10 @@
 const EnvironmentManager = (() => {
-  const WebEnvironment = (() => {
+  const WebEnvironment = () => {
     const config = {
       name: "web",
       workDir: ".",
       langCode: "pt-BR",
-      iconPath: "/src/assets/icons/",
+      iconPath: "src/assets/icons/",
       storageKeys: {
         routines: "@routine-flow:routines",
         settings: "@routine-flow:settings",
@@ -68,9 +68,9 @@ const EnvironmentManager = (() => {
       saveSettings,
       exit
     };
-  })();
+  };
 
-  const TaskerEnvironment = (() => {
+  const TaskerEnvironment = () => {
     const config = {
       name: "tasker",
       langCode: tk.local("sys_lang_code") || "en",
@@ -157,10 +157,10 @@ const EnvironmentManager = (() => {
       getSettings,
       saveSettings
     };
-  })();
+  };
 
   function detect() {
-    return typeof tk === "undefined" ? WebEnvironment : TaskerEnvironment;
+    return typeof tk === "undefined" ? WebEnvironment() : TaskerEnvironment();
   }
 
   return {
