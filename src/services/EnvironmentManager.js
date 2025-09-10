@@ -1,18 +1,21 @@
 const EnvironmentManager = (() => {
   const WebEnvironment = (() => {
-    const NAME = "web";
-    const WORK_DIR = ".";
-    const LANG_CODE = "pt-BR";
-    const ICON_PATH = "/src/assets/icons/";
-
-    const STORAGE_KEYS = {
-      routines: "@routine-flow:routines",
-      settings: "@routine-flow:settings",
-      categories: "@routine-flow:categories"
+    const config = {
+      name: "web",
+      workDir: ".",
+      langCode: "pt-BR",
+      iconPath: "/src/assets/icons/",
+      storageKeys: {
+        routines: "@routine-flow:routines",
+        settings: "@routine-flow:settings",
+        categories: "@routine-flow:categories"
+      }
     };
 
     async function loadLang(code) {
-      const response = await fetch(`${WORK_DIR}/src/locales/${code}.json`);
+      const response = await fetch(
+        `${config.workDir}/src/locales/${code}.json`
+      );
       return await response.json();
     }
 
@@ -25,38 +28,35 @@ const EnvironmentManager = (() => {
     }
 
     function getCategories() {
-      return localStorage.getItem(STORAGE_KEYS.categories);
+      return localStorage.getItem(config.storageKeys.categories);
     }
 
     function saveCategories(data) {
-      localStorage.setItem(STORAGE_KEYS.categories, data);
+      localStorage.setItem(config.storageKeys.categories, data);
     }
 
     function getRoutines() {
-      return localStorage.getItem(STORAGE_KEYS.routines);
+      return localStorage.getItem(config.storageKeys.routines);
     }
 
     function saveRoutines(data) {
-      localStorage.setItem(STORAGE_KEYS.routines, data);
+      localStorage.setItem(config.storageKeys.routines, data);
     }
 
     function getSettings() {
-      return localStorage.getItem(STORAGE_KEYS.settings);
+      return localStorage.getItem(config.storageKeys.settings);
     }
 
     function saveSettings(settings) {
-      localStorage.setItem(STORAGE_KEYS.settings, settings);
+      localStorage.setItem(config.storageKeys.settings, settings);
     }
 
     function exit() {
       alert("Fechando aplicação...");
     }
-  
+
     return {
-      name: NAME,
-      langCode: LANG_CODE,
-      workDir: WORK_DIR,
-      iconPath: ICON_PATH,
+      ...config,
       loadLang,
       loadApps,
       loadTasks,
@@ -71,89 +71,70 @@ const EnvironmentManager = (() => {
   })();
 
   const TaskerEnvironment = (() => {
-    const NAME = "tasker";
-    const LANG_CODE = tk.local("sys_lang_code") || "en";
-    const WORK_DIR = "%project_path";
-    const PRIORITY = 100;
-    const ICON_PATH =
-      "content://net.dinglisch.android.taskerm.iconprovider//app/";
+    const config = {
+      name: "tasker",
+      langCode: tk.local("sys_lang_code") || "en",
+      workDir: "%project_path",
+      iconPath: "content://net.dinglisch.android.taskerm.iconprovider//app/"
+    };
+
+    const state = { priority: 50 };
+
+    function validateData(data) {
+      const isValid = !data.match(/^%[a-z_]+/);
+      return isValid ? data : null;
+    }
+
+    function executeHandleAction(action, data = "") {
+      tk.performTask(
+        "RF 06 - HANDLE ACTIONS",
+        ++state.priority,
+        action,
+        data,
+        "",
+        true,
+        true,
+        "",
+        true
+      );
+    }
 
     function loadLang(code) {
       const storedLanguage = tk.shell(
-        `cat "${WORK_DIR}/src/locales/${code}.json" 2>/dev/null`, false, 2000
+        `cat "${config.workDir}/src/locales/${code}.json" 2>/dev/null`,
+        false,
+        2000
       );
       if (!storedLanguage) throw new Error("");
       return JSON.parse(storedLanguage);
     }
 
     function loadApps() {
-      tk.performTask(
-        "RF 06 - ACTIONS HANDLER",
-        PRIORITY,
-        "load_apps",
-        "",
-        "",
-        true,
-        true,
-        "",
-        true
-      );
+      executeHandleAction("load_apps");
       return [];
     }
 
     function loadTasks() {
-      tk.performTask(
-        "RF 06 - ACTIONS HANDLER",
-        PRIORITY,
-        "load_tasks",
-        "",
-        "",
-        true,
-        true,
-        "",
-        true
-      );
+      executeHandleAction("load_tasks");
       return [];
     }
 
     function getCategories() {
       const data = tk.local("category_data");
-      const isValid = !data.match(/^.[a-z_]+/);
-      return isValid ? data : null;
+      return validateData(data);
     }
 
     function saveCategories(data) {
-      tk.performTask(
-        "RF 06 - ACTIONS HANDLER",
-        PRIORITY,
-        "update_categories",
-        data,
-        "",
-        true,
-        true,
-        "",
-        true
-      );
+      executeHandleAction("update_categories", data);
     }
 
     function getRoutines() {
       const data = tk.local("routine_data");
-      const isValid = !data.match(/^.[a-z_]+/);
-      return isValid ? data : null;
+      return validateData(data);
     }
 
     function saveRoutines(data) {
-      tk.performTask(
-        "RF 06 - ACTIONS HANDLER",
-        PRIORITY,
-        "update_routines",
-        data,
-        "",
-        true,
-        true,
-        "",
-        true
-      );
+      executeHandleAction("update_routines", data);
     }
 
     function getSettings() {
@@ -165,10 +146,7 @@ const EnvironmentManager = (() => {
     }
 
     return {
-      name: NAME,
-      langCode: LANG_CODE,
-      workDir: WORK_DIR,
-      iconPath: ICON_PATH,
+      ...config,
       loadLang,
       loadApps,
       loadTasks,
